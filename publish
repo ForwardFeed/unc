@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+/bin/bash -ex
 
 # Setup
 
@@ -22,4 +22,4 @@ git push git@github.com:smogon/damage-calc.git --force gh-pages #reminder to set
 
 # Checkout: gh-pages -> master
 
-git checkout -
+git checkout main
