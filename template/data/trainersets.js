@@ -1,0 +1,1 @@
+var TRAINER_DEX = [];
