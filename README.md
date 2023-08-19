@@ -15,5 +15,5 @@ Yes you can have game mechanics of gen 1 and pokemon of gen 9.
 
 ## TODOLIST
 - [ ] add custom dynamic message list for resets
-- [ ] internationnalisation
-- [ ] add gender
+- [ ] internationalisation
+- [ ] add gender to pokemon
