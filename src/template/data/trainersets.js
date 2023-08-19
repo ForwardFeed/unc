@@ -1,1 +1,1 @@
-var TRAINER_DEX = []
+var TRAINER_DEX = [];
