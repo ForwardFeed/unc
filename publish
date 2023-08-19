@@ -22,4 +22,4 @@ git push git@github.com:ForwardFeed/unc.git --force gh-pages
 
 # Checkout: gh-pages -> master
 
-git checkout -
+git checkout master
