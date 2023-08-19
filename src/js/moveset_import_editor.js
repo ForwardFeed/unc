@@ -1,11 +1,33 @@
+function placeBsBtn() {
+	var importBtn = "<button id='import' class='bs-btn bs-btn-default'>Import</button>";
+	$("#import-1_wrapper").append(importBtn);
+
+	$("#import.bs-btn").click(function () {
+		var pokes = document.getElementsByClassName("import-team-text")[0].value;
+		var pokelist = addSets(pokes);
+		pokelist.sort(sortImports);
+		for (var i = 0; i < pokelist.length; i++) {
+			addToDex(pokelist[i]);
+		}
+		if (pokelist.length > 0) {
+			//$(allPokemon("#importedSetsOptions")).css("display", "inline");
+		} else {
+			alert("No sets imported, please check your syntax and try again");
+		}
+		//erase the import text area
+		document.getElementsByClassName("import-team-text")[0].value="";
+	});
+}
+
+
 /*
 	for now only save the current trainer #p1
 */
-function saveTrainerPokemon() {
+/*function saveTrainerPokemon() {
 	$('#save-change').attr("hidden", true);
-	$("textarea.import-team-text").val(ExportPokemon($("#p1")));
+	ExportPokemon($("#p1"));
 	$("#import.bs-btn").click();
-}
+}*/
 
 function ExportPokemon(pokeInfo) {
 	var pokemon = createPokemon(pokeInfo);
@@ -56,24 +78,12 @@ function ExportPokemon(pokeInfo) {
 	return finalText;
 }
 
-function importMonsPlayer() {
-	var text = document.getElementById("import-zone");
-	var monsList = window.addSets(text.value);
-	dispatchPlayerMon(monsList);
-	text.value = "";
-}
 $("#exportL").click(function () {
-	var exportData = ExportPokemon($("#p1"));
-	$("textarea.import-team-text").val(exportData);
-	navigator.clipboard.writeText(exportData).then(function () {
-	});
+	$("textarea.import-team-text").val(ExportPokemon($("#p1")));
 });
 
 $("#exportR").click(function () {
-	var exportData = ExportPokemon($("#p2"));
-	$("textarea.import-team-text").val(exportData);
-	navigator.clipboard.writeText(exportData).then(function () {
-	});
+	$("textarea.import-team-text").val(ExportPokemon($("#p2")));
 });
 
 function serialize(array, separator) {
@@ -199,18 +209,26 @@ function getMoves(currentPoke, rows, offset) {
 	return currentPoke;
 }
 
+function sortImports (a,b){
+	var sorted = [a.name, b.name].sort()[0]
+	if (sorted == b.name){
+		return 1
+	}
+	return -1
+}
+
 function addSets(pokes) {
 	var rows = pokes.split("\n");
 	var currentRow;
 	var currentPoke;
-	var pokelist = [];
+	var pokelist = []
 	for (var i = 0; i < rows.length; i++) {
 		currentRow = rows[i].split(/[()@]/);
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
 				currentPoke = calc.SPECIES[9][currentRow[j].trim()];
-				currentPoke.species = currentRow[j].trim();
+				currentPoke.name = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
 				currentPoke.isCustomSet = true;
 				currentPoke.ability = getAbility(rows[i + 1].split(":"));
@@ -266,55 +284,42 @@ function checkExeptions(poke) {
 	return poke;
 
 }
-
-function dispatchPlayerMon() {
-	var text = document.getElementById("import-zone");
-	var monsList = window.addSets(text.value);
-	dispatchPlayerMon(monsList);
-}
-
-function sortImports(a, b) {
-	var sorted = [a.species, b.species].sort()[0];
-	if (sorted == b.species) {
-		return 1;
+/*
+$("#clearSets").click(function () {
+	var yes = confirm("Do you really wish to delete all your mons?")
+	if (!yes){
+		return
 	}
-	return -1;
-}
-
-
-function dispatchPlayerMon(list) {
-	if (list.length <= 0) {
-		return;
+	localStorage.removeItem("customsets");
+	$(allPokemon("#importedSetsOptions")).hide();
+	loadDefaultLists();
+	for (let zone of document.getElementsByClassName("dropzone")){
+		zone.innerHTML="";
 	}
-	list.sort(sortImports);
-	var box = document.getElementById("box-poke-list");
-	for (var i = 0, iLen = list.length; i < iLen; i++) {
-		var poke = list[i];
-		/* checks for dupes*/
-		var isDupe = false;
-		var playerMons = window.setdex[0].mons;
-		for (var j = 0, jLen = playerMons.length; j < jLen; j++) {
-			if (playerMons[j].species === poke.species) {
-				isDupe = j;
-				break;
-			}
-		}
-		if (isDupe !== false) {
-			window.setdex[0].mons[j] = poke;
-		} else {
-			window.addBoxed(box, poke, i, 0);
-			window.setdex[0].mons.push(poke);
-		}
+
+});*/
+
+/*$(allPokemon("#importedSets")).click(function () {
+	var pokeID = $(this).parent().parent().prop("id");
+	var showCustomSets = $(this).prop("checked");
+	if (showCustomSets) {
+		loadCustomList(pokeID);
+	} else {
+		loadDefaultLists();
 	}
-	localStorage.setItem("playerdex", JSON.stringify(window.setdex[0].mons));
-	box.children[0].click();
-}
+});*/
 
 $(document).ready(function () {
-	$('#save-change').click(saveTrainerPokemon);
-	$("#import").click(importMonsPlayer);
-	var savedMons = JSON.parse(localStorage.getItem("playerdex"));
-	if (savedMons) {
-		dispatchPlayerMon(savedMons);
+	/*var customSets;
+	placeBsBtn();
+	if (localStorage.customsets) {
+		customSets = JSON.parse(localStorage.customsets);
+		updateDex(customSets);
+		selectFirstMon();
+		$(allPokemon("#importedSetsOptions")).css("display", "inline");
+	} else {
+		loadDefaultLists();
 	}
+	//adjust the side buttons that collapse the data wished to be hidden
+	setupSideCollapsers();*/
 });

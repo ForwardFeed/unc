@@ -136,6 +136,34 @@ html, body {
     padding: 0;
     min-width: 100em;
 }
+
+.trainer-poks-label {
+    margin:  10px 0px;
+}
+
+.trainer-pok-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trainer-pok-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trainer-pok{
+    height:  100%;
+    width:  auto;
+    margin-right:  10px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.trainer-pok:hover,  .opposite-pok:hover{
+    outline: 2px solid;
+    outline-color: #1abc9c;
+}
+
 .wrapper {
     padding: 0 1em;
     max-width: 1285px;
@@ -172,9 +200,6 @@ th {
     position: relative;
     top: -5px;
 }
-.main-title-text {
-    top: -10px;
-}
 .big-text {
     text-align: left;
     font-weight: bold;
@@ -206,7 +231,7 @@ th {
 .poke-info {
     width: 30em;
 }
-.field-info, .poke-import {
+.field-info, .poke-import , .note-button{
     text-align: center;
     width: 27.5em;
 }
@@ -311,7 +336,7 @@ th {
     background: #ffff99;
 }
 
-.genSelection, .notationSelection, .modeSelection {
+.genSelection, .notationSelection {
     display: inline-block;
     position: relative;
     top: -8px;
@@ -358,7 +383,7 @@ th {
 .info-group {
     margin: 1em 0;
 }
-.set-selector {
+.set-selector, .player-selector {
     width: 100%;
 }
 .info-selectors select {
@@ -421,13 +446,6 @@ table.field {
 .select2-container .select2-choice > .select2-chosen {
     width: 100%;
 }
-
-.select2-chosen {
-	word-wrap: break-word;
-	text-overflow: inherit;
-	white-space: normal !important;
-}
-
 .small-select.select2-container .select2-choice {
     font-size: 0.9em;
     height: 18px;
@@ -505,3 +523,301 @@ table.field {
 .extraSetMoves {
     width: 100%;
 }
+
+/*
+
+    F = Faster 
+    T = Speed tie
+    S = slower
+*/
+.mon-speed-F{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: solid;
+    border-color: #7ee1ff;
+    border-radius: 20%;
+    border-width: var(--spe-bor-width)
+}
+.mon-speed-T{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: solid;
+    border-color: #894197;
+    border-radius: 20%;
+    border-width: var(--spe-bor-width)
+}
+.mon-speed-S{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: solid;
+    border-color: #1c1414;;
+    border-radius: 20%;
+    border-width: var(--spe-bor-width);
+}
+.mon-speed-none{
+    border: none !important; 
+}
+.mon-dmg-none{
+    background: var(--fieldset-color) !important;
+}
+.mon-dmg-W{
+    /* Is considerable a wall*/
+    background: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
+}
+.mon-dmg-WMO{
+    /* Is considerable a wall that may OHKO*/
+    background: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
+}
+.mon-dmg-4{
+    /*Gets OHKO*/
+    background: linear-gradient(to right, var(--fieldset-color) 50%, #dd0b0b 0%);
+}
+.mon-dmg-3{
+    /*maybe gets OHKO*/
+    background: linear-gradient(to right, var(--fieldset-color) 50%, #ff7f16 0%);
+}
+.mon-dmg-1{
+    /*inflicts OHKO*/
+    background: linear-gradient(to right, #20d408 50%, var(--fieldset-color) 0%);
+}
+.mon-dmg-2{
+    /*may inflicts OHKO*/
+    background: linear-gradient(to right, #daff08 50%, var(--fieldset-color) 0%);
+}
+
+.mon-dmg-14{
+    /*both sides Gets OHKO*/
+    background: linear-gradient(to right, #20d408 50%, #dd0b0b 0%);
+}
+.mon-dmg-23{
+    /*both sides might inflict OHKO*/
+    background: linear-gradient(to right, #daff08 50%, #ff7f16 0%);
+}
+.mon-dmg-13{
+    /*inflict OHKO but may Gets OHKO*/
+    background: linear-gradient(to right, #20d408 50%, #ff7f16 0%);
+}
+.mon-dmg-24{
+    /*may inflict OHKO but Gets OHKO*/
+    background: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
+}
+
+.box-poke, #trainer-pok-list-opposing2, #trainer-pok-list-opposing{
+    min-height: 30px;
+}
+.dropzone::before{
+    content:attr(data-placeholder);
+    color:gray
+}
+.dropzone > img{
+    cursor: move; 
+}
+.dropzone > img:hover{
+    background: var(--button-hover);
+}
+.deadzone:hover{
+    background: #722323;
+}
+.over{
+    background: #373232;
+}
+
+.s-arrow{
+    border: solid rgb(175, 155, 155);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+.arrowdown {
+    transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.arrowright {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+.arrowtop {
+    transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+.arrowleft{
+    transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+.l-side-button, .r-side-button{
+    position: absolute;
+}
+.side-pannel{
+    display: grid;
+    position: relative;
+}
+.left-side-pannel{
+    float: left;
+}
+.right-side-pannel{
+    float: none;
+}
+
+#p2mon, #p1mon, #monSingle, #monDouble{
+    min-height: 30px;
+}
+
+.info-paragraph > b{
+    color: rgb(15, 14, 14);
+}
+.info-paragraph > b:hover{
+    background: var(--fieldset-color);
+    color: unset;
+}
+
+.box-frame{
+    position: absolute;
+    background: var(--fieldset-color);
+    border: 1px solid #AAA;
+    padding: 3px;
+}
+#item-box-frame{
+    z-index: 3;
+    width: 650px;
+    height: 400px;
+    top: 500px;
+    left: 500px;
+}
+#note-box-frame{
+    z-index: 2;
+    width: fit-content;
+    height: fit-content;
+    top: 200px;
+    left: 1220px;
+    overflow: visible;
+}
+.screen-box-frame{
+    position: absolute !important;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    top: 250px;
+    left: 500px;
+}
+.screen-box-frame-header{
+    position: relative;
+    min-height: 30px;
+}
+.box-frame-header{
+    position: relative;
+    min-height: 30px;
+}
+.box-frame-header>legend{
+    font-size: larger;
+    text-align: unset;
+}
+
+.close-frame{
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border: 1px solid black;
+    margin-left: auto;
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    cursor: pointer;
+}
+
+#close-item-box:hover{
+    background-color: white;
+    overflow: auto;
+    
+}
+
+.mdiv {
+  height: 25px;
+  width: 2px;
+  margin-left: 12px;
+  background-color: black;
+  transform: rotate(45deg);
+  Z-index: 4;
+}
+
+.md {
+  height: 25px;
+  width: 2px;
+  background-color: black;
+  transform: rotate(90deg);
+  Z-index: 5;
+}
+
+.berry-bb{
+    background:#B8B8D0; 
+} 
+.berry-cr{
+    background:#B8A038;
+}   
+.berry-cl{
+    background:#A8A878;
+}   
+.berry-cp{
+    background:#C03028; 
+}   
+.berry-co{
+    background:#A890F0; 
+}   
+.berry-cb{
+    background:#705848; 
+}   
+.berry-ha{
+    background:#7038F8;
+}   
+.berry-ka{
+    background:#705898; 
+}   
+.berry-ke{
+    background:#A040A0; 
+}   
+.berry-oc{
+    background:#F08030;
+}   
+.berry-ps{
+    background:#6890F0;
+}   
+.berry-py{
+    background:#F85888;
+    
+}   
+.berry-ri{
+    background:#78C850;
+    
+}  
+.berry-ro{
+    background:#EE99AC; 
+}   
+.berry-sh{
+    background:#E0C068; 
+}   
+.berry-ta{
+    background:#A8B820; 
+}   
+.berry-wa{
+    background:#F8D030;
+}   
+.berry-ya{
+    background:#98D8D8; 
+}
+
+#sets > a {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#screen-calc{
+    float: right;
+    margin-top: 22px;
+    margin-right: 41px;
+}
+
+.box-item-list > img:hover {
+    background: var(--button-hover);
+  }
