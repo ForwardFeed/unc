@@ -1614,6 +1614,7 @@ function selectTrainer(id) {
 }
 
 function nextTrainer() {
+	addTrainer(); // save the current modification.
 	var next = window.current_trainer_id + 1;
 	if (next < setdex.length) {
 		selectTrainer(next);
@@ -1621,6 +1622,7 @@ function nextTrainer() {
 }
 
 function previousTrainer() {
+	addTrainer(); // save the current modification.
 	var prev = window.current_trainer_id - 1;
 	if (prev >= 1) {
 		selectTrainer(prev);
