@@ -1,25 +1,3 @@
-function placeBsBtn() {
-	var importBtn = "<button id='import' class='bs-btn bs-btn-default'>Import</button>";
-	$("#import-1_wrapper").append(importBtn);
-
-	$("#import.bs-btn").click(function () {
-		var pokes = document.getElementsByClassName("import-team-text")[0].value;
-		var pokelist = addSets(pokes);
-		pokelist.sort(sortImports);
-		for (var i = 0; i < pokelist.length; i++) {
-			addToDex(pokelist[i]);
-		}
-		if (pokelist.length > 0) {
-			//$(allPokemon("#importedSetsOptions")).css("display", "inline");
-		} else {
-			alert("No sets imported, please check your syntax and try again");
-		}
-		//erase the import text area
-		document.getElementsByClassName("import-team-text")[0].value="";
-	});
-}
-
-
 /*
 	for now only save the current trainer #p1
 */
@@ -221,14 +199,14 @@ function addSets(pokes) {
 	var rows = pokes.split("\n");
 	var currentRow;
 	var currentPoke;
-	var pokelist = []
+	var pokelist = [];
 	for (var i = 0; i < rows.length; i++) {
 		currentRow = rows[i].split(/[()@]/);
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
 				currentPoke = calc.SPECIES[9][currentRow[j].trim()];
-				currentPoke.name = currentRow[j].trim();
+				currentPoke.species = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
 				currentPoke.isCustomSet = true;
 				currentPoke.ability = getAbility(rows[i + 1].split(":"));
