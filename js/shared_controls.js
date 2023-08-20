@@ -1311,7 +1311,6 @@ function loadDefaultLists() {
 		query: function (query) {
 			var pageSize = 30;
 			var results = [];
-			var term = query.term;// ? query.term[0].toUpperCase() : undefined;
 			var options = getSetOptions();
 			for (var i = 0; i < options.length; i++) {
 				var option = options[i];

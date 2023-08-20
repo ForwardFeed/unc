@@ -66,7 +66,6 @@
                 <fieldset class="poke-info import-export">
                     <legend>Import / Export</legend>
                     <div id="import-1_wrapper" class=" import-team dataTables_wrapper no-footer">
-                        <input id="sets-trainer" class="import-name-text" value="Trainer Name"></input>
                         <textarea id="import-zone"class="import-team-text"></textarea>
                         <button id="import-sets" class='bs-btn bs-btn-default'>Import</button>
                     </div>
@@ -86,12 +85,16 @@
                     <legend>
                         <button id="save-change" hidden>Save Changes</button>
                         Trainer's Pokemon Editor
+                        <img src="" alt="">
                     </legend>
-                    <div class="edition-export">
-                        <button id="pokemon-edition-save">Add pokemon</button>
+                    <button id="pokemon-edition-save">Add pokemon</button>
+                    <button id="trainer-edition-save">Save trainer</button>
+                    <div id="edit-trainer"  class="edition-export">
+                        <button id="trainer-edition-add">New trainer</button>
+                    </div>
+                    <div id ="new-trainer" class="edition-export" hidden>
                         <label for="trainer-edition-name">Trainer name: </label>
                         <input type="text" name="trainer-edition-name" id="trainer-edition-name" autocomplete="off">
-                        <button id="trainer-edition-add">Add to trainer list</button>
                     </div>
                     <hr>
                     <input type="text" class="set-selector opposing save-trigger" />
