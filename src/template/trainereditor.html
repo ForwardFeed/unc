@@ -91,6 +91,9 @@
                     <button id="trainer-edition-save">Save trainer</button>
                     <div id="edit-trainer"  class="edition-export">
                         <button id="trainer-edition-add">New trainer</button>
+                        <button id="rename-trainer">Rename Trainer</button>
+                        <input style="display: none;" type="text" name="rename-trainer" id="edition-rename-trainer" autocomplete="off" hidden>
+                        <button style="display: none;" id="validate-rename">Validate Rename</button hidden>
                     </div>
                     <div id ="new-trainer" class="edition-export" hidden>
                         <label for="trainer-edition-name">Trainer name: </label>
@@ -658,7 +661,7 @@
                     <li>Boosts, HP aren't saved</li>
                 </ul>
             </p>
-            version 0.0.1 First release to any public
+            version 0.0.3 "I'm too impatient"
         </div>
     </div>
     <script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
@@ -700,6 +703,7 @@
     <script type="text/javascript" src="../js/calc_settings.js"></script>
     <script type="text/javascript" src="../js/trainereditor.js"></script>
     <script type="text/javascript" src="../js/moveset_import_editor.js"></script>
+    <script type="text/javascript" src="./calculator_specific.js"></script>
 
     <div class="credits">Created by ForwardFeed thanks to the prior work of Honko with the smogon calc
         <ul>

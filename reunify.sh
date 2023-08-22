@@ -18,7 +18,6 @@ gamesBase="./src/"
 games="runbun renegade EK"
 for game in $games
 do
-    echo "cp -f ${templateHTML}" "${gamesBase}${game}/index.html"
     cp -f  "${templateHTML}"  "${gamesBase}${game}/index.html"
-    cp -f  "${templateEditor}" "${gamesBase}${game}/index.html"
+    cp -f  "${templateEditor}" "${gamesBase}${game}/trainereditor.html"
 done
