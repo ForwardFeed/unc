@@ -237,9 +237,8 @@ var EK_MOVES = {
     'Water Spout': { bp: 150, type: 'Water', target: 'allAdjacentFoes', recoil: [1, 4] },
     Yawn: { bp: 0, category: 'Status', type: 'Normal' }
 };
-
 $(document).ready(function () {
-    moves = {...moves, ...EK_MOVES};
+    moves = (0, util_1.extend)(true, {}, moves, EK_MOVES);;
     var moveOptions = getSelectOptions(Object.keys(moves), true)
     $("select.move-selector").find("option").remove().end().append(moveOptions);
 });
