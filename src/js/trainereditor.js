@@ -1469,7 +1469,7 @@ function rowChangePos(ev) {
 	}
 	var row = tar.closest('tr');
 	var parent = row.parentNode;
-	if (diff == 1) {
+	/*if (diff == 1) {
 		var crossed = parent.children[value - 1];
 		var inputRow = crossed.children[1].children[0];
 		inputRow.value--;
@@ -1481,7 +1481,7 @@ function rowChangePos(ev) {
 		inputRow.value++;
 		inputRow.prev = inputRow.value;
 		crossed.before(row);
-	} else if (diff > 0) {
+	} else */if (diff > 0) {
 		var crossed;
 		for (var i = prev; i <= diff + prev - 1; i++) {
 			crossed = parent.children[i];
