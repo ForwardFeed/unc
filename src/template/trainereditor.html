@@ -26,25 +26,7 @@
 <body class="dark-theme">
 
     <div class="wrapper">
-        <span class="title-text main-title-text">UNC Pok&eacute;mon Calculator Trainer Editor </span> 
-
-        <div aria-label="Global settings" class="global-settings" role="region">
-            <div>
-                Select the generation
-            </div>
-            <span class="genSelection" aria-labelledby="selectGenInstruction" role="radiogroup" title="Select the generation.">
-                <span class="visually-hidden" id="selectGenInstruction">Select the generation.</span>
-                <input class="gen visually-hidden" type="radio" name="gen" value="1" id="gen1" /><label class="btn btn-small btn-left" for="gen1">RBY</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="2" id="gen2" /><label class="btn btn-small btn-mid" for="gen2">GSC</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="3" id="gen3" /><label class="btn btn-small btn-mid" for="gen3">ADV</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="4" id="gen4" /><label class="btn btn-small btn-mid" for="gen4">DPP</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="5" id="gen5" /><label class="btn btn-small btn-mid" for="gen5">B/W</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="6" id="gen6" /><label class="btn btn-small btn-mid" for="gen6">X/Y</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="7" id="gen7" /><label class="btn btn-small btn-mid" for="gen7">S/M</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="8" id="gen8" /><label class="btn btn-small btn-mid" for="gen8">S/S</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="9" id="gen9" checked="checked" /><label class="btn btn-small btn-right" for="gen9">S/V</label>
-            </span>
-        </div>
+        <span class="title-text main-title-text">UNC Pok&eacute;mon Calculator Trainer Editor </span>
         <hr>
         <div class="panel">
              <div aria-label="Trainer list" role="region">
@@ -657,7 +639,7 @@
                 This is an editor allowing to generate the trainer list for my unified nuzlocke calc
                 <ul>
                     <li>Your work is automatically save upon switching position or adding a trainer to the list</li>
-                    <li>The delete pokemon works instantly, if you made a mistake just switch trainer by using previous Trainer or Next Trainer</li>
+                    <li>The delete pokemon works instantly, if you made a mistake refesh the page</li>
                     <li>Boosts, HP aren't saved</li>
                 </ul>
             </p>
@@ -700,10 +682,11 @@
     <script type="text/javascript" src="../calc/result.js?"></script>
     <script type="text/javascript" src="../calc/adaptable.js?"></script>
     <script type="text/javascript" src="../calc/index.js?"></script>
-    <script type="text/javascript" src="../js/calc_settings.js"></script>
+    <script type="text/javascript" src="./data/calc_settings.js"></script>
     <script type="text/javascript" src="../js/trainereditor.js"></script>
     <script type="text/javascript" src="../js/moveset_import_editor.js"></script>
     <script type="text/javascript" src="./calculator_specific.js"></script>
+    <script type="text/javascript" src="../js/side_arrows_controls.js"></script>
 
     <div class="credits">Created by ForwardFeed thanks to the prior work of Honko with the smogon calc
         <ul>

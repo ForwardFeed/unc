@@ -649,6 +649,8 @@ table.field {
 }
 .l-side-button, .r-side-button{
     position: absolute;
+    border: none;
+    background-color: rgba(250, 235, 215, 0);
 }
 .side-pannel{
     display: grid;
@@ -685,6 +687,7 @@ table.field {
     height: 400px;
     top: 500px;
     left: 500px;
+    overflow-y: scroll;
 }
 #note-box-frame{
     z-index: 2;
@@ -749,61 +752,61 @@ table.field {
   transform: rotate(90deg);
   Z-index: 5;
 }
-
-.berry-bb{
+/* Damage reduction berry background*/
+[data-id="Babiri Berry"]{
     background:#B8B8D0; 
 } 
-.berry-cr{
+[data-id="Charti Berry"]{
     background:#B8A038;
 }   
-.berry-cl{
+[data-id="Chilan Berry"]{
     background:#A8A878;
 }   
-.berry-cp{
+[data-id="Chople Berry"]{
     background:#C03028; 
 }   
-.berry-co{
+[data-id="Coba Berry"]{
     background:#A890F0; 
 }   
-.berry-cb{
+[data-id="Colbur Berry"]{
     background:#705848; 
 }   
-.berry-ha{
+[data-id="Haban Berry"]{
     background:#7038F8;
 }   
-.berry-ka{
+[data-id="Kasib Berry"]{
     background:#705898; 
 }   
-.berry-ke{
+[data-id="Kebia Berry"]{
     background:#A040A0; 
 }   
-.berry-oc{
+[data-id="Occa Berry"]{
     background:#F08030;
 }   
-.berry-ps{
+[data-id="Passho Berry"]{
     background:#6890F0;
 }   
-.berry-py{
+[data-id="Payapa Berry"]{
     background:#F85888;
     
 }   
-.berry-ri{
+[data-id="Rindo Berry"]{
     background:#78C850;
     
 }  
-.berry-ro{
+[data-id="Roseli Berry"]{
     background:#EE99AC; 
 }   
-.berry-sh{
+[data-id="Shuca Berry"]{
     background:#E0C068; 
 }   
-.berry-ta{
+[data-id="Tanga Berry"]{
     background:#A8B820; 
 }   
-.berry-wa{
+[data-id="Wacan Berry"]{
     background:#F8D030;
 }   
-.berry-ya{
+[data-id="Yache Berry"]{
     background:#98D8D8; 
 }
 

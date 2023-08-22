@@ -173,7 +173,6 @@ var EK_MOVES = {
     Uproar: { bp: 50, type: 'Normal', isSound: true },
     'Volt Tackle': { bp: 120, type: 'Electric', recoil: [1, 3], makesContact: true },
     'Weather Ball': { bp: 50, type: 'Normal' },
-    'Weather Ball AI': { bp: 100, type: 'Normal' },
     Aromatherapy: { bp: 0, category: 'Status', type: 'Grass' },
     'Brick Break': { bp: 75, type: 'Fighting', makesContact: true },
     Endeavor: { bp: 0, type: 'Normal', makesContact: true },
@@ -237,6 +236,7 @@ var EK_MOVES = {
     'Water Spout': { bp: 150, type: 'Water', target: 'allAdjacentFoes', recoil: [1, 4] },
     Yawn: { bp: 0, category: 'Status', type: 'Normal' }
 };
+
 $(document).ready(function () {
     moves = (0, util_1.extend)(true, {}, moves, EK_MOVES);;
     var moveOptions = getSelectOptions(Object.keys(moves), true)

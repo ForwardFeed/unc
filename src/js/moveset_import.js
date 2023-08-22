@@ -288,11 +288,12 @@ function dispatchPlayerMon(list) {
 	}
 	list.sort(sortImports);
 	var box = document.getElementById("box-poke-list");
+	var playerMons = window.setdex[0].mons;
+	var boxOffset = playerMons.length;
 	for (var i = 0, iLen = list.length; i < iLen; i++) {
 		var poke = list[i];
 		/* checks for dupes*/
 		var isDupe = false;
-		var playerMons = window.setdex[0].mons;
 		for (var j = 0, jLen = playerMons.length; j < jLen; j++) {
 			if (playerMons[j].species === poke.species) {
 				isDupe = j;
@@ -302,7 +303,8 @@ function dispatchPlayerMon(list) {
 		if (isDupe !== false) {
 			window.setdex[0].mons[j] = poke;
 		} else {
-			window.addBoxed(box, poke, i, 0);
+			var idOffeseted = boxOffset + i
+			window.addBoxed(box, poke, idOffeseted, 0);
 			window.setdex[0].mons.push(poke);
 		}
 	}

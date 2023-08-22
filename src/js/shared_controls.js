@@ -1159,6 +1159,7 @@ $(".set-selector").change(function () {
 
 $(".player-selector").change(function () {
 	var id = $(this).val();
+	console.log(id)
 	parsed = parseSelector(id)
 	var trainerID = parsed[0],
 		trainer = parsed[1],
@@ -1381,37 +1382,6 @@ function allPokemon(selector) {
 		allSelector += "#p" + (i + 1) + " " + selector;
 	}
 	return allSelector;
-}
-
-function loadCustomList(id) {
-	$("#" + id + " .set-selector").select2({
-		formatResult: function (set) {
-			return (set.nickname ? set.pokemon + " (" + set.nickname + ")" : set.id);
-		},
-		query: function (query) {
-			var pageSize = 30;
-			var results = [];
-			var options = getSetOptions();
-			for (var i = 0; i < options.length; i++) {
-				var option = options[i];
-				var pokeName = option.pokemon.toUpperCase();
-				var setName = option.set ? option.set.toUpperCase() : option.set;
-				if (option.isCustom && option.set && (!query.term || query.term.toUpperCase().split(" ").every(function (term) {
-					return pokeName.indexOf(term) === 0 || pokeName.indexOf("-" + term) >= 0 || pokeName.indexOf(" " + term) >= 0 || setName.indexOf(term) === 0 || setName.indexOf("-" + term) >= 0 || setName.indexOf(" " + term) >= 0;
-				}))) {
-					results.push(option);
-				}
-			}
-			query.callback({
-				results: results.slice((query.page - 1) * pageSize, query.page * pageSize),
-				more: results.length >= query.page * pageSize
-			});
-		},
-		initSelection: function (element, callback) {
-			var data = "";
-			callback(data);
-		}
-	});
 }
 
 /*imitate a manual selection*/
@@ -1705,100 +1675,6 @@ function ColorCodeSetsChange(ev) {
 
 	}
 }
-function setupSideCollapsers() {
-	var applyF = function (btns) {
-		for (var i = 0; i < btns.length; i++) {
-			var btn = btns[i];
-			btn.cum = btn.offsetHeight;
-			btn.sisterEl = document.getElementsByClassName(btn.getAttribute("data-set"))[0];
-			btn.prevEl = btns[i - 1] || null;
-			if (btn.prevEl) {
-				btn.cum += btn.prevEl.cum
-			} else {
-				btn.cum = 0;
-			}
-			btn.nextEl = btns[i + 1] || null;
-			btn.onclick = sideCollapsersCorrection
-		}
-	}
-	var leftBtns = document.getElementsByClassName("l-side-button");
-	var rigtBtns = document.getElementsByClassName("r-side-button");
-	applyF(leftBtns);
-	applyF(rigtBtns);
-	/*
-		readjust the left buttons
-		Because i couldn't find a proper way to do it with css
-	*/
-	for (var index = 0; index < leftBtns.length; index++) {
-		leftBtns[index].style.left = "-" + btn.offsetWidth + "px";
-
-	}
-	leftBtns[0].onclick();
-	rigtBtns[0].onclick();
-}
-function sideCollapsersCorrection(ev) {
-	if (ev) {
-		var arrow = ev.target.children[0] || ev.target.parentNode.children[0];
-		collapseArrow(arrow);
-	}
-	var node = this;
-	if (node.tagName != "BUTTON") {
-		node = this.target.parentNode;
-	}
-	var prev = node.prevEl;
-	var offset = node.sisterEl.offsetTop;
-	var relativeHeight = node.parentNode.offsetTop;
-	if (prev) {
-		//since the position is absolute, this will prevent from eating fellows.
-		var prevLowPos = prev.offsetTop + prev.offsetHeight; - relativeHeight;
-		if (offset == 0) {// collapsed
-			offset = prevLowPos;
-		} else {// standing
-			offset = offset - relativeHeight;
-			if (offset < prevLowPos) {
-				offset = prevLowPos;
-			}
-		}
-	} else {
-		if (offset == 0) {// collapsed
-			offset = node.offsetTop;
-		} else {// standing
-			offset = offset - relativeHeight;
-		}
-	}
-	node.style.top = offset + "px"
-	//propagate to next buttons
-	if (node.nextEl) {
-		node.nextEl.onclick()
-	}
-}
-function collapseArrow(arrow) {
-	var arrBtn = arrow.parentNode;
-	var target = arrBtn.getAttribute("data-set");
-	var divs = document.getElementsByClassName(target)
-	for (var index = 0; index < divs.length; index++) {
-		divs[index].toggleAttribute("hidden");
-
-	}
-	if (arrBtn.classList.contains("l-side-button")) {
-		if (arrow.classList.contains("arrowdown")) {
-			arrow.classList.remove("arrowdown");
-			arrow.classList.add("arrowright");
-		} else {
-			arrow.classList.remove("arrowright");
-			arrow.classList.add("arrowdown");
-		}
-	}
-	else if (arrBtn.classList.contains("r-side-button")) {
-		if (arrow.classList.contains("arrowdown")) {
-			arrow.classList.remove("arrowdown");
-			arrow.classList.add("arrowleft");
-		} else {
-			arrow.classList.remove("arrowleft");
-			arrow.classList.add("arrowdown");
-		}
-	}
-}
 
 window.isInDoubles = false;
 function switchIconSingle() {
@@ -1975,10 +1851,8 @@ $(document).ready(function () {
 	$('#cc-spe-width').change(widthSpeedBorder);
 	$('#singles-format').click(switchIconDouble);
 	$('#doubles-format').click(switchIconSingle);
-	$('#side-arrow-toggle').click(sideArrowToggle);
 	$('#close-item-box, #ball-item').click(openCloseItemBox);
 	$('#close-note-box, #open-note').click(openCloseNoteBox);
-	$('.ic').click(selectItem);
 	$('#double-legacy-mode').click(toggleDoubleLegacyMode);
 	$('#screen-calc').click(onClickScreenCalc)
 	for (let dropzone of document.getElementsByClassName("dropzone")) {
@@ -1999,10 +1873,6 @@ $(document).ready(function () {
 	if (!isNotNew) {//first time loading the page
 		onFirstTime()
 		localStorage.setItem("isNotNew", true)
-	}
-	if (+localStorage.getItem("hsidearrow")) {
-		setupSideCollapsers()
-		sideArrowToggle()
 	}
 	if (+localStorage.getItem("doubleLegacy")) {
 		toggleDoubleLegacyMode()
