@@ -48,7 +48,7 @@ function drop(ev) {
 			ev.target.parentNode.children[1].appendChild(pokeDragged);
 		} else if (ev.target.id == "poke-trash") {
 			var id = pokeDragged.dataset.id;
-			id = parseInt(id.split(";")[1]);
+			id = parseInt(id.split(";")[2]);
 			var pokes = document.getElementById("poke-box");
 			for (var i = 0; i < pokes.childElementCount; i++) {
 				if (i >= id) {
@@ -56,10 +56,20 @@ function drop(ev) {
 					mon.dataset.id = "0;" + (id);
 				}
 			}
+			setdex[window.current_trainer_id].mons.splice(id, 1);
 		} else {
 			ev.target.appendChild(pokeDragged);
 		}
 	} else if (ev.target.classList.contains("poke-icon")) {
+		var didParse = pokeDragged.dataset.id.split(";");
+		var tidParse = ev.target.dataset.id.split(";");
+		var did = parseInt(didParse[2]);
+		var tid = parseInt(tidParse[2]);
+		var tempMon = setdex[window.current_trainer_id].mons[did];
+		setdex[window.current_trainer_id].mons[did] = setdex[window.current_trainer_id].mons[tid];
+		setdex[window.current_trainer_id].mons[tid] = tempMon;
+		ev.target.dataset.id = tidParse[0] + ";" + tidParse[1] + ";" + did;
+		pokeDragged.dataset.id = didParse[0] + ";" + didParse[1] + ";" + tid;
 		if (!cntrlIsPressed) {
 			var prev1 = pokeDragged.previousElementSibling;
 			if (!prev1) {
@@ -152,9 +162,9 @@ function createPokemon(pokeInfo) {
 		});
 	} else {
 		var selectID = pokeInfo.find("input.set-selector").val();
-		parsed = parseSelector(selectID)
+		parsed = parseSelector(selectID);
 		var trainerID	= parsed[0],
-			trainer		= parsed[1], 
+			trainer		= parsed[1],
 			pokemon 	= parsed[2],
 			pokemonName = parsed[3];
 		var name = pokemonName;
@@ -805,7 +815,7 @@ var SETDEX = [
 	typeof SETDEX_SV === 'undefined' ? {} : SETDEX_SV,
 ];
 
-var gen, genWasChanged, notation, pokedex, setdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION;
+var gen, genWasChanged, notation, setdex, typeChart, pokedex, moves, abilities, items, calcHP, calcStat, GENERATION;
 
 $(".gen").change(function () {
 	/*eslint-disable */
@@ -813,7 +823,6 @@ $(".gen").change(function () {
 	GENERATION = calc.Generations.get(gen);
 	genWasChanged = true;
 	/* eslint-enable */
-	// declaring these variables with var here makes z moves not work; TODO
 	pokedex = calc.SPECIES[gen];
 	setdex = SETDEX[gen];
 	typeChart = calc.TYPE_CHART[gen];
@@ -903,6 +912,9 @@ function getSetOptions() {
 			if (document.getElementById('no-pokedex').checked || document.getElementById("any-selection").checked) {
 				for (var j = 0; j < trainer.mons.length; j++) {
 					var mon = trainer.mons[j];
+					if (!mon) {
+						continue;
+					}
 					setOptions.push({
 						text: mon.species + " : " + trainer.trn,
 						id: i + ";" + j,
@@ -1087,13 +1099,16 @@ function saveTrigger(ev) {
 function saveTrainerPokemon() {
 	var saveField = ($(this).closest("fieldset"));
 	$('#save-change').attr("hidden", true);
-	var poke = window.addSets(window.ExportPokemon(saveField))[0];
+	var poke = createPokemon(saveField);
+	poke.species = poke.name;
+	for (var i = 0; i < 4; i++) {
+		poke.moves[i] = poke.moves[i].originalName;
+	}
 	setdex[window.current_trainer_id].mons[window.current_pokemon_id] = poke;
+	saveTrainer();
 }
 
 function importSets() {
-	var trainerNamediv = document.getElementById("sets-trainer");
-	var trainerName = trainerNamediv.value;
 	var textDiv = document.getElementById("import-zone");
 	var text = textDiv.value;
 	var monsList = window.addSets(text);
@@ -1104,15 +1119,19 @@ function importSets() {
 	var offsetid = box.childElementCount;
 	for (var i = 0; i < monsList.length; i++) {
 		var poke = monsList[i];
+
 		addBoxed(box, poke, parseInt(offsetid) + parseInt(i));
+		setdex[window.current_trainer_id].mons.push(poke);
 	}
+	textDiv.value = "";
 }
 function parseSelector(value) {
 	var parsed = value.split(";");
 	var trainerID, trainer, pokemon, pokemonName, pokeID;
 	pokemonName = parsed[0];
-	pokeID = parsed[2];
 	if (parsed.length == 3) {
+		pokeID = parsed[2];
+		window.current_pokemon_id = pokeID;
 		//it's a pokemon from a trainer
 		if (parsed[1] == "Player") {
 			// from the player
@@ -1131,6 +1150,7 @@ function parseSelector(value) {
 		}
 	} else {
 		trainerID = parseInt(pokemonName);
+		window.current_pokemon_id = 0;
 		if (isNaN(trainerID)) {
 			//It's a pokemon
 			return [null, null, pokedex[pokemonName], pokemonName];
@@ -1138,12 +1158,81 @@ function parseSelector(value) {
 			//It's a trainer
 			trainer = setdex[trainerID];
 			pokemon = trainer.mons[0];
+			if (!pokemon) {
+				return;
+			}
 			pokemonName = pokemon.name || pokemon.species || pokemon.baseSpecies;
 			return [trainerID, trainer, pokemon, pokemonName];
 		}
 	}
 }
+$(".move-selector").change(function () {
+	var moveName = $(this).val();
+	var move = moves[moveName] || moves['(No Move)'];
+	var moveGroupObj = $(this).parent();
+	moveGroupObj.children(".move-bp").val(moveName === 'Present' ? 40 : move.bp);
+	var m = moveName.match(HIDDEN_POWER_REGEX);
+	if (m) {
+		var pokeObj = $(this).closest(".poke-info");
+		var pokemon = createPokemon(pokeObj);
+		var actual = calc.Stats.getHiddenPower(GENERATION, pokemon.ivs);
+		if (actual.type !== m[1]) {
+			var hpIVs = calc.Stats.getHiddenPowerIVs(GENERATION, m[1]);
+			if (hpIVs && gen < 7) {
+				for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+					var legacyStat = LEGACY_STATS[gen][i];
+					var stat = legacyStatToStat(legacyStat);
+					pokeObj.find("." + legacyStat + " .ivs").val(hpIVs[stat] !== undefined ? hpIVs[stat] : 31);
+					pokeObj.find("." + legacyStat + " .dvs").val(hpIVs[stat] !== undefined ? calc.Stats.IVToDV(hpIVs[stat]) : 15);
+				}
+				if (gen < 3) {
+					var hpDV = calc.Stats.getHPDV({
+						atk: pokeObj.find(".at .ivs").val(),
+						def: pokeObj.find(".df .ivs").val(),
+						spe: pokeObj.find(".sp .ivs").val(),
+						spc: pokeObj.find(".sa .ivs").val()
+					});
+					pokeObj.find(".hp .ivs").val(calc.Stats.DVToIV(hpDV));
+					pokeObj.find(".hp .dvs").val(hpDV);
+				}
+				pokeObj.change();
+				moveGroupObj.children(".move-bp").val(gen >= 6 ? 60 : 70);
+			}
+		} else {
+			moveGroupObj.children(".move-bp").val(actual.power);
+		}
+	} else if (gen >= 2 && gen <= 6 && HIDDEN_POWER_REGEX.test($(this).attr('data-prev'))) {
+		// If this selector was previously Hidden Power but now isn't, reset all IVs/DVs to max.
+		var pokeObj = $(this).closest(".poke-info");
+		for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+			var legacyStat = LEGACY_STATS[gen][i];
+			pokeObj.find("." + legacyStat + " .ivs").val(31);
+			pokeObj.find("." + legacyStat + " .dvs").val(15);
+		}
+	}
+	$(this).attr('data-prev', moveName);
+	moveGroupObj.children(".move-type").val(move.type);
+	moveGroupObj.children(".move-cat").val(move.category);
+	moveGroupObj.children(".move-crit").prop("checked", move.willCrit === true);
 
+	var stat = move.category === 'Special' ? 'spa' : 'atk';
+	var dropsStats =
+		move.self && move.self.boosts && move.self.boosts[stat] && move.self.boosts[stat] < 0;
+	if (Array.isArray(move.multihit)) {
+		moveGroupObj.children(".stat-drops").hide();
+		moveGroupObj.children(".move-hits").show();
+		var pokemon = $(this).closest(".poke-info");
+		var moveHits = (pokemon.find(".ability").val() === 'Skill Link') ? 5 : 3;
+		moveGroupObj.children(".move-hits").val(moveHits);
+	} else if (dropsStats) {
+		moveGroupObj.children(".move-hits").hide();
+		moveGroupObj.children(".stat-drops").show();
+	} else {
+		moveGroupObj.children(".move-hits").hide();
+		moveGroupObj.children(".stat-drops").hide();
+	}
+	moveGroupObj.children(".move-z").prop("checked", false);
+});
 // auto-update set details on select
 $(".set-selector").change(function () {
 	var id = $(this).val();
@@ -1165,7 +1254,7 @@ $(".set-selector").change(function () {
 			box.innerText = "";
 			for (var i = 0; i < trainer.mons.length; i++) {
 				var poke = trainer.mons[i];
-				addBoxed(box, poke, i, trainerID);
+				addBoxed(box, poke, i);
 			}
 			pokemonName = pokemonName || trainer.mons[0].species;
 			pokemon = pokemon || trainer.mons[0];
@@ -1179,7 +1268,7 @@ $(".set-selector").change(function () {
 	}
 });
 
-function setDataPannel(pannel, pokemonName, pokemon ,trainer) {
+function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	window.NO_CALC = true;
 	var pokeObj = pannel.closest(".poke-info");
 	if (stickyMoves.getSelectedSide() === pokeObj.prop("id")) {
@@ -1293,8 +1382,8 @@ function select2Select(select, id, title) {
 }
 function iconMonClicked(ev) {
 	var tar = ev.target;
-	var select = $(this).closest(".panel").find("input.set-selector")
-	select2Select(select, tar.dataset.id, tar.dataset.title)
+	var select = $(this).closest(".panel").find("input.set-selector");
+	select2Select(select, tar.dataset.id, tar.dataset.title);
 }
 
 //check if a trainer has already the same name, return its id
@@ -1317,13 +1406,13 @@ function saveTrainer() {
 		document.getElementById("edit-error").innerText = "Missing Pokemons";
 		return;
 	}
-	var existingID = checkPreExistingTrainer(tName.value);
+	/*var existingID = checkPreExistingTrainer(tName.value);
 	var count = tPoks.childElementCount;
 	var pokeList = [];
 	for (var i = 0; i < count; i++) {
 		var poke = tPoks.children[i].pokedata;
 		pokeList.push({
-			species: poke.species || poke.name,
+			species: poke.species,
 			level: poke.level,
 			ability: poke.ability,
 			moves: poke.moves,
@@ -1341,9 +1430,10 @@ function saveTrainer() {
 		setdex.push(trainer);
 		var node = document.getElementById("trn-table");
 		appendTrainerToList(node, trainer, node.childElementCount + 1);
-	}
+	}*/
 	localStorage.setItem("setdex", JSON.stringify(setdex));
 	switchToModTrainer();
+	document.getElementById("edit-error").innerText = "";
 }
 
 function rowEditOnClick(ev) {
@@ -1381,32 +1471,39 @@ function rowChangePos(ev) {
 	var parent = row.parentNode;
 	if (diff == 1) {
 		var crossed = parent.children[value - 1];
-		crossed.children[1].children[0].value--;
-		crossed.children[1].children[0].dataset.prev--;
+		var inputRow = crossed.children[1].children[0];
+		inputRow.value--;
+		inputRow.prev = inputRow.value;
 		crossed.after(row);
 	} else if (diff == -1) {
 		var crossed = parent.children[value - 1];
-		crossed.children[1].children[0].value++;
-		crossed.children[1].children[0].dataset.prev++;
+		var inputRow = crossed.children[1].children[0];
+		inputRow.value++;
+		inputRow.prev = inputRow.value;
 		crossed.before(row);
 	} else if (diff > 0) {
 		var crossed;
-		for (var i = 1; i <= diff; i++) {
+		for (var i = prev; i <= diff + prev - 1; i++) {
 			crossed = parent.children[i];
-			crossed.children[1].children[0].value--;
-			crossed.children[1].children[0].dataset.prev--;
+			var inputRow = crossed.children[1].children[0];
+			inputRow.value--;
+			inputRow.setAttribute("value", inputRow.value);
+			inputRow.dataset.prev = inputRow.value;
 		}
 		crossed.after(row);
 	} else {
 		var crossed;
-		for (var i = Math.abs(diff) - 1; i >= 0; i--) {
+		for (var i = prev - 2; i + 1 >= prev + diff; i--) {
 			crossed = parent.children[i];
-			crossed.children[1].children[0].value++;
-			crossed.children[1].children[0].dataset.prev++;
+			var inputRow = crossed.children[1].children[0];
+			inputRow.value++;
+			inputRow.setAttribute("value", inputRow.value);
+			inputRow.dataset.prev = inputRow.value;
 		}
 		crossed.before(row);
 	}
 	tar.dataset.prev = value;
+	tar.setAttribute("value", value);
 	saveTrainerListOrder();
 	localStorage.setItem("setdex", JSON.stringify(setdex));
 }
@@ -1477,17 +1574,20 @@ function addMon() {
 	var poke = window.addSets(window.ExportPokemon($("#p2")))[0];
 	var idMon = box.childElementCount;
 	addBoxed(box, poke, idMon);
+	setdex[window.current_trainer_id].mons.push(poke);
 }
 
 function addBoxed(box, poke, id) {
+	if (!poke) {
+		return;
+	}
 	var newPoke = document.createElement("img");
-	newPoke.id = poke.species || poke.name;
-	newPoke.src = getSrcImgPokemon(newPoke.id);
+	newPoke.id = poke.species + ";" + id;
+	newPoke.src = getSrcImgPokemon(poke.species);
 	newPoke.className = "poke-icon";
-	newPoke.pokedata = poke;
 	var trainerName = setdex[window.current_trainer_id].trn || document.getElementById("sets-trainer").value || "No-Named Trainer";
-	newPoke.dataset.title = newPoke.id + " : " + trainerName;
-	newPoke.dataset.id = newPoke.id + ";" + trainerName + ";" + id;
+	newPoke.dataset.title = poke.species + " : " + trainerName;
+	newPoke.dataset.id = poke.species + ";" + trainerName + ";" + id;
 	newPoke.addEventListener("dragstart", dragstart_handler);
 	newPoke.addEventListener("click", iconMonClicked);
 	box.append(newPoke);
@@ -1535,6 +1635,58 @@ function exportFile() {
 	a.download = "trainersets.js";
 	a.removeAttribute("hidden");
 }
+
+function tagOptionnal() {
+	var div = document.getElementById("trainer-edition-name");
+	var value = div.value;
+	var regex = new RegExp("(Optional)");
+	if (regex.test(value)) {
+		value = value.replace("(Optional)", "");
+	} else {
+		value += "(Optional)";
+	}
+	setdex[window.current_trainer_id].trn = value;
+	dexset[value] = window.current_trainer_id;
+	div.value = value;
+}
+
+function renameTrainerOnclick() {
+	var div = document.getElementById("trainer-edition-name");
+	var value = div.value;
+	var renameInput = document.getElementById("edition-rename-trainer");
+	var validate = document.getElementById("validate-rename");
+	renameInput.value = value;
+	renameInput.style.display = "inline";
+	validate.style.display = "inline";
+	var selfBtn = document.getElementById("rename-trainer");
+	selfBtn.style.display = "none";
+}
+
+function validateTrainerRename() {
+	var renameInput = document.getElementById("edition-rename-trainer");
+	var value = renameInput.value;
+	var existingID = checkPreExistingTrainer(value);
+	if (existingID && existingID != window.current_trainer_id) {
+		document.getElementById("edit-error").innerText = "Trainer already exist";
+		return;
+	}
+	setdex[window.current_trainer_id].trn = value;
+	for (var a in setdex) {
+		var name = setdex[a].trn;
+		if (window.dexset[name]) {
+			continue;
+		}
+		window.dexset[name] = a;
+	}
+	var div = document.getElementById("trainer-edition-name");
+	div.value = value;
+	var validate = document.getElementById("validate-rename");
+	renameInput.style.display = "none";
+	validate.style.display = "none";
+	var selfBtn = document.getElementById("rename-trainer");
+	selfBtn.style.display = "inline";
+}
+
 function setupCalc() {
 	gen = window.CALC_GEN_SETTINGS.calc;
 	GENERATION = calc.Generations.get(gen);
@@ -1543,6 +1695,9 @@ function setupCalc() {
 	dexset = [];
 	for (var a in setdex) {
 		var name = setdex[a].trn;
+		if (dexset[name]){
+			continue;
+		}
 		dexset[name] = a;
 	}
 	typeChart = calc.TYPE_CHART[window.CALC_GEN_SETTINGS.type_chart];
@@ -1592,8 +1747,7 @@ $(document).ready(function () {
 		}
 	});
 	var trainerid = JSON.parse(localStorage.getItem("tid")) || 1;
-	$(".set-selector").val(trainerid);
-	$(".set-selector").change();
+	selectTrainer(trainerid);
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$('#next-trainer').click(nextTrainer);
 	$('#previous-trainer').click(previousTrainer);
@@ -1602,6 +1756,9 @@ $(document).ready(function () {
 	appendAllTrainerToList();
 	$('#trainer-edition-save').click(saveTrainer);
 	$('#import-sets').click(importSets);
+	$("#rename-trainer").click(renameTrainerOnclick);
+	$("#validate-rename").click(validateTrainerRename);
+
 	var dropzones = document.getElementsByClassName("dropzone");
 	for (var i = 0; i < dropzones.length; i++) {
 		var dropzone = dropzones[i];
@@ -1610,7 +1767,7 @@ $(document).ready(function () {
 		dropzone.ondrop = drop;
 		dropzone.ondragover = allowDrop;
 	}
-	
+	$('#tag-optionnal').click(tagOptionnal);
 	$(".save-trigger").bind("change keyup", saveTrigger);
 	$('#save-change').click(saveTrainerPokemon);
 	$("#export-file").click(exportFile);

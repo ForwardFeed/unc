@@ -465,7 +465,6 @@ function isKnownDamagingMove(move) {
 
 function selectMovesFromRandomOptions(moves) {
 	var selected = [];
-
 	var nonDamaging = [];
 	for (var i = 0; i < moves.length; i++) {
 		if (isKnownDamagingMove(moves[i])) {
@@ -827,6 +826,10 @@ function setupCalc() {
 	dexset = [];
 	for (var a in setdex) {
 		var name = setdex[a].trn;
+		if (dexset[name]){
+			console.log(name);
+			continue;
+		}
 		dexset[name] = a;
 	}
 	typeChart = calc.TYPE_CHART[window.CALC_GEN_SETTINGS.type_chart];
@@ -1020,6 +1023,9 @@ function getSetOptions() {
 		//the zero trainer is off
 		for (var i = 1; i < setdex.length; i++) {
 			var trainer = setdex[i];
+			if (! trainer.mons[0]) {
+				trainer.mons[0] = {"ability":"Swift Swim","level":9,"item":"Choice Band","moves":["Bounce"],"nature":"Careful","species":"Magikarp"}
+			}
 			setOptions.push({
 				text: trainer.trn,
 				id: trainer.mons[0].species + ";" + trainer.trn + ";" + "0" 

@@ -205,10 +205,9 @@ function addSets(pokes) {
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
-				currentPoke = calc.SPECIES[9][currentRow[j].trim()];
+				currentPoke = structuredClone(calc.SPECIES[9][currentRow[j].trim()]);
 				currentPoke.species = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
-				currentPoke.isCustomSet = true;
 				currentPoke.ability = getAbility(rows[i + 1].split(":"));
 				currentPoke.teraType = getTeraType(rows[i + 1].split(":"));
 				currentPoke = getStats(currentPoke, rows, i + 1);
