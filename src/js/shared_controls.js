@@ -1138,7 +1138,7 @@ $(".set-selector").change(function () {
 		} else {
 			// changed trainer
 			window.current_trainer_id = trainerID;
-			localStorage.setItem("trainer", trainerID);
+			localStorage.setItem(GameName + "trainer", trainerID);
 			var box = document.getElementById("trainer-pok-list-opposing");
 			box.innerText = "";
 			for (var i = 0; i < trainer.mons.length; i++) {
@@ -1518,7 +1518,7 @@ function selectTrainer(id) {
 		pokemonName = parsed[3];
 
 	select2Select($('#p2').find("input.set-selector"), id, pokemonName + " : " + trainer.trn)
-	localStorage.setItem("trainer", id);
+	localStorage.setItem(GameName + "trainer", id);
 }
 
 function nextTrainer() {
@@ -1538,7 +1538,7 @@ function previousTrainer() {
 function resetTrainer() {
 	if (confirm("This will delete all your pokemons and make you going back to Youngster Calvin, this cannot be undone")) {
 		setdex[0].mons = [];
-		localStorage.removeItem("playerdex")
+		localStorage.removeItem(GameName + "playerdex")
 		var dropzones = document.getElementsByClassName("dropzone")
 		for (var i = 0; i < dropzones.length; i++) {
 			dropzones[i].innerText = "";
@@ -1602,6 +1602,34 @@ function hideColorCodes() {
 	HideShowCCSettings();
 }
 
+function SpeedBorderSetsChange(ev) {
+	var monImgs = document.getElementsByClassName("left-side");
+	for (var i = 0; i < monImgs.length; i++) {
+		if (ev.target.checked) {
+			monImgs[i].classList.remove("mon-speed-none");
+		} else {
+			monImgs[i].classList.add("mon-speed-none");
+		}
+
+	}
+
+}
+function widthSpeedBorder(ev) {
+	document.documentElement.style.setProperty("--spe-bor-width", ev.target.value + "px");
+}
+
+function ColorCodeSetsChange(ev) {
+	var monImgs = document.getElementsByClassName("left-side");
+	for (var i = 0; i < monImgs.length; i++) {
+		if (ev.target.checked) {
+			monImgs[i].classList.remove("mon-dmg-none");
+		} else {
+			monImgs[i].classList.add("mon-dmg-none");
+		}
+
+	}
+}
+
 function toggleInfoColorCode() {
 	document.getElementById("info-cc-field").toggleAttribute("hidden");
 }
@@ -1632,7 +1660,7 @@ function TrashPokemon() {
 		setdex[0].mons.splice(parseInt(pokeID), 1)
 	}
 	document.getElementById("trash-box").innerHTML = "";
-	localStorage.setItem("playerdex", JSON.stringify(setdex[0].mons));
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
 }
 
 function clearTrainerSets() {
@@ -1645,35 +1673,7 @@ function clearTrainerSets() {
 		mon.parentNode.removeChild(mon);
 	}
 	setdex[0].mons = [];
-	localStorage.setItem("playerdex", JSON.stringify(setdex[0].mons));
-}
-
-function SpeedBorderSetsChange(ev) {
-	var monImgs = document.getElementsByClassName("left-side");
-	for (var i = 0; i < monImgs.length; i++) {
-		if (ev.target.checked) {
-			monImgs[i].classList.remove("mon-speed-none");
-		} else {
-			monImgs[i].classList.add("mon-speed-none");
-		}
-
-	}
-
-}
-function widthSpeedBorder(ev) {
-	document.documentElement.style.setProperty("--spe-bor-width", ev.target.value + "px");
-}
-
-function ColorCodeSetsChange(ev) {
-	var monImgs = document.getElementsByClassName("left-side");
-	for (var i = 0; i < monImgs.length; i++) {
-		if (ev.target.checked) {
-			monImgs[i].classList.remove("mon-dmg-none");
-		} else {
-			monImgs[i].classList.add("mon-dmg-none");
-		}
-
-	}
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
 }
 
 window.isInDoubles = false;
@@ -1732,23 +1732,6 @@ function onFirstTime() {
 	document.getElementById("trash-box").setAttribute("data-placeholder", "drop here and click remove to remove");
 }
 
-function sideArrowToggle() {
-	var btn = document.getElementById("side-arrow-toggle");
-	var onShow = btn.getAttribute("data-id")
-	if (onShow == "true") {
-		btn.setAttribute("data-id", "false");
-		btn.innerText = "Hide Side Arrows";
-		localStorage.setItem("hsidearrow", "1");
-	} else {
-		btn.setAttribute("data-id", "true");
-		btn.innerText = "Show Side Arrows";
-		localStorage.setItem("hsidearrow", "0");
-	}
-	for (pannel of document.getElementsByClassName("side-pannel")) {
-		pannel.toggleAttribute("hidden")
-	}
-	setupSideCollapsers()
-}
 
 function toggleDoubleLegacyMode() {
 	if (+localStorage.getItem("doubleLegacy")) {
@@ -1862,7 +1845,7 @@ $(document).ready(function () {
 		dropzone.ondragover = allowDrop;
 	}
 	//select last trainer
-	var last = parseInt(localStorage.getItem("trainer"));
+	var last = parseInt(localStorage.getItem(GameName + "trainer"));
 	if (isNaN(last)) {
 		selectTrainer(1);
 	} else {

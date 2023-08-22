@@ -7,3 +7,5 @@ window.CALC_GEN_SETTINGS = {
 	items: 9,
 	abilities: 9
 };
+
+const GameName = "set this please"

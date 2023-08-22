@@ -1,3 +1,21 @@
+function sideArrowToggle() {
+	var btn = document.getElementById("side-arrow-toggle");
+	var onShow = btn.getAttribute("data-id")
+	if (onShow == "true") {
+		btn.setAttribute("data-id", "false");
+		btn.innerText = "Hide Side Arrows";
+		localStorage.setItem("hsidearrow", "1");
+	} else {
+		btn.setAttribute("data-id", "true");
+		btn.innerText = "Show Side Arrows";
+		localStorage.setItem("hsidearrow", "0");
+	}
+	for (pannel of document.getElementsByClassName("side-pannel")) {
+		pannel.toggleAttribute("hidden")
+	}
+	setupSideCollapsers()
+}
+
 function sideCollapsersCorrection(ev) {
 	if (ev) {
 		var arrow = ev.target.children[0] || ev.target.parentNode.children[0];

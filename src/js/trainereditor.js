@@ -1,4 +1,69 @@
 
+var GENERATION = {
+	'1': 1, 'rb': 1, 'rby': 1,
+	'2': 2, 'gs': 2, 'gsc': 2,
+	'3': 3, 'rs': 3, 'rse': 3, 'frlg': 3, 'adv': 3,
+	'4': 4, 'dp': 4, 'dpp': 4, 'hgss': 4,
+	'5': 5, 'bw': 5, 'bw2': 5, 'b2w2': 5,
+	'6': 6, 'xy': 6, 'oras': 6,
+	'7': 7, 'sm': 7, 'usm': 7, 'usum': 7,
+	'8': 8, 'ss': 8,
+	'9': 9, 'sv': 9
+};
+var GENERATION_O = GENERATION;
+
+var SETDEX = [
+	{},
+	typeof SETDEX_RBY === 'undefined' ? {} : SETDEX_RBY,
+	typeof SETDEX_GSC === 'undefined' ? {} : SETDEX_GSC,
+	typeof SETDEX_ADV === 'undefined' ? {} : SETDEX_ADV,
+	typeof SETDEX_DPP === 'undefined' ? {} : SETDEX_DPP,
+	typeof SETDEX_BW === 'undefined' ? {} : SETDEX_BW,
+	typeof SETDEX_XY === 'undefined' ? {} : SETDEX_XY,
+	typeof SETDEX_SM === 'undefined' ? {} : SETDEX_SM,
+	typeof SETDEX_SS === 'undefined' ? {} : SETDEX_SS,
+	typeof SETDEX_SV === 'undefined' ? {} : SETDEX_SV,
+];
+
+var gen, genWasChanged, notation, setdex, typeChart, pokedex, moves, abilities, items, calcHP, calcStat, GENERATION;
+
+function setupCalc() {
+	gen = window.CALC_GEN_SETTINGS.calc;
+	GENERATION = calc.Generations.get(gen);
+	pokedex = calc.SPECIES[window.CALC_GEN_SETTINGS.dex];
+	setdex = JSON.parse(localStorage.getItem(GameName + "setdex")) || TRAINER_DEX;
+	if (setdex.length == 0) {
+		setdex = [{trn: "Player", mons: [{species: "Beldum"}]}]
+	}
+	dexset = [];
+	for (var a in setdex) {
+		var name = setdex[a].trn;
+		if (dexset[name]){
+			continue;
+		}
+		dexset[name] = a;
+	}
+	typeChart = calc.TYPE_CHART[window.CALC_GEN_SETTINGS.type_chart];
+	moves = calc.MOVES[window.CALC_GEN_SETTINGS.moves];
+	items = calc.ITEMS[window.CALC_GEN_SETTINGS.items];
+	abilities = calc.ABILITIES[window.CALC_GEN_SETTINGS.abilities];
+	clearField();
+	loadDefaultLists();
+	$(".gen-specific.g" + gen).show();
+	$(".gen-specific").not(".g" + gen).hide();
+	var typeOptions = getSelectOptions(Object.keys(typeChart));
+	$("select.type1, select.move-type").find("option").remove().end().append(typeOptions);
+	$("select.teraType").find("option").remove().end().append(getSelectOptions(Object.keys(typeChart).slice(1)));
+	$("select.type2").find("option").remove().end().append("<option value=\"\">(none)</option>" + typeOptions);
+	var moveOptions = getSelectOptions(Object.keys(moves), true);
+	$("select.move-selector").find("option").remove().end().append(moveOptions);
+	var abilityOptions = getSelectOptions(abilities, true);
+	$("select.ability").find("option").remove().end().append("<option value=\"\">(other)</option>" + abilityOptions);
+	var itemOptions = getSelectOptions(items, true);
+	$("select.item").find("option").remove().end().append("<option value=\"\">(none)</option>" + itemOptions);
+}
+
+
 function cleanTrainerEdition() {
 	document.getElementById("trainer-edition-name").value = "";
 	document.getElementById("poke-box").innerText = "";
@@ -789,64 +854,6 @@ function calcStat(poke, StatID) {
 	return total;
 }
 
-var GENERATION = {
-	'1': 1, 'rb': 1, 'rby': 1,
-	'2': 2, 'gs': 2, 'gsc': 2,
-	'3': 3, 'rs': 3, 'rse': 3, 'frlg': 3, 'adv': 3,
-	'4': 4, 'dp': 4, 'dpp': 4, 'hgss': 4,
-	'5': 5, 'bw': 5, 'bw2': 5, 'b2w2': 5,
-	'6': 6, 'xy': 6, 'oras': 6,
-	'7': 7, 'sm': 7, 'usm': 7, 'usum': 7,
-	'8': 8, 'ss': 8,
-	'9': 9, 'sv': 9
-};
-var GENERATION_O = GENERATION;
-
-var SETDEX = [
-	{},
-	typeof SETDEX_RBY === 'undefined' ? {} : SETDEX_RBY,
-	typeof SETDEX_GSC === 'undefined' ? {} : SETDEX_GSC,
-	typeof SETDEX_ADV === 'undefined' ? {} : SETDEX_ADV,
-	typeof SETDEX_DPP === 'undefined' ? {} : SETDEX_DPP,
-	typeof SETDEX_BW === 'undefined' ? {} : SETDEX_BW,
-	typeof SETDEX_XY === 'undefined' ? {} : SETDEX_XY,
-	typeof SETDEX_SM === 'undefined' ? {} : SETDEX_SM,
-	typeof SETDEX_SS === 'undefined' ? {} : SETDEX_SS,
-	typeof SETDEX_SV === 'undefined' ? {} : SETDEX_SV,
-];
-
-var gen, genWasChanged, notation, setdex, typeChart, pokedex, moves, abilities, items, calcHP, calcStat, GENERATION;
-
-$(".gen").change(function () {
-	/*eslint-disable */
-	gen = ~~$(this).val() || 9;
-	GENERATION = calc.Generations.get(gen);
-	genWasChanged = true;
-	/* eslint-enable */
-	pokedex = calc.SPECIES[gen];
-	setdex = SETDEX[gen];
-	typeChart = calc.TYPE_CHART[gen];
-	moves = calc.MOVES[gen];
-	items = calc.ITEMS[gen];
-	abilities = calc.ABILITIES[gen];
-	clearField();
-	$("#importedSets").prop("checked", false);
-	loadDefaultLists();
-	$(".gen-specific.g" + gen).show();
-	$(".gen-specific").not(".g" + gen).hide();
-	var typeOptions = getSelectOptions(Object.keys(typeChart));
-	$("select.type1, select.move-type").find("option").remove().end().append(typeOptions);
-	$("select.teraType").find("option").remove().end().append(getSelectOptions(Object.keys(typeChart).slice(1)));
-	$("select.type2").find("option").remove().end().append("<option value=\"\">(none)</option>" + typeOptions);
-	var moveOptions = getSelectOptions(Object.keys(moves), true);
-	$("select.move-selector").find("option").remove().end().append(moveOptions);
-	var abilityOptions = getSelectOptions(abilities, true);
-	$("select.ability").find("option").remove().end().append("<option value=\"\">(other)</option>" + abilityOptions);
-	var itemOptions = getSelectOptions(items, true);
-	$("select.item").find("option").remove().end().append("<option value=\"\">(none)</option>" + itemOptions);
-	$(".set-selector").val(getSetOptions()[1].id);
-	$(".set-selector").change();
-});
 
 
 $(".notation").change(function () {
@@ -1249,7 +1256,7 @@ $(".set-selector").change(function () {
 			document.getElementById("trainer-edition-name").value = trainer.trn;
 			switchToModTrainer();
 			window.current_trainer_id = parseInt(trainerID);
-			localStorage.setItem("tid", trainerID);
+			localStorage.setItem(GameName + "tid", trainerID);
 			var box = document.getElementById("poke-box");
 			box.innerText = "";
 			for (var i = 0; i < trainer.mons.length; i++) {
@@ -1435,7 +1442,7 @@ function saveTrainer() {
 		var node = document.getElementById("trn-table");
 		appendTrainerToList(node, trainer, node.childElementCount + 1);
 	}*/
-	localStorage.setItem("setdex", JSON.stringify(setdex));
+	localStorage.setItem(GameName +"setdex", JSON.stringify(setdex));
 	switchToModTrainer();
 	document.getElementById("edit-error").innerText = "";
 }
@@ -1460,7 +1467,7 @@ function rowDeleteOnClick(ev) {
 	var row = ev.target.parentNode;
 	row.parentNode.removeChild(row);
 	saveTrainerListOrder();
-	localStorage.setItem("setdex", JSON.stringify(setdex));
+	localStorage.setItem(GameName + "setdex", JSON.stringify(setdex));
 }
 
 function rowChangePos(ev) {
@@ -1509,7 +1516,7 @@ function rowChangePos(ev) {
 	tar.dataset.prev = value;
 	tar.setAttribute("value", value);
 	saveTrainerListOrder();
-	localStorage.setItem("setdex", JSON.stringify(setdex));
+	localStorage.setItem(GameName + "setdex", JSON.stringify(setdex));
 }
 
 
@@ -1675,13 +1682,9 @@ function validateTrainerRename() {
 		return;
 	}
 	setdex[window.current_trainer_id].trn = value;
-	for (var a in setdex) {
-		var name = setdex[a].trn;
-		if (window.dexset[name]) {
-			continue;
-		}
-		window.dexset[name] = a;
-	}
+	dexset[value]=window.current_trainer_id;
+	localStorage.setItem(GameName + "setdex", JSON.stringify(setdex));
+
 	var div = document.getElementById("trainer-edition-name");
 	div.value = value;
 	var validate = document.getElementById("validate-rename");
@@ -1691,39 +1694,6 @@ function validateTrainerRename() {
 	selfBtn.style.display = "inline";
 }
 
-function setupCalc() {
-	gen = window.CALC_GEN_SETTINGS.calc;
-	GENERATION = calc.Generations.get(gen);
-	pokedex = calc.SPECIES[window.CALC_GEN_SETTINGS.dex];
-	setdex = JSON.parse(localStorage.getItem("setdex")) || TRAINER_DEX;
-	dexset = [];
-	for (var a in setdex) {
-		var name = setdex[a].trn;
-		if (dexset[name]){
-			continue;
-		}
-		dexset[name] = a;
-	}
-	typeChart = calc.TYPE_CHART[window.CALC_GEN_SETTINGS.type_chart];
-	moves = calc.MOVES[window.CALC_GEN_SETTINGS.moves];
-	items = calc.ITEMS[window.CALC_GEN_SETTINGS.items];
-	abilities = calc.ABILITIES[window.CALC_GEN_SETTINGS.abilities];
-	clearField();
-	loadDefaultLists();
-	$(".gen-specific.g" + gen).show();
-	$(".gen-specific").not(".g" + gen).hide();
-	var typeOptions = getSelectOptions(Object.keys(typeChart));
-	$("select.type1, select.move-type").find("option").remove().end().append(typeOptions);
-	$("select.teraType").find("option").remove().end().append(getSelectOptions(Object.keys(typeChart).slice(1)));
-	$("select.type2").find("option").remove().end().append("<option value=\"\">(none)</option>" + typeOptions);
-	var moveOptions = getSelectOptions(Object.keys(moves), true);
-	$("select.move-selector").find("option").remove().end().append(moveOptions);
-	var abilityOptions = getSelectOptions(abilities, true);
-	$("select.ability").find("option").remove().end().append("<option value=\"\">(other)</option>" + abilityOptions);
-	var itemOptions = getSelectOptions(items, true);
-	$("select.item").find("option").remove().end().append("<option value=\"\">(none)</option>" + itemOptions);
-}
-
 function switchToNewTrainer() {
 	document.getElementById("new-trainer").removeAttribute("hidden");
 	document.getElementById("edit-trainer").setAttribute("hidden", true);
@@ -1731,6 +1701,20 @@ function switchToNewTrainer() {
 	document.getElementById("previous-trainer").setAttribute("hidden", true);
 	window.current_trainer_id = parseInt(document.getElementById("trn-table").childElementCount + 1);
 	document.getElementById("poke-box").innerText = "";
+}
+
+function validateTrainerName () {
+	var nameInput = document.getElementById("trainer-edition-name");
+	var value = nameInput.value;
+	var existingID = checkPreExistingTrainer(value);
+	if (existingID && existingID != window.current_trainer_id) {
+		document.getElementById("edit-error").innerText = "Trainer already exist";
+		return;
+	}
+	setdex[window.current_trainer_id] = {trn: value, mons: [{species: "Beldum"}]}
+	dexset[value]=window.current_trainer_id;
+	localStorage.setItem(GameName + "setdex", JSON.stringify(setdex));
+	switchToModTrainer()
 }
 
 function switchToModTrainer() {
@@ -1750,13 +1734,19 @@ $(document).ready(function () {
 			return text.toUpperCase().indexOf(term.toUpperCase()) === 0 || text.toUpperCase().indexOf(" " + term.toUpperCase()) >= 0;
 		}
 	});
-	var trainerid = JSON.parse(localStorage.getItem("tid")) || 1;
-	selectTrainer(trainerid);
+	var trainerid = JSON.parse(localStorage.getItem(GameName + "tid")) || 1;
+	if (setdex.length < 2) {
+		//keep the trainer unselected
+	} else {
+		selectTrainer(trainerid);
+	}
+	
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$('#next-trainer').click(nextTrainer);
 	$('#previous-trainer').click(previousTrainer);
 	$("#pokemon-edition-save").click(addMon);
 	$('#trainer-edition-add').click(switchToNewTrainer);
+	$('#validate-name').click(validateTrainerName);
 	appendAllTrainerToList();
 	$('#trainer-edition-save').click(saveTrainer);
 	$('#import-sets').click(importSets);

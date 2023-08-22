@@ -7,3 +7,5 @@ window.CALC_GEN_SETTINGS = {
 	items: 8,
 	abilities: 8
 };
+
+const GameName = "runbun"

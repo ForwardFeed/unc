@@ -7,3 +7,5 @@ window.CALC_GEN_SETTINGS = {
 	items: 4,
 	abilities: 4
 };
+
+const GameName = "renegade"

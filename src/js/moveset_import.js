@@ -308,14 +308,14 @@ function dispatchPlayerMon(list) {
 			window.setdex[0].mons.push(poke);
 		}
 	}
-	localStorage.setItem("playerdex", JSON.stringify(window.setdex[0].mons));
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(window.setdex[0].mons));
 	box.children[0].click();
 }
 
 $(document).ready(function () {
 	$('#save-change').click(saveTrainerPokemon);
 	$("#import").click(importMonsPlayer);
-	var savedMons = JSON.parse(localStorage.getItem("playerdex"));
+	var savedMons = JSON.parse(localStorage.getItem(GameName + "playerdex"));
 	if (savedMons) {
 		dispatchPlayerMon(savedMons);
 	}

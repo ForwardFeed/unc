@@ -261,42 +261,7 @@ function checkExeptions(poke) {
 	return poke;
 
 }
-/*
-$("#clearSets").click(function () {
-	var yes = confirm("Do you really wish to delete all your mons?")
-	if (!yes){
-		return
-	}
-	localStorage.removeItem("customsets");
-	$(allPokemon("#importedSetsOptions")).hide();
-	loadDefaultLists();
-	for (let zone of document.getElementsByClassName("dropzone")){
-		zone.innerHTML="";
-	}
-
-});*/
-
-/*$(allPokemon("#importedSets")).click(function () {
-	var pokeID = $(this).parent().parent().prop("id");
-	var showCustomSets = $(this).prop("checked");
-	if (showCustomSets) {
-		loadCustomList(pokeID);
-	} else {
-		loadDefaultLists();
-	}
-});*/
 
 $(document).ready(function () {
-	/*var customSets;
-	placeBsBtn();
-	if (localStorage.customsets) {
-		customSets = JSON.parse(localStorage.customsets);
-		updateDex(customSets);
-		selectFirstMon();
-		$(allPokemon("#importedSetsOptions")).css("display", "inline");
-	} else {
-		loadDefaultLists();
-	}
-	//adjust the side buttons that collapse the data wished to be hidden
-	setupSideCollapsers();*/
+
 });
