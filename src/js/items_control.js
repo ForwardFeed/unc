@@ -16,7 +16,7 @@ function populateItemBox() {
         itemBox.innerHTML += '<img class="ic save-trigger" src="../img/none.png" data-id="">'
         BATTLE_ITEMS_MAPS[entry].forEach(function(value, key){
             if (items.includes(key)){
-                itemBox.innerHTML += '<img class="ic save-trigger" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/' + value + '.png" data-id="' + key + '">';
+                itemBox.innerHTML += '<img class="ic save-trigger" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/' + value + '.png" loading="lazy" data-id="' + key + '">';
             }
         });
         itemBox.innerHTML += '<hr>'
