@@ -3,14 +3,14 @@
 templateHTML="./src/template/index.html"
 templateEditor="./src/template/trainereditor.html"
 
-if [ ! -f $templateHTML ] 
+if [ ! -f "$templateHTML" ] 
 then
-    echo "can't find ${templateHTML}"
+    echo "can't find "$templateHTML""
     exit 1
 fi
-if [ ! -f $templateEditor ]
+if [ ! -f "$templateEditor" ]
 then
-    echo "can't find ${templateEditor}"
+    echo "can't find "$templateEditor""
     exit 2
 fi
 
@@ -18,6 +18,7 @@ gamesBase="./src/"
 games="runbun renegade EK"
 for game in $games
 do
-    cp -f "${gamesBase}${game}/index.html" ${templateHTML}
-    cp -f "${gamesBase}${game}/index.html" ${templateEditor}
+    echo "cp -f ${templateHTML}" "${gamesBase}${game}/index.html"
+    cp -f  "${templateHTML}"  "${gamesBase}${game}/index.html"
+    cp -f  "${templateEditor}" "${gamesBase}${game}/index.html"
 done
