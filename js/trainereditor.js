@@ -1097,7 +1097,7 @@ function saveTrigger(ev) {
 }
 
 function saveTrainerPokemon() {
-	var saveField = ($(this).closest("fieldset"));
+	var saveField = $("#p2");
 	$('#save-change').attr("hidden", true);
 	var poke = createPokemon(saveField);
 	poke.species = poke.name;
@@ -1248,7 +1248,7 @@ $(".set-selector").change(function () {
 			// changed trainer
 			document.getElementById("trainer-edition-name").value = trainer.trn;
 			switchToModTrainer();
-			window.current_trainer_id = trainerID;
+			window.current_trainer_id = parseInt(trainerID);
 			localStorage.setItem("tid", trainerID);
 			var box = document.getElementById("poke-box");
 			box.innerText = "";
@@ -1297,6 +1297,9 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	pannel.closest('.poke-info').find(".role-pool").hide();
 	pannel.closest('.poke-info').find(".tera-type-pool").hide();
 	if (trainer) {
+		if (!pokemon.moves) {
+			pokemon.moves=["(No Move)","(No Move)","(No Move)","(No Move)"];
+		}
 		var set = correctHiddenPower(pokemon);
 		if (trainer) {
 			pokeObj.find(".teraType").val(set.teraType || pokemon.types[0]);
@@ -1381,8 +1384,9 @@ function select2Select(select, id, title) {
 	select.select2('data', {id: id, text: title});
 }
 function iconMonClicked(ev) {
-	var tar = ev.target;
+	saveTrainerPokemon();
 	var select = $(this).closest(".panel").find("input.set-selector");
+	var tar = ev.target;
 	select2Select(select, tar.dataset.id, tar.dataset.title);
 }
 
@@ -1725,7 +1729,7 @@ function switchToNewTrainer() {
 	document.getElementById("edit-trainer").setAttribute("hidden", true);
 	document.getElementById("next-trainer").setAttribute("hidden", true);
 	document.getElementById("previous-trainer").setAttribute("hidden", true);
-	document.current_trainer_id = document.getElementById("trn-table").childElementCount + 1;
+	window.current_trainer_id = parseInt(document.getElementById("trn-table").childElementCount + 1);
 	document.getElementById("poke-box").innerText = "";
 }
 
