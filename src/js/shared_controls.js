@@ -1641,6 +1641,12 @@ function reboxTrainerPokemon() {
 	}
 }
 
+function selectFirstPlayerAvailable(select) {
+	$('#pl-any-selection').checked = true; // first check any pokemon
+	var toSel = getPlayerOptions()[4];
+	select2Select(select, toSel.id, toSel.text);
+}
+
 function TrashPokemon() {
 	var trashBox = document.getElementById("trash-box")
 	var maybeMultiple = trashBox.children;
@@ -1660,6 +1666,14 @@ function TrashPokemon() {
 	}
 	document.getElementById("trash-box").innerHTML = "";
 	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
+	// and then click to another pokemon, else its gonna make things crash
+	var mons = document.getElementById("trainer-mons").querySelectorAll("img")
+	if (!mons) {
+		var select = $(this).closest(".panel").find("input.selector")
+		selectFirstPlayerAvailable(select)
+	} else {
+		mons[0].click()
+	}
 }
 
 function clearTrainerSets() {
@@ -1673,6 +1687,8 @@ function clearTrainerSets() {
 	}
 	setdex[0].mons = [];
 	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
+	var select = $(this).closest(".panel").find("input.selector")
+	selectFirstPlayerAvailable(select)
 }
 
 window.isInDoubles = false;
