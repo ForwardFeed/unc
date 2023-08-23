@@ -13,6 +13,7 @@ function ExportPokemon(pokeInfo) {
 	var finalText = "";
 	finalText = pokemon.name + (pokemon.item ? " @ " + pokemon.item : "") + "\n";
 	finalText += "Level: " + pokemon.level + "\n";
+	finalText += "Gender: " + pokemon.gender + "\n";
 	finalText += pokemon.nature && gen > 2 ? pokemon.nature + " Nature" + "\n" : "";
 	finalText += pokemon.teraType && gen > 8 ? "Tera Type: " + pokemon.teraType : "";
 	finalText += pokemon.ability ? "Ability: " + pokemon.ability + "\n" : "";
@@ -195,6 +196,19 @@ function sortImports (a,b){
 	return -1
 }
 
+function getImportGender(row) {
+	switch (row){
+		case "Male":
+		case "M":
+			return "M";
+		case "Female":
+		case "F":
+			return "F";
+		default:
+			return "N";
+	}
+}
+
 function addSets(pokes) {
 	var rows = pokes.split("\n");
 	var currentRow;
@@ -205,9 +219,10 @@ function addSets(pokes) {
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
-				currentPoke = structuredClone(calc.SPECIES[9][currentRow[j].trim()]);
+				currentPoke =  structuredClone(calc.SPECIES[9][currentRow[j].trim()]); // prevents painfull overwrite of the pokedex
 				currentPoke.species = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
+				currentPoke.gender = getImportGender(rows[2].split(":")[1].trim())
 				currentPoke.ability = getAbility(rows[i + 1].split(":"));
 				currentPoke.teraType = getTeraType(rows[i + 1].split(":"));
 				currentPoke = getStats(currentPoke, rows, i + 1);
@@ -219,7 +234,6 @@ function addSets(pokes) {
 	}
 	return pokelist;
 }
-
 function checkExeptions(poke) {
 	switch (poke) {
 	case 'Aegislash':

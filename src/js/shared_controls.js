@@ -1268,7 +1268,13 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	if (pokemon.gender === "N") {
 		pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");
-	} else pokeObj.find(".gender").parent().show();
+	} else {
+		var genderDiv = pokeObj.find(".gender");
+		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "Female" ? "Female" : "";
+		genderDiv.val(gender);
+		genderDiv.change();
+		genderDiv.parent().show();
+	}
 	pannel.closest("fieldset")[0].querySelector("img").src = getSrcImgPokemon(pokemonName);
 	window.NO_CALC = false;
 }
@@ -1647,7 +1653,7 @@ function selectFirstPlayerAvailable(select) {
 	select2Select(select, toSel.id, toSel.text);
 }
 
-function TrashPokemon() {
+function trashPokemon() {
 	var trashBox = document.getElementById("trash-box")
 	var maybeMultiple = trashBox.children;
 	if (maybeMultiple.length == 0) {
@@ -1668,7 +1674,7 @@ function TrashPokemon() {
 	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
 	// and then click to another pokemon, else its gonna make things crash
 	var mons = document.getElementById("trainer-mons").querySelectorAll("img")
-	if (!mons) {
+	if (mons.length < 1) {
 		var select = $(this).closest(".panel").find("input.selector")
 		selectFirstPlayerAvailable(select)
 	} else {
@@ -1816,7 +1822,7 @@ $(document).ready(function () {
 	$('#hide-cc').click(hideColorCodes);
 	$('#refr-cc').click(refreshColorCode);
 	$('#info-cc').click(toggleInfoColorCode);
-	$('#trash-pok').click(TrashPokemon);
+	$('#trash-pok').click(trashPokemon);
 	$('#clearSets').click(clearTrainerSets);
 	$('#cc-spe-border').change(SpeedBorderSetsChange);
 	$('#cc-ohko-color').change(ColorCodeSetsChange);

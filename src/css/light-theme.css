@@ -8,7 +8,7 @@
     --button-hover: rgb(255, 255, 255);
     --button-selected: #bbc5e8;
     --fieldset-color: #e2e0e0;
-
+    --background-image: linear-gradient(#f2f2f2, 70%, #d7d7d7);
     --column-1: #757575;
 }
 
@@ -31,7 +31,7 @@ a.links-lighten:visited:hover {
 
 .select2-container .select2-choice {
 	background: var(--background);
-	background-image: linear-gradient(#f2f2f2, 70%, #d7d7d7);
+	background-image: var(--background-image);
 	color: var(--text);
 }
 

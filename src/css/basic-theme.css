@@ -6,7 +6,7 @@ html, body {
 }
 
 .btn {
-    background-color: var(--background);
+    background-image: var(--background-image);
     color: var(--text);
 }
 
@@ -36,18 +36,18 @@ fieldset {
 }
 
 select {
-    background-color: var(--background);
+    background-image: var(--background-image);
     color: var(--text);
 }
 
 
 input {
-    background-color: var(--background);
+    background-image: var(--background-image);
     color: var(--text);
 }
 
 textarea {
-    background-color: var(--background);
+    background-image: var(--background-image);
     color: var(--text);
 }
 
@@ -61,7 +61,7 @@ a.collapsible-link {
 }
 
 .bs-btn {
-    background-color: var(--background);
+    background-image: var(--background-image);
     color: var(--text);
 }
 
@@ -125,7 +125,7 @@ input.select2-input {
 }
 
 button{
-    background-color: var(--background);
+    background-image: var(--background-image);
     color: var(--text);
 }
 

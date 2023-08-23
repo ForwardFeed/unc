@@ -651,6 +651,7 @@ table.field {
     position: absolute;
     border: none;
     background-color: rgba(250, 235, 215, 0);
+    background-image: none;
 }
 .side-pannel{
     display: grid;
@@ -866,4 +867,8 @@ input[type='radio'] {
 
 input[type='radio']:checked {
     background: var(--button-selected);
+}
+
+input, select, button, .btn{
+    
 }

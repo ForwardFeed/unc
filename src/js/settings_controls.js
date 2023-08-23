@@ -22,14 +22,13 @@ function doubleModeSelection() {
 }
 
 function settingsMenuToggle(){
-    //eh, ironic a menu button to open the menu
     document.getElementById("settings-menu").toggleAttribute("hidden");
 }
 
 $(document).ready(function () {
     $('#light-theme').change(themeSelection);
     $('#dark-theme').change(themeSelection);
-    $('#other-theme').change(themeSelection);
+    $('#forest-theme').change(themeSelection);
     $('#double-two').change(doubleModeSelection);
     $('#double-one').change(doubleModeSelection);
     $('#hide-arrows').change(sideArrowToggle);

@@ -1134,47 +1134,6 @@ function importSets() {
 	}
 	textDiv.value = "";
 }
-function parseSelector(value) {
-	var parsed = value.split(";");
-	var trainerID, trainer, pokemon, pokemonName, pokeID;
-	pokemonName = parsed[0];
-	if (parsed.length == 3) {
-		pokeID = parsed[2];
-		window.current_pokemon_id = pokeID;
-		//it's a pokemon from a trainer
-		if (parsed[1] == "Player") {
-			// from the player
-			trainerID = 0;
-			trainer = setdex[trainerID];
-			pokemon = trainer.mons[pokeID];
-			pokemon = Object.assign(pokemon, pokedex[pokemon.species]);
-			return [trainerID, trainer, pokemon, pokemonName];
-		} else {
-			//for a NPC
-			trainerID = window.dexset[parsed[1]];
-			trainer = setdex[trainerID];
-			pokemon = trainer.mons[pokeID];
-			pokemon = Object.assign(pokemon, pokedex[pokemon.species]);
-			return [trainerID, trainer, pokemon, pokemonName];
-		}
-	} else {
-		trainerID = parseInt(pokemonName);
-		window.current_pokemon_id = 0;
-		if (isNaN(trainerID)) {
-			//It's a pokemon
-			return [null, null, pokedex[pokemonName], pokemonName];
-		} else {
-			//It's a trainer
-			trainer = setdex[trainerID];
-			pokemon = trainer.mons[0];
-			if (!pokemon) {
-				return;
-			}
-			pokemonName = pokemon.name || pokemon.species || pokemon.baseSpecies;
-			return [trainerID, trainer, pokemon, pokemonName];
-		}
-	}
-}
 $(".move-selector").change(function () {
 	var moveName = $(this).val();
 	var move = moves[moveName] || moves['(No Move)'];
@@ -1242,6 +1201,48 @@ $(".move-selector").change(function () {
 	}
 	moveGroupObj.children(".move-z").prop("checked", false);
 });
+
+function parseSelector(value) {
+	var parsed = value.split(";");
+	var trainerID, trainer, pokemon, pokemonName, pokeID;
+	pokemonName = parsed[0];
+	if (parsed.length == 3) {
+		pokeID = parsed[2];
+		window.current_pokemon_id = pokeID;
+		//it's a pokemon from a trainer
+		if (parsed[1] == "Player") {
+			// from the player
+			trainerID = 0;
+			trainer = setdex[trainerID];
+			pokemon = trainer.mons[pokeID];
+			pokemon = Object.assign(pokemon, pokedex[pokemon.species]);
+			return [trainerID, trainer, pokemon, pokemonName];
+		} else {
+			//for a NPC
+			trainerID = window.dexset[parsed[1]];
+			trainer = setdex[trainerID];
+			pokemon = trainer.mons[pokeID];
+			pokemon = Object.assign(pokemon, pokedex[pokemon.species]);
+			return [trainerID, trainer, pokemon, pokemonName];
+		}
+	} else {
+		trainerID = parseInt(pokemonName);
+		window.current_pokemon_id = 0;
+		if (isNaN(trainerID)) {
+			//It's a pokemon
+			return [null, null, pokedex[pokemonName], pokemonName];
+		} else {
+			//It's a trainer
+			trainer = setdex[trainerID];
+			pokemon = trainer.mons[0];
+			if (!pokemon) {
+				return;
+			}
+			pokemonName = pokemon.name || pokemon.species || pokemon.baseSpecies;
+			return [trainerID, trainer, pokemon, pokemonName];
+		}
+	}
+}
 // auto-update set details on select
 $(".set-selector").change(function () {
 	var id = $(this).val();
@@ -1250,6 +1251,7 @@ $(".set-selector").change(function () {
 		trainer		= parsed[1],
 		pokemon 	= parsed[2],
 		pokemonName = parsed[3];
+	console.log(pokemon);
 	if (trainer) {
 		if (trainerID == 0 || window.current_trainer_id == trainerID) {
 			//Player hasn't changed
@@ -1377,9 +1379,15 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	abilityObj.change();
 	itemObj.change();
 	if (pokemon.gender === "N") {
-		pokeObj.find(".gender").parent().hide();
+		//pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");
-	} else pokeObj.find(".gender").parent().show();
+	} else {
+		var genderDiv = pokeObj.find(".gender");
+		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "Female" ? "Female" : "";
+		genderDiv.val(gender);
+		genderDiv.change();
+		genderDiv.parent().show();
+	}
 	pannel.closest("fieldset")[0].querySelector("img").src = getSrcImgPokemon(pokemonName);
 	window.NO_CALC = false;
 }
