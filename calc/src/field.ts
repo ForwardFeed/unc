@@ -86,6 +86,10 @@ export class Side implements State.Side {
   isForesight: boolean;
   isTailwind: boolean;
   isHelpingHand: boolean;
+  isBadgeAtk: boolean;
+  isBadgeDef: boolean;
+  isBadgeSpeed: boolean;
+  isBadgeSpec: boolean;
   isFlowerGift: boolean;
   isFriendGuard: boolean;
   isAuroraVeil: boolean;
@@ -108,6 +112,10 @@ export class Side implements State.Side {
     this.isForesight = !!side.isForesight;
     this.isTailwind = !!side.isTailwind;
     this.isHelpingHand = !!side.isHelpingHand;
+    this.isBadgeAtk = !!side.isBadgeAtk;
+    this.isBadgeDef = !!side.isBadgeDef;
+    this.isBadgeSpeed = !!side.isBadgeSpeed;
+    this.isBadgeSpec = !!side.isBadgeSpec;
     this.isFlowerGift = !!side.isFlowerGift;
     this.isFriendGuard = !!side.isFriendGuard;
     this.isAuroraVeil = !!side.isAuroraVeil;

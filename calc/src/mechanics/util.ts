@@ -94,6 +94,9 @@ export function getFinalSpeed(gen: Generation, pokemon: Pokemon, field: Field, s
   const terrain = field.terrain;
   let speed = getModifiedStat(pokemon.rawStats.spe, pokemon.boosts.spe, gen);
   const speedMods = [];
+  if (field.attackerSide.isBadgeSpeed){
+		speed = Math.floor(speed*1.1);
+	}
 
   if (side.isTailwind) speedMods.push(8192);
   // Pledge swamp would get applied here when implemented
