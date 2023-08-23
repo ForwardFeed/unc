@@ -1377,7 +1377,6 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	calcStats(pokeObj);
 	abilityObj.change();
 	itemObj.change();
-	console.log(pokemon.gender)
 	if (pokemon.gender === "N") {
 		//pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("N");
