@@ -1,32 +1,38 @@
-function toggleDoubleLegacyMode() {
-	if (+localStorage.getItem("doubleLegacy")) {
-		localStorage.setItem("doubleLegacy", 0)
-		document.getElementById("double-legacy-mode").innerText = "Doubles Modern"
-		if (window.isInDoubles) {
+function doubleModeSelection() {
+    var double = document.querySelector("input[name=\"double\"]:checked").id;
+    if (double === "double-two") {
+        //set the 2 v 1 mode (modern :D)
+        localStorage.setItem("doubleLegacy", 0);
+        if (window.isInDoubles) {
 			document.getElementById("trainer-pok-list-opposing2").removeAttribute("hidden");
 			for (toShow of document.getElementsByClassName("for-doubles")) {
 				toShow.removeAttribute("hidden");
 			}
 		}
-	} else {
-		localStorage.setItem("doubleLegacy", 1)
-		document.getElementById("double-legacy-mode").innerText = "Doubles Legacy"
-		if (window.isInDoubles) {
+    } else {
+        //It's more like legacy mode (bruh)
+        localStorage.setItem("doubleLegacy", 1);
+        if (window.isInDoubles) {
 			document.getElementById("trainer-pok-list-opposing2").setAttribute("hidden", true);
 			for (toHide of document.getElementsByClassName("for-doubles")) {
 				toHide.setAttribute("hidden", true);
 			}
 		}
-	}
+    }
 }
 
-
+function settingsMenuToggle(){
+    //eh, ironic a menu button to open the menu
+    document.getElementById("settings-menu").toggleAttribute("hidden");
+}
 
 $(document).ready(function () {
-    $('#light-theme').click(themeSelection);
-    $('#dark-theme').click(themeSelection);
-    $('#double-two').click();
-    $('#double-one').click();
-    $('#hide-arrows').click();
-    $('#show-arrows').click();
+    $('#light-theme').change(themeSelection);
+    $('#dark-theme').change(themeSelection);
+    $('#double-two').change(doubleModeSelection);
+    $('#double-one').change(doubleModeSelection);
+    $('#hide-arrows').change(sideArrowToggle);
+    $('#show-arrows').change(sideArrowToggle);
+    $('#open-settings-box').click(settingsMenuToggle);
+    $('#close-settings-box').click(settingsMenuToggle)
 });

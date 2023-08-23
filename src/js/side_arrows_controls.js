@@ -1,13 +1,8 @@
 function sideArrowToggle() {
-	var btn = document.getElementById("side-arrow-toggle");
-	var onShow = btn.getAttribute("data-id")
-	if (onShow == "true") {
-		btn.setAttribute("data-id", "false");
-		btn.innerText = "Hide Side Arrows";
+	var arrows = document.querySelector("input[name=\"arrows\"]:checked").id;
+	if (arrows === "show-arrows") {
 		localStorage.setItem("hsidearrow", "1");
 	} else {
-		btn.setAttribute("data-id", "true");
-		btn.innerText = "Show Side Arrows";
 		localStorage.setItem("hsidearrow", "0");
 	}
 	for (pannel of document.getElementsByClassName("side-pannel")) {
@@ -115,9 +110,9 @@ function setupSideCollapsers() {
 
 
 $(document).ready(function(){
-    $('#side-arrow-toggle').click(sideArrowToggle);
     if (+localStorage.getItem("hsidearrow")) {
-		setupSideCollapsers()
-		sideArrowToggle()
+        document.getElementById("show-arrows").checked = true;
+		setupSideCollapsers();
+		sideArrowToggle();
 	}
 });

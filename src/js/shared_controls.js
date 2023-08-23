@@ -1810,7 +1810,6 @@ $(document).ready(function () {
 	$('#doubles-format').click(switchIconSingle);
 	$('#close-item-box, #ball-item').click(openCloseItemBox);
 	$('#close-note-box, #open-note').click(openCloseNoteBox);
-	$('#double-legacy-mode').click(toggleDoubleLegacyMode);
 	$('#screen-calc').click(onClickScreenCalc)
 	for (let dropzone of document.getElementsByClassName("dropzone")) {
 		dropzone.ondragenter = handleDragEnter;
@@ -1833,10 +1832,6 @@ $(document).ready(function () {
 		onFirstTime()
 		localStorage.setItem("isNotNew", true)
 	}
-	if (+localStorage.getItem("doubleLegacy")) {
-		toggleDoubleLegacyMode()
-	}
-
 	//some CSS variable;
 	document.documentElement.style.setProperty("--spe-bor-width", "3px");
 });

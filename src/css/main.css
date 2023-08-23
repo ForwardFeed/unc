@@ -225,7 +225,7 @@ th {
     font-size: 0.8em;
 }
 .panel {
-    float: left;
+    float: left; /* I like how my IDE yells me its an error*/
     display: inline-block; /* required for honkaculate to work */
 }
 .poke-info {
