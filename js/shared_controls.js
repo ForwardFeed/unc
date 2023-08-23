@@ -723,6 +723,12 @@ function createField() {
 		weather = $("input:radio[name='weather']:checked").val();
 		spikes = [~~$("input:radio[name='spikesL']:checked").val(), ~~$("input:radio[name='spikesR']:checked").val()];
 	}
+
+	var isBadgeAtk = [$("#AtkL").prop("checked"), $("#AtkR").prop("checked")];
+	var isBadgeSpec = [$("#SpecL").prop("checked"), $("#SpecR").prop("checked")];
+	var isBadgeDef = [$("#DefL").prop("checked"), $("#DefR").prop("checked")];
+	var isBadgeSpeed = [$("#SpeL").prop("checked"), $("#SpeR").prop("checked")];
+
 	var steelsurge = [$("#steelsurgeL").prop("checked"), $("#steelsurgeR").prop("checked")];
 	var vinelash = [$("#vinelashL").prop("checked"), $("#vinelashR").prop("checked")];
 	var wildfire = [$("#wildfireL").prop("checked"), $("#wildfireR").prop("checked")];
@@ -750,7 +756,7 @@ function createField() {
 			vinelash: vinelash[i], wildfire: wildfire[i], cannonade: cannonade[i], volcalith: volcalith[i],
 			isReflect: isReflect[i], isLightScreen: isLightScreen[i],
 			isProtected: isProtected[i], isSeeded: isSeeded[i], isForesight: isForesight[i],
-			isTailwind: isTailwind[i], isHelpingHand: isHelpingHand[i], isFlowerGift: isFlowerGift[i], isFriendGuard: isFriendGuard[i],
+			isTailwind: isTailwind[i], isHelpingHand: isHelpingHand[i], isFlowerGift: isFlowerGift[i], isFriendGuard: isFriendGuard[i], isBadgeAtk: isBadgeAtk[i], isBadgeSpec: isBadgeSpec[i], isBadgeDef: isBadgeDef[i], isBadgeSpeed: isBadgeSpeed[i],
 			isAuroraVeil: isAuroraVeil[i], isBattery: isBattery[i], isPowerSpot: isPowerSpot[i], isSwitching: isSwitchingOut[i] ? 'out' : undefined
 		});
 	};
@@ -1265,7 +1271,6 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	calcStats(pokeObj);
 	abilityObj.change();
 	itemObj.change();
-	console.log(pokemon.gender)
 	if (pokemon.gender === "N") {
 		pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");

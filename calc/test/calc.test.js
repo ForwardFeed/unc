@@ -637,10 +637,18 @@ describe('calc', function () {
                         spikes: 1,
                         isLightScreen: true,
                         isSeeded: true,
-                        isFriendGuard: true
+                        isFriendGuard: true,
+                        isBadgeAtk: false,
+                        isBadgeDef: false,
+                        isBadgeSpeed: false,
+                        isBadgeSpec: false
                     },
                     attackerSide: {
                         isHelpingHand: true,
+                        isBadgeAtk: false,
+                        isBadgeDef: false,
+                        isBadgeSpeed: false,
+                        isBadgeSpec: false,
                         isTailwind: true
                     }
                 });
