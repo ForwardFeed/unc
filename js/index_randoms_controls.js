@@ -361,10 +361,10 @@ function calcTrigger() {
 	}
 	if (window.isInDoubles) {
 		var monRow1 = document.getElementById("trainer-pok-list-opposing").children[0];
-		var monRow1T = monRow1T ? monRow1.dataset.title : null;
+		var monRow1T = monRow1 ? monRow1.dataset.id : null;
 		monRow1 = monRow1 ? monRow1.getAttribute("data-id") : null;
 		var monRow2 = document.getElementById("trainer-pok-list-opposing2").children[0];
-		var monRow2T = monRow2 ? monRow2.dataset.title : null;
+		var monRow2T = monRow2 ? monRow2.dataset.id : null;
 		monRow2 = monRow2 ? monRow2.getAttribute("data-id") : null;
 		var activeMon = $('#p2').find("input.set-selector").val();
 		window.NO_CALC = true;
@@ -374,7 +374,7 @@ function calcTrigger() {
 			performCalculations();
 		} else {
 			if (monRow1 != activeMon && monRow2 != activeMon) {
-				if (document.querySelectorAll("[data-id=" + activeMon + "]")[0].parentNode.id == "trainer-pok-list-opposing") {
+				if (document.querySelectorAll('[data-id="' + activeMon + '"')[0].parentNode.id == "trainer-pok-list-opposing") {
 					performCalculations();
 					window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
 					performCalculations(false, true);

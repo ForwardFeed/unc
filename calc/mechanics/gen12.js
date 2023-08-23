@@ -80,6 +80,11 @@ function calculateRBYGSC(gen, attacker, defender, move, field) {
             _a = __read([secondDefenderType, firstDefenderType], 2), firstDefenderType = _a[0], secondDefenderType = _a[1];
         }
     }
+    if (gen.num === 1 && (move.named('Super Fang'))) {
+        var lostHP = Math.floor(defender.curHP() / 2) || 1;
+        result.damage = lostHP;
+        return result;
+    }
     var type1Effectiveness = (0, util_1.getMoveEffectiveness)(gen, move, firstDefenderType, field.defenderSide.isForesight);
     var type2Effectiveness = secondDefenderType
         ? (0, util_1.getMoveEffectiveness)(gen, move, secondDefenderType, field.defenderSide.isForesight)

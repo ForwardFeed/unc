@@ -8,43 +8,37 @@
     <link type="text/css" rel="stylesheet"href="../css/main.css?" />
     <link type="text/css" rel="stylesheet"href="../css/editor.css" />
     <link type="text/css" rel="stylesheet"href="../css/vendor/bootstrap.css" />
-    <link type="text/css" rel="stylesheet"href="../css/dark-theme.css" id="dark-theme-styles">
-    <!-- Immediately loads the dark theme in order to reduce FOIT -->
-    <script>
-        /*
-        * localStorage will only store strings
-        * This means that if it has the value 'false',
-        * It will be truey and incorrectly cause the
-        * dark theme to load.
-        */
-        if (localStorage.getItem('darkTheme') !== 'true') {
-            document.getElementById('dark-theme-styles').disabled = true;
-        }
-    </script>
+    <link type="text/css" rel="stylesheet" href="../css/basic-theme.css">
+    <link type="text/css" rel="stylesheet" href="../css/dark-theme.css" id="dark-theme-styles">
+    <link type="text/css" rel="stylesheet" href="../css/light-theme.css" id="light-theme-styles">
+    <link type="text/css" rel="stylesheet" href="../css/forest-theme.css" id="forest-theme-styles">
 </head>
 
-<body class="dark-theme">
-
-    <div class="wrapper">
-        <span class="title-text main-title-text">UNC Pok&eacute;mon Calculator Trainer Editor </span> 
-
-        <div aria-label="Global settings" class="global-settings" role="region">
-            <div>
-                Select the generation
-            </div>
-            <span class="genSelection" aria-labelledby="selectGenInstruction" role="radiogroup" title="Select the generation.">
-                <span class="visually-hidden" id="selectGenInstruction">Select the generation.</span>
-                <input class="gen visually-hidden" type="radio" name="gen" value="1" id="gen1" /><label class="btn btn-small btn-left" for="gen1">RBY</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="2" id="gen2" /><label class="btn btn-small btn-mid" for="gen2">GSC</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="3" id="gen3" /><label class="btn btn-small btn-mid" for="gen3">ADV</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="4" id="gen4" /><label class="btn btn-small btn-mid" for="gen4">DPP</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="5" id="gen5" /><label class="btn btn-small btn-mid" for="gen5">B/W</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="6" id="gen6" /><label class="btn btn-small btn-mid" for="gen6">X/Y</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="7" id="gen7" /><label class="btn btn-small btn-mid" for="gen7">S/M</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="8" id="gen8" /><label class="btn btn-small btn-mid" for="gen8">S/S</label>
-                <input class="gen visually-hidden" type="radio" name="gen" value="9" id="gen9" checked="checked" /><label class="btn btn-small btn-right" for="gen9">S/V</label>
-            </span>
+<body class="wrapper">
+    <div id="settings-menu" hidden>
+        <div class="box-frame-header" data-x="0"data-y="0">
+            <legend>Settings</legend>
+            <div class="close-frame" id="close-settings-box">
+                <div class="mdiv">
+                  <div class="md"></div>
+                </div>
+              </div>
         </div>
+        <div id="settings-box">
+            <div class="settings-row">
+                <span>Theme: </span>
+                <label for="light-theme">Light</label>
+                <input type="radio" name="theme" id="light-theme">
+                <label for="dark-theme">Dark</label>
+                <input type="radio" name="theme" id="dark-theme" checked>
+                <label for="forest-theme">Forest</label>
+                <input type="radio" name="theme" id="forest-theme">
+            </div>
+        </div>
+        <script type="text/javascript" src="../js/theme-toggle.js"></script>
+    </div>
+    <div class="wrapper">
+        <span class="title-text main-title-text">UNC Pok&eacute;mon Calculator Trainer Editor </span>
         <hr>
         <div class="panel">
              <div aria-label="Trainer list" role="region">
@@ -98,6 +92,7 @@
                     <div id ="new-trainer" class="edition-export" hidden>
                         <label for="trainer-edition-name">Trainer name: </label>
                         <input type="text" name="trainer-edition-name" id="trainer-edition-name" autocomplete="off">
+                        <button" id="validate-name">Validate Name</button hidden>
                     </div>
                     <button id="tag-optionnal">Tag as Optionnal</button>
                     <hr>
@@ -657,11 +652,10 @@
                 This is an editor allowing to generate the trainer list for my unified nuzlocke calc
                 <ul>
                     <li>Your work is automatically save upon switching position or adding a trainer to the list</li>
-                    <li>The delete pokemon works instantly, if you made a mistake just switch trainer by using previous Trainer or Next Trainer</li>
+                    <li>The delete pokemon works instantly, if you made a mistake refesh the page</li>
                     <li>Boosts, HP aren't saved</li>
                 </ul>
             </p>
-            version 0.0.3 "I'm too impatient"
         </div>
     </div>
     <script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
@@ -700,10 +694,13 @@
     <script type="text/javascript" src="../calc/result.js?"></script>
     <script type="text/javascript" src="../calc/adaptable.js?"></script>
     <script type="text/javascript" src="../calc/index.js?"></script>
-    <script type="text/javascript" src="../js/calc_settings.js"></script>
+    <script type="text/javascript" src="./data/calc_settings.js"></script>
+    <script type="text/javascript" src="./cs_pre_load.js"></script>
+    <script type="text/javascript" src="../js/settings_controls.js"></script>
     <script type="text/javascript" src="../js/trainereditor.js"></script>
     <script type="text/javascript" src="../js/moveset_import_editor.js"></script>
-    <script type="text/javascript" src="./calculator_specific.js"></script>
+    <script type="text/javascript" src="./cs_after_load.js"></script>
+    <script type="text/javascript" src="../js/side_arrows_controls.js"></script>
 
     <div class="credits">Created by ForwardFeed thanks to the prior work of Honko with the smogon calc
         <ul>
@@ -713,9 +710,10 @@
                 </a>
             </li>
         </ul>
-
-        <button type="button" id="dark-theme-toggle"></button>
-        <script type="text/javascript" src="../js/dark-theme-toggle.js?"></script>
+        <button id="open-settings-box">Open Settings Panel</button>
+        <div id="sets">
+            <span>version 0.1.0 "Poltergeists in my code"</span>
+        </div>
     </div>
 </body>
 

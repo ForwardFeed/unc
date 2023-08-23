@@ -7,3 +7,6 @@ window.CALC_GEN_SETTINGS = {
 	items: 3,
 	abilities: 3
 };
+
+
+const GameName = "ek"

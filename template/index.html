@@ -7,23 +7,54 @@
     <link type="text/css" rel="stylesheet" href="../js/vendor/select2/select2.css" />
     <link type="text/css" rel="stylesheet" href="../css/main.css?" />
     <link type="text/css" rel="stylesheet" href="../css/vendor/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="../css/basic-theme.css">
     <link type="text/css" rel="stylesheet" href="../css/dark-theme.css" id="dark-theme-styles">
-    <!-- Immediately loads the dark theme in order to reduce FOIT -->
-    <script>
-        /*
-        * localStorage will only store strings
-        * This means that if it has the value 'false',
-        * It will be truey and incorrectly cause the
-        * dark theme to load.
-        */
-        if (localStorage.getItem('darkTheme') !== 'true') {
-            document.getElementById('dark-theme-styles').disabled = true;
-        }
-    </script>
+    <link type="text/css" rel="stylesheet" href="../css/light-theme.css" id="light-theme-styles">
+    <link type="text/css" rel="stylesheet" href="../css/forest-theme.css" id="forest-theme-styles">
 </head>
 
-<body class="dark-theme">
-
+<body class="wrapper">
+    <div id="settings-menu" hidden>
+        <div class="box-frame-header" data-x="0"data-y="0">
+            <legend>Settings</legend>
+            <div class="close-frame" id="close-settings-box">
+                <div class="mdiv">
+                  <div class="md"></div>
+                </div>
+              </div>
+        </div>
+        <div id="settings-box">
+            <div class="settings-row">
+                <span>Theme: </span>
+                <label for="light-theme">Light</label>
+                <input type="radio" name="theme" id="light-theme">
+                <label for="dark-theme">Dark</label>
+                <input type="radio" name="theme" id="dark-theme" checked>
+                <label for="forest-theme">Forest</label>
+                <input type="radio" name="theme" id="forest-theme">
+            </div>
+        </div>
+        <div id="settings-box">
+            <div class="settings-row">
+                <span>Double Mode: </span>
+                <label for="double-two">2 V 1</label>
+                <input type="radio" name="double" id="double-two" checked>
+                <label for="double-one">1 V 1</label>
+                <input type="radio" name="double" id="double-one">
+            </div>
+        </div>
+        <div id="settings-box">
+            <div class="settings-row">
+                <span>Side Arrows:</span>
+                <label for="hide-arrows">Hide</label>
+                <input type="radio" name="arrows" id="hide-arrows" checked>
+                <label for="show-arrows">Show</label>
+                <input type="radio" name="arrows" id="show-arrows">
+            </div>
+        </div>
+    </div>
+    <!-- Load the theme right now-->
+    <script type="text/javascript" src="../js/theme-toggle.js"></script>
 <div class="wrapper">
 
     <div aria-label="Settings" role="region">
@@ -1143,7 +1174,7 @@
                 <input type="text" class="set-selector calc-trigger selector" />
                 <span style="width:auto">
                     <input type="radio" name="selection-filter" id="pokemons-only">Only pokedex</input>
-                    <input type="radio" name="selection-filter" id="no-pokedex">Hide pokedex</input> 
+                    <input type="radio" name="selection-filter" id="no-pokedex">No pokedex</input> 
                     <input type="radio" name="selection-filter" id="trainers-only">Only trainers</input> 
                     <input type="radio" name="selection-filter" id="any-selection" checked>Any</input> 
                 </span>
@@ -1674,7 +1705,7 @@
                 <hr>
                 <button type="button" id="previous-trainer"> Previous Trainer</button>
                 <button type="button" id="next-trainer"> Next Trainer</button>
-                <button type="button" id="reset-trainer">Truck</button>
+                <button type="button" id="reset-trainer">Reset</button>
             </fieldset>
         </div>
     </div>
@@ -1749,10 +1780,12 @@
     <script type="text/javascript" src="../calc/adaptable.js?"></script>
     <script type="text/javascript" src="../calc/index.js?"></script>
     <script type="text/javascript" src="./data/calc_settings.js"></script>
+    <script type="text/javascript" src="./cs_pre_load.js"></script>
+    <script type="text/javascript" src="../js/settings_controls.js"></script>
     <script type="text/javascript" src="../js/shared_controls.js?"></script>
     <script type="text/javascript" src="../js/index_randoms_controls.js?"></script>
     <script type="text/javascript" src="../js/moveset_import.js?"></script>
-    <script type="text/javascript" src="./calculator_specific.js"></script>
+    <script type="text/javascript" src="./cs_after_load.js"></script>
     <script type="text/javascript" src="../js/items_control.js"></script>
     <script type="text/javascript" src="../js/side_arrows_controls.js"></script>
 </div>
@@ -1765,14 +1798,13 @@
         <li><a href="https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-damage-calculator.3593546/" class="links-lighten" target="_blank">Smogon Bug Reports</a></li>
         <li><a href="https://github.com/smogon/damage-calc" class="links-lighten" target="_blank">Smogon GitHub repository</a></li>
     </ul>
+    <button id="open-settings-box">Open Settings Panel</button>
     <div id="sets">
-        <button type="button" id="dark-theme-toggle"></button>
-        <script type="text/javascript" src="../js/dark-theme-toggle.js?"></script>
-        <button id="side-arrow-toggle" data-id="true">Show Side Arrows</button>
-        <button id="double-legacy-mode">Doubles Modern</button>
+        <span>version 0.1.0 "Poltergeists in my code"</span>
     </div>
+    
 </div> 
-version 0.0.3 "I'm too impatient"
+
 <div id="note-box-frame" class="box-frame" hidden>
     <div class="box-frame-header" data-x="1220"data-y="200">
         <legend>Notes</legend>

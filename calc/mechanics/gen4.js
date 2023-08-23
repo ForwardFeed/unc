@@ -159,6 +159,11 @@ function calculateDPP(gen, attacker, defender, move, field) {
         return result;
     }
     desc.HPEVs = "".concat(defender.evs.hp, " HP");
+    if (move.named('Super Fang')) {
+        var lostHP = Math.floor(defender.curHP() / 2) || 1;
+        result.damage = lostHP;
+        return result;
+    }
     var fixedDamage = (0, util_1.handleFixedDamageMoves)(attacker, move);
     if (fixedDamage) {
         result.damage = fixedDamage;

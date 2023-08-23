@@ -1,3 +1,16 @@
+function sideArrowToggle() {
+	var arrows = document.querySelector("input[name=\"arrows\"]:checked").id;
+	if (arrows === "show-arrows") {
+		localStorage.setItem("hsidearrow", "1");
+	} else {
+		localStorage.setItem("hsidearrow", "0");
+	}
+	for (pannel of document.getElementsByClassName("side-pannel")) {
+		pannel.toggleAttribute("hidden")
+	}
+	setupSideCollapsers()
+}
+
 function sideCollapsersCorrection(ev) {
 	if (ev) {
 		var arrow = ev.target.children[0] || ev.target.parentNode.children[0];
@@ -86,7 +99,6 @@ function setupSideCollapsers() {
 		readjust the left buttons
 		Because i couldn't find a proper way to do it with css
 	*/
-    console.log(leftBtns)
 	for (var i = 0; i < leftBtns.length; i++) {
 		leftBtns[i].style.left = "-" + leftBtns[i].offsetWidth + "px";
 
@@ -98,9 +110,9 @@ function setupSideCollapsers() {
 
 
 $(document).ready(function(){
-    $('#side-arrow-toggle').click(sideArrowToggle);
     if (+localStorage.getItem("hsidearrow")) {
-		setupSideCollapsers()
-		sideArrowToggle()
+        document.getElementById("show-arrows").checked = true;
+		setupSideCollapsers();
+		sideArrowToggle();
 	}
 });

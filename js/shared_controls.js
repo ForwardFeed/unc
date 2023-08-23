@@ -1138,7 +1138,7 @@ $(".set-selector").change(function () {
 		} else {
 			// changed trainer
 			window.current_trainer_id = trainerID;
-			localStorage.setItem("trainer", trainerID);
+			localStorage.setItem(GameName + "trainer", trainerID);
 			var box = document.getElementById("trainer-pok-list-opposing");
 			box.innerText = "";
 			for (var i = 0; i < trainer.mons.length; i++) {
@@ -1159,7 +1159,6 @@ $(".set-selector").change(function () {
 
 $(".player-selector").change(function () {
 	var id = $(this).val();
-	console.log(id)
 	parsed = parseSelector(id)
 	var trainerID = parsed[0],
 		trainer = parsed[1],
@@ -1266,10 +1265,17 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	calcStats(pokeObj);
 	abilityObj.change();
 	itemObj.change();
+	console.log(pokemon.gender)
 	if (pokemon.gender === "N") {
 		pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");
-	} else pokeObj.find(".gender").parent().show();
+	} else {
+		var genderDiv = pokeObj.find(".gender");
+		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "F" ? "Female" : "";
+		genderDiv.val(gender);
+		genderDiv.change();
+		genderDiv.parent().show();
+	}
 	pannel.closest("fieldset")[0].querySelector("img").src = getSrcImgPokemon(pokemonName);
 	window.NO_CALC = false;
 }
@@ -1386,11 +1392,9 @@ function allPokemon(selector) {
 
 /*imitate a manual selection*/
 function select2Select(select, id, title) {
-	select.value = id;
-	select.select2('data', { id: id, text: title });
+	select.val(id);
 	select.change();
-	//stupid but i'll fix this issue, eventually, one day, on purpose
-	select.select2('data', { id: id, text: title });
+	select.closest(".panel").find('.selector .select2-chosen').text(title);;
 }
 
 function iconMonClicked(ev) {
@@ -1431,6 +1435,8 @@ $(document).keydown(function (event) {
 		cntrlIsPressed = true;
 	else if (event.which == 65 && cntrlIsPressed) {
 		// Cntrl+  A
+	} else if (event.key === "Escape") {
+		settingsMenuToggle()
 	}
 });
 
@@ -1518,7 +1524,7 @@ function selectTrainer(id) {
 		pokemonName = parsed[3];
 
 	select2Select($('#p2').find("input.set-selector"), id, pokemonName + " : " + trainer.trn)
-	localStorage.setItem("trainer", id);
+	localStorage.setItem(GameName + "trainer", id);
 }
 
 function nextTrainer() {
@@ -1538,7 +1544,7 @@ function previousTrainer() {
 function resetTrainer() {
 	if (confirm("This will delete all your pokemons and make you going back to Youngster Calvin, this cannot be undone")) {
 		setdex[0].mons = [];
-		localStorage.removeItem("playerdex")
+		localStorage.removeItem(GameName + "playerdex")
 		var dropzones = document.getElementsByClassName("dropzone")
 		for (var i = 0; i < dropzones.length; i++) {
 			dropzones[i].innerText = "";
@@ -1572,13 +1578,13 @@ function colorCodeUpdate() {
 		var set = pMons[i].getAttribute("data-id");
 		var idColor = calculationsColors(set, p2);
 		if (speCheck && ohkoCheck) {
-			pMons[i].className = "trainer-pok left-side mon-speed-" + idColor.speed + "mon-dmg-" + idColor.code;
+			pMons[i].className = "mon-speed-" + idColor.speed + " mon-dmg-" + idColor.code;
 		}
 		else if (speCheck) {
-			pMons[i].className = "trainer-pok left-side mon-speed-" + idColor.speed;
+			pMons[i].className = "mon-speed-" + idColor.speed;
 		}
 		else if (ohkoCheck) {
-			pMons[i].className = "trainer-pok left-side mon-dmg-" + idColor.code;
+			pMons[i].className = "mon-dmg-" + idColor.code;
 		}
 	}
 }
@@ -1600,52 +1606,6 @@ function hideColorCodes() {
 	}
 	window.AUTO_REFRESH = false;
 	HideShowCCSettings();
-}
-
-function toggleInfoColorCode() {
-	document.getElementById("info-cc-field").toggleAttribute("hidden");
-}
-
-function reboxTrainerPokemon() {
-	var box = document.getElementById("box-poke-list");
-	var mons = document.getElementById("trainer-mons").querySelectorAll("img");
-	for (var mon of mons) {
-		box.append(mon);
-	}
-}
-
-function TrashPokemon() {
-	var trashBox = document.getElementById("trash-box")
-	var maybeMultiple = trashBox.children;
-	if (maybeMultiple.length == 0) {
-		return; //nothing to delete
-	}
-	var numberPKM = maybeMultiple.length > 1 ? maybeMultiple.length + " Pokemon(s)" : "this Pokemon";
-	var yes = confirm("do you really want to remove " + numberPKM + "?");
-	if (!yes) {
-		return;
-	}
-	var length = maybeMultiple.length;
-	for (var i = 0; i < length; i++) {
-		var pokeTrashed = maybeMultiple[i];
-		var pokeID = pokeTrashed.getAttribute("data-id").split(";")[2];
-		setdex[0].mons.splice(parseInt(pokeID), 1)
-	}
-	document.getElementById("trash-box").innerHTML = "";
-	localStorage.setItem("playerdex", JSON.stringify(setdex[0].mons));
-}
-
-function clearTrainerSets() {
-	var yes = confirm("This cannot be undone, are you sure?")
-	if (!yes) {
-		return;
-	}
-	var mons = document.getElementById("trainer-mons").querySelectorAll("img");
-	for (var mon of mons) {
-		mon.parentNode.removeChild(mon);
-	}
-	setdex[0].mons = [];
-	localStorage.setItem("playerdex", JSON.stringify(setdex[0].mons));
 }
 
 function SpeedBorderSetsChange(ev) {
@@ -1674,6 +1634,68 @@ function ColorCodeSetsChange(ev) {
 		}
 
 	}
+}
+
+function toggleInfoColorCode() {
+	document.getElementById("info-cc-field").toggleAttribute("hidden");
+}
+
+function reboxTrainerPokemon() {
+	var box = document.getElementById("box-poke-list");
+	var mons = document.getElementById("trainer-mons").querySelectorAll("img");
+	for (var mon of mons) {
+		box.append(mon);
+	}
+}
+
+function selectFirstPlayerAvailable(select) {
+	$('#pl-any-selection').checked = true; // first check any pokemon
+	var toSel = getPlayerOptions()[4];
+	select2Select(select, toSel.id, toSel.text);
+}
+
+function trashPokemon() {
+	var trashBox = document.getElementById("trash-box")
+	var maybeMultiple = trashBox.children;
+	if (maybeMultiple.length == 0) {
+		return; //nothing to delete
+	}
+	var numberPKM = maybeMultiple.length > 1 ? maybeMultiple.length + " Pokemon(s)" : "this Pokemon";
+	var yes = confirm("do you really want to remove " + numberPKM + "?");
+	if (!yes) {
+		return;
+	}
+	var length = maybeMultiple.length;
+	for (var i = 0; i < length; i++) {
+		var pokeTrashed = maybeMultiple[i];
+		var pokeID = pokeTrashed.getAttribute("data-id").split(";")[2];
+		setdex[0].mons.splice(parseInt(pokeID), 1)
+	}
+	document.getElementById("trash-box").innerHTML = "";
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
+	// and then click to another pokemon, else its gonna make things crash
+	var mons = document.getElementById("trainer-mons").querySelectorAll("img")
+	if (mons.length < 1) {
+		var select = $(this).closest(".panel").find("input.selector")
+		selectFirstPlayerAvailable(select)
+	} else {
+		mons[0].click()
+	}
+}
+
+function clearTrainerSets() {
+	var yes = confirm("This cannot be undone, are you sure?")
+	if (!yes) {
+		return;
+	}
+	var mons = document.getElementById("trainer-mons").querySelectorAll("img");
+	for (var mon of mons) {
+		mon.parentNode.removeChild(mon);
+	}
+	setdex[0].mons = [];
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
+	var select = $(this).closest(".panel").find("input.selector")
+	selectFirstPlayerAvailable(select)
 }
 
 window.isInDoubles = false;
@@ -1730,46 +1752,6 @@ function onFirstTime() {
 	document.getElementById("team-poke-list").setAttribute("data-placeholder", "You can drag & drop your pokemons here");
 	document.getElementById("box-poke-list2").setAttribute("data-placeholder", "You can drag & drop your pokemons here");
 	document.getElementById("trash-box").setAttribute("data-placeholder", "drop here and click remove to remove");
-}
-
-function sideArrowToggle() {
-	var btn = document.getElementById("side-arrow-toggle");
-	var onShow = btn.getAttribute("data-id")
-	if (onShow == "true") {
-		btn.setAttribute("data-id", "false");
-		btn.innerText = "Hide Side Arrows";
-		localStorage.setItem("hsidearrow", "1");
-	} else {
-		btn.setAttribute("data-id", "true");
-		btn.innerText = "Show Side Arrows";
-		localStorage.setItem("hsidearrow", "0");
-	}
-	for (pannel of document.getElementsByClassName("side-pannel")) {
-		pannel.toggleAttribute("hidden")
-	}
-	setupSideCollapsers()
-}
-
-function toggleDoubleLegacyMode() {
-	if (+localStorage.getItem("doubleLegacy")) {
-		localStorage.setItem("doubleLegacy", 0)
-		document.getElementById("double-legacy-mode").innerText = "Doubles Modern"
-		if (window.isInDoubles) {
-			document.getElementById("trainer-pok-list-opposing2").removeAttribute("hidden");
-			for (toShow of document.getElementsByClassName("for-doubles")) {
-				toShow.removeAttribute("hidden");
-			}
-		}
-	} else {
-		localStorage.setItem("doubleLegacy", 1)
-		document.getElementById("double-legacy-mode").innerText = "Doubles Legacy"
-		if (window.isInDoubles) {
-			document.getElementById("trainer-pok-list-opposing2").setAttribute("hidden", true);
-			for (toHide of document.getElementsByClassName("for-doubles")) {
-				toHide.setAttribute("hidden", true);
-			}
-		}
-	}
 }
 
 var screenDivCount = 0;
@@ -1841,7 +1823,7 @@ $(document).ready(function () {
 	$('#hide-cc').click(hideColorCodes);
 	$('#refr-cc').click(refreshColorCode);
 	$('#info-cc').click(toggleInfoColorCode);
-	$('#trash-pok').click(TrashPokemon);
+	$('#trash-pok').click(trashPokemon);
 	$('#clearSets').click(clearTrainerSets);
 	$('#cc-spe-border').change(SpeedBorderSetsChange);
 	$('#cc-ohko-color').change(ColorCodeSetsChange);
@@ -1853,7 +1835,6 @@ $(document).ready(function () {
 	$('#doubles-format').click(switchIconSingle);
 	$('#close-item-box, #ball-item').click(openCloseItemBox);
 	$('#close-note-box, #open-note').click(openCloseNoteBox);
-	$('#double-legacy-mode').click(toggleDoubleLegacyMode);
 	$('#screen-calc').click(onClickScreenCalc)
 	for (let dropzone of document.getElementsByClassName("dropzone")) {
 		dropzone.ondragenter = handleDragEnter;
@@ -1862,22 +1843,20 @@ $(document).ready(function () {
 		dropzone.ondragover = allowDrop;
 	}
 	//select last trainer
-	var last = parseInt(localStorage.getItem("trainer"));
+	var last = parseInt(localStorage.getItem(GameName + "trainer"));
 	if (isNaN(last)) {
 		selectTrainer(1);
 	} else {
 		selectTrainer(last);
 	}
+	//
+	clearField()
 	//to indicate some features to new arrivants
 	var isNotNew = JSON.parse(localStorage.getItem("isNotNew"))
 	if (!isNotNew) {//first time loading the page
 		onFirstTime()
 		localStorage.setItem("isNotNew", true)
 	}
-	if (+localStorage.getItem("doubleLegacy")) {
-		toggleDoubleLegacyMode()
-	}
-
 	//some CSS variable;
 	document.documentElement.style.setProperty("--spe-bor-width", "3px");
 });

@@ -13,6 +13,7 @@ function ExportPokemon(pokeInfo) {
 	var finalText = "";
 	finalText = pokemon.name + (pokemon.item ? " @ " + pokemon.item : "") + "\n";
 	finalText += "Level: " + pokemon.level + "\n";
+	finalText += "Gender: " + pokemon.gender + "\n";
 	finalText += pokemon.nature && gen > 2 ? pokemon.nature + " Nature" + "\n" : "";
 	finalText += pokemon.teraType && gen > 8 ? "Tera Type: " + pokemon.teraType : "";
 	finalText += pokemon.ability ? "Ability: " + pokemon.ability + "\n" : "";
@@ -195,6 +196,19 @@ function sortImports (a,b){
 	return -1
 }
 
+function getImportGender(row) {
+	switch (row){
+		case "Male":
+		case "M":
+			return "M";
+		case "Female":
+		case "F":
+			return "F";
+		default:
+			return "N";
+	}
+}
+
 function addSets(pokes) {
 	var rows = pokes.split("\n");
 	var currentRow;
@@ -205,9 +219,10 @@ function addSets(pokes) {
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
-				currentPoke = structuredClone(calc.SPECIES[9][currentRow[j].trim()]);
+				currentPoke =  structuredClone(calc.SPECIES[9][currentRow[j].trim()]); // prevents painfull overwrite of the pokedex
 				currentPoke.species = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
+				currentPoke.gender = getImportGender(rows[2].split(":")[1].trim())
 				currentPoke.ability = getAbility(rows[i + 1].split(":"));
 				currentPoke.teraType = getTeraType(rows[i + 1].split(":"));
 				currentPoke = getStats(currentPoke, rows, i + 1);
@@ -219,7 +234,6 @@ function addSets(pokes) {
 	}
 	return pokelist;
 }
-
 function checkExeptions(poke) {
 	switch (poke) {
 	case 'Aegislash':
@@ -261,42 +275,7 @@ function checkExeptions(poke) {
 	return poke;
 
 }
-/*
-$("#clearSets").click(function () {
-	var yes = confirm("Do you really wish to delete all your mons?")
-	if (!yes){
-		return
-	}
-	localStorage.removeItem("customsets");
-	$(allPokemon("#importedSetsOptions")).hide();
-	loadDefaultLists();
-	for (let zone of document.getElementsByClassName("dropzone")){
-		zone.innerHTML="";
-	}
-
-});*/
-
-/*$(allPokemon("#importedSets")).click(function () {
-	var pokeID = $(this).parent().parent().prop("id");
-	var showCustomSets = $(this).prop("checked");
-	if (showCustomSets) {
-		loadCustomList(pokeID);
-	} else {
-		loadDefaultLists();
-	}
-});*/
 
 $(document).ready(function () {
-	/*var customSets;
-	placeBsBtn();
-	if (localStorage.customsets) {
-		customSets = JSON.parse(localStorage.customsets);
-		updateDex(customSets);
-		selectFirstMon();
-		$(allPokemon("#importedSetsOptions")).css("display", "inline");
-	} else {
-		loadDefaultLists();
-	}
-	//adjust the side buttons that collapse the data wished to be hidden
-	setupSideCollapsers();*/
+
 });
