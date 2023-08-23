@@ -1428,6 +1428,8 @@ $(document).keydown(function (event) {
 		cntrlIsPressed = true;
 	else if (event.which == 65 && cntrlIsPressed) {
 		// Cntrl+  A
+	} else if (event.key === "Escape") {
+		settingsMenuToggle()
 	}
 });
 

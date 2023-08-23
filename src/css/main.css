@@ -865,5 +865,5 @@ input[type='radio'] {
 }
 
 input[type='radio']:checked {
-    background: #333;
+    background: var(--button-selected);
 }
