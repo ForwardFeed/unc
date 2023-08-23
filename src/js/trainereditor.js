@@ -1250,8 +1250,7 @@ $(".set-selector").change(function () {
 	var trainerID	= parsed[0],
 		trainer		= parsed[1],
 		pokemon 	= parsed[2],
-		pokemonName = parsed[3];
-	console.log(pokemon);
+		pokemonName = parsed[3]
 	if (trainer) {
 		if (trainerID == 0 || window.current_trainer_id == trainerID) {
 			//Player hasn't changed
@@ -1378,12 +1377,13 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	calcStats(pokeObj);
 	abilityObj.change();
 	itemObj.change();
+	console.log(pokemon.gender)
 	if (pokemon.gender === "N") {
 		//pokeObj.find(".gender").parent().hide();
-		pokeObj.find(".gender").val("");
+		pokeObj.find(".gender").val("N");
 	} else {
 		var genderDiv = pokeObj.find(".gender");
-		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "Female" ? "Female" : "";
+		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender === "F" ? "Female" : "";
 		genderDiv.val(gender);
 		genderDiv.change();
 		genderDiv.parent().show();

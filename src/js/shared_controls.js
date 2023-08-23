@@ -1265,12 +1265,13 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	calcStats(pokeObj);
 	abilityObj.change();
 	itemObj.change();
+	console.log(pokemon.gender)
 	if (pokemon.gender === "N") {
 		pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");
 	} else {
 		var genderDiv = pokeObj.find(".gender");
-		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "Female" ? "Female" : "";
+		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "F" ? "Female" : "";
 		genderDiv.val(gender);
 		genderDiv.change();
 		genderDiv.parent().show();
