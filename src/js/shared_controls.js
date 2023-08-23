@@ -1159,7 +1159,6 @@ $(".set-selector").change(function () {
 
 $(".player-selector").change(function () {
 	var id = $(this).val();
-	console.log(id)
 	parsed = parseSelector(id)
 	var trainerID = parsed[0],
 		trainer = parsed[1],
@@ -1386,11 +1385,9 @@ function allPokemon(selector) {
 
 /*imitate a manual selection*/
 function select2Select(select, id, title) {
-	select.value = id;
-	select.select2('data', { id: id, text: title });
+	select.val(id);
 	select.change();
-	//stupid but i'll fix this issue, eventually, one day, on purpose
-	select.select2('data', { id: id, text: title });
+	select.closest(".panel").find('.selector .select2-chosen').text(title);;
 }
 
 function iconMonClicked(ev) {
@@ -1572,13 +1569,13 @@ function colorCodeUpdate() {
 		var set = pMons[i].getAttribute("data-id");
 		var idColor = calculationsColors(set, p2);
 		if (speCheck && ohkoCheck) {
-			pMons[i].className = "trainer-pok left-side mon-speed-" + idColor.speed + "mon-dmg-" + idColor.code;
+			pMons[i].className = "mon-speed-" + idColor.speed + " mon-dmg-" + idColor.code;
 		}
 		else if (speCheck) {
-			pMons[i].className = "trainer-pok left-side mon-speed-" + idColor.speed;
+			pMons[i].className = "mon-speed-" + idColor.speed;
 		}
 		else if (ohkoCheck) {
-			pMons[i].className = "trainer-pok left-side mon-dmg-" + idColor.code;
+			pMons[i].className = "mon-dmg-" + idColor.code;
 		}
 	}
 }
@@ -1851,6 +1848,8 @@ $(document).ready(function () {
 	} else {
 		selectTrainer(last);
 	}
+	//
+	$("#clear").prop("checked", true);
 	//to indicate some features to new arrivants
 	var isNotNew = JSON.parse(localStorage.getItem("isNotNew"))
 	if (!isNotNew) {//first time loading the page

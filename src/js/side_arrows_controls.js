@@ -104,7 +104,6 @@ function setupSideCollapsers() {
 		readjust the left buttons
 		Because i couldn't find a proper way to do it with css
 	*/
-    console.log(leftBtns)
 	for (var i = 0; i < leftBtns.length; i++) {
 		leftBtns[i].style.left = "-" + leftBtns[i].offsetWidth + "px";
 
