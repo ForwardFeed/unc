@@ -1729,29 +1729,6 @@ function onFirstTime() {
 	document.getElementById("trash-box").setAttribute("data-placeholder", "drop here and click remove to remove");
 }
 
-
-function toggleDoubleLegacyMode() {
-	if (+localStorage.getItem("doubleLegacy")) {
-		localStorage.setItem("doubleLegacy", 0)
-		document.getElementById("double-legacy-mode").innerText = "Doubles Modern"
-		if (window.isInDoubles) {
-			document.getElementById("trainer-pok-list-opposing2").removeAttribute("hidden");
-			for (toShow of document.getElementsByClassName("for-doubles")) {
-				toShow.removeAttribute("hidden");
-			}
-		}
-	} else {
-		localStorage.setItem("doubleLegacy", 1)
-		document.getElementById("double-legacy-mode").innerText = "Doubles Legacy"
-		if (window.isInDoubles) {
-			document.getElementById("trainer-pok-list-opposing2").setAttribute("hidden", true);
-			for (toHide of document.getElementsByClassName("for-doubles")) {
-				toHide.setAttribute("hidden", true);
-			}
-		}
-	}
-}
-
 var screenDivCount = 0;
 function closeScreenCalc(id) {
 	var screenDiv = document.getElementById("calc-screen-id" + id);
@@ -1849,7 +1826,7 @@ $(document).ready(function () {
 		selectTrainer(last);
 	}
 	//
-	$("#clear").prop("checked", true);
+	clearField()
 	//to indicate some features to new arrivants
 	var isNotNew = JSON.parse(localStorage.getItem("isNotNew"))
 	if (!isNotNew) {//first time loading the page

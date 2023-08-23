@@ -8,19 +8,9 @@
     <link type="text/css" rel="stylesheet"href="../css/main.css?" />
     <link type="text/css" rel="stylesheet"href="../css/editor.css" />
     <link type="text/css" rel="stylesheet"href="../css/vendor/bootstrap.css" />
-    <link type="text/css" rel="stylesheet"href="../css/dark-theme.css" id="dark-theme-styles">
-    <!-- Immediately loads the dark theme in order to reduce FOIT -->
-    <script>
-        /*
-        * localStorage will only store strings
-        * This means that if it has the value 'false',
-        * It will be truey and incorrectly cause the
-        * dark theme to load.
-        */
-        if (localStorage.getItem('darkTheme') !== 'true') {
-            document.getElementById('dark-theme-styles').disabled = true;
-        }
-    </script>
+    <link type="text/css" rel="stylesheet" href="../css/dark-theme.css" id="dark-theme-styles">
+    <link type="text/css" rel="stylesheet" href="../css/light-theme.css" id="light-theme-styles">
+    <script type="text/javascript" src="../js/theme-toggle.js"></script>
 </head>
 
 <body class="dark-theme">

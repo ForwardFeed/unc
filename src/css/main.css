@@ -823,4 +823,47 @@ table.field {
 
 .ic:hover {
     background: var(--button-hover);
-  }
+}
+
+#settings-menu {
+	background-color: var(--background);
+	width: 50em;
+	z-index: 8;
+	position: fixed;
+	min-height: fit-content;
+	/* margin: auto; */
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+    padding: 10px;
+    border: solid;
+}
+#settings-box{
+    background-color: var(--fieldset-color);
+    padding-bottom: 20px;
+}
+
+.settings-row {
+	padding-left: 10px;
+	padding-top: 10px;
+    font-size: 12pt;
+}
+.settings-row> span{
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+input[type='radio'] {
+    box-sizing: border-box;
+    appearance: none;
+    background: white;
+    outline: 2px solid #333;
+    border: 3px solid white;
+    width: 16px;
+    height: 16px;
+}
+
+input[type='radio']:checked {
+    background: #333;
+}
