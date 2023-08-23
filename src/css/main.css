@@ -821,6 +821,6 @@ table.field {
     margin-right: 41px;
 }
 
-.box-item-list > img:hover {
+.ic:hover {
     background: var(--button-hover);
   }
