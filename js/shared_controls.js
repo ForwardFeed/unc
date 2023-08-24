@@ -1290,7 +1290,7 @@ interact('.box-frame-header').draggable({
 	inertia: true,
 	modifiers: [
 		interact.modifiers.restrictRect({
-			restriction: document.body,
+			restriction: document,
 			endOnly: true
 		})
 	],
@@ -1309,12 +1309,15 @@ function dragMoveListener(event) {
 	if (target.classList.contains("screen-box-frame")) {
 		parent = target;
 	}
+	if (isNaN(event.dx)) return;
 	var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
 	var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 	parent.style.left = x + "px";
 	parent.style.top = y + "px";
+	
 	target.setAttribute('data-x', x);
 	target.setAttribute('data-y', y);
+	
 }
 
 window.dragMoveListener = dragMoveListener
@@ -1773,23 +1776,25 @@ function closeScreenCalc(id) {
 function onClickScreenCalc() {
 	var screenDiv = document.createElement("div");
 	// box frame header here so it's less code in the end;
+	var mon1Name = document.getElementById("resultHeaderL").innerText.match(/^[^\']+/);
+	var mon2Name = document.getElementById("resultHeaderR").innerText.match(/^[^\']+/);
 	screenDiv.className = "box-frame screen-box-frame box-frame-header";
 	screenDiv.id = "calc-screen-id" + screenDivCount;
 	screenDiv.dataset.x = "500";
 	screenDiv.dataset.y = "250";
-	screenDiv.innerHTML = ` <div class="screen-box-frame-header"><legend>Calculation ${screenDivCount + 1}</legend>
+	screenDiv.innerHTML = ` <div class="screen-box-frame-header"><legend>Calculation ${mon1Name} VS ${mon2Name}</legend>
 	<div class="close-frame" id="close-calc-box-${screenDivCount}" onclick="closeScreenCalc(${screenDivCount})"><div class="mdiv"><div class="md"></div></div></div></div>`;
 	var moveResults = document.getElementsByClassName("move-result-group");
-	var mainResults = document.getElementsByClassName("main-result-group");
+	//var mainResults = document.getElementsByClassName("main-result-group");
 	for (let i = 0; i < moveResults.length; i++) {
 		if (moveResults[i].parentNode.classList.contains("box-frame")) {
 			continue
 		}
-		if (mainResults[i].parentNode.classList.contains("box-frame")) {
+		/*if (mainResults[i].parentNode.classList.contains("box-frame")) {
 			continue
-		}
+		}*/
 		screenDiv.appendChild(moveResults[i].cloneNode(true));
-		screenDiv.appendChild(mainResults[i].cloneNode(true));
+		//screenDiv.appendChild(mainResults[i].cloneNode(true));
 	}
 	document.body.append(screenDiv);
 	for (let label of document.querySelectorAll('.box-frame label')) {

@@ -605,24 +605,40 @@ table.field {
     background: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
 }
 
+.move-dmg-0{
+    /* exactly 0 % */
+    background: rgb(148,172,175);
+    background: linear-gradient(90deg, rgba(148,172,175,0.5004202364539565) 0%, rgba(244,254,255,0.1922969871542367) 100%);
+}
+
 .move-dmg-1{
     /* less than 25% */
+    background: rgb(65,198,214);
+    background: linear-gradient(90deg, rgba(65,198,214,0.5004202364539565) 0%, rgba(244,254,255,0.1922969871542367) 100%);
 }
 
 .move-dmg-2{
     /* less than 50% */
+    background: rgb(38,196,79);
+    background: linear-gradient(90deg, rgba(38,196,79,0.5004202364539565) 0%, rgba(244,254,255,0.1922969871542367) 100%);
 }
 
 .move-dmg-3{
     /* less than 75% */
+    background: rgb(190,208,26);
+    background: linear-gradient(90deg, rgba(190,208,26,0.5004202364539565) 0%, rgba(244,254,255,0.1922969871542367) 100%);
 }
 
 .move-dmg-4{
     /* less than 100% */
+    background: rgb(208,143,26);
+    background: linear-gradient(90deg, rgba(208,143,26,0.5004202364539565) 0%, rgba(244,254,255,0.1922969871542367) 100%);
 }
 
 .move-dmg-5{
     /* more than 100% */
+    background: rgb(208,58,26);
+    background: linear-gradient(90deg, rgba(208,58,26,0.5004202364539565) 0%, rgba(244,254,255,0.1922969871542367) 100%);
 }
 
 .box-poke, #trainer-pok-list-opposing2, #trainer-pok-list-opposing{
