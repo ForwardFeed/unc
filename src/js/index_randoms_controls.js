@@ -30,6 +30,16 @@ for (var i = 0; i < 4; i++) {
 	});
 }
 
+function resultBorderColors(result) {
+	var maxRoll = parseFloat(result.desc().match(/[^ ]+%/)[0]);
+	if (maxRoll == 0) return "0"
+	if (maxRoll < 25) return "1"
+	if (maxRoll < 50) return "2"
+	if (maxRoll < 75) return "3"
+	if (maxRoll < 100) return "4"
+	return "5"
+}
+
 var damageResults;
 /*
 	@p1 player one
@@ -71,9 +81,10 @@ function performCalculations(p1, p2, p3, double) {
 		p1.maxDamages.sort(function (firstMove, secondMove) {
 			return secondMove.maxDamage - firstMove.maxDamage;
 		});
+		;
 		$(resultLocations[0 + double][i].move + " + label").text(p1.moves[i].name.replace("Hidden Power", "HP"));
 		$(resultLocations[0 + double][i].damage).text(result.moveDesc(notation));
-
+		$(resultLocations[0 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))
 		// P2
 		result = damageResults[1 + double][i];
 		maxDamage = result.range()[1] * p2.moves[i].hits;
@@ -87,6 +98,7 @@ function performCalculations(p1, p2, p3, double) {
 		});
 		$(resultLocations[1 + double][i].move + " + label").text(p2.moves[i].name.replace("Hidden Power", "HP"));
 		$(resultLocations[1 + double][i].damage).text(result.moveDesc(notation));
+		$(resultLocations[1 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))
 
 		// BOTH
 		var bestMove;
