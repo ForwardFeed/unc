@@ -343,9 +343,12 @@ th {
 }
 
 /* header */
-.move-result-group {
+.move-result-group{
     min-width: 50em;
     margin: 1em 0 11.5em;
+}
+.screen-result-group{
+    min-width: 80em;
 }
 .move-result-subgroup {
     float: left;

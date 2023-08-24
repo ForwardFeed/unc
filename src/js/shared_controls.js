@@ -1785,16 +1785,11 @@ function onClickScreenCalc() {
 	screenDiv.innerHTML = ` <div class="screen-box-frame-header"><legend>Calculation ${mon1Name} VS ${mon2Name}</legend>
 	<div class="close-frame" id="close-calc-box-${screenDivCount}" onclick="closeScreenCalc(${screenDivCount})"><div class="mdiv"><div class="md"></div></div></div></div>`;
 	var moveResults = document.getElementsByClassName("move-result-group");
-	//var mainResults = document.getElementsByClassName("main-result-group");
 	for (let i = 0; i < moveResults.length; i++) {
 		if (moveResults[i].parentNode.classList.contains("box-frame")) {
 			continue
 		}
-		/*if (mainResults[i].parentNode.classList.contains("box-frame")) {
-			continue
-		}*/
 		screenDiv.appendChild(moveResults[i].cloneNode(true));
-		//screenDiv.appendChild(mainResults[i].cloneNode(true));
 	}
 	document.body.append(screenDiv);
 	for (let label of document.querySelectorAll('.box-frame label')) {
@@ -1808,9 +1803,7 @@ function onClickScreenCalc() {
 	}
 	for (let group of document.querySelectorAll('.box-frame .move-result-group')) {
 		group.classList.remove("move-result-group");
-	}
-	for (let group of document.querySelectorAll('.box-frame .main-result-group')) {
-		group.classList.remove("main-result-group");
+		group.classList.add("screen-result-group");
 	}
 	screenDivCount++
 }
