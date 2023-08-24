@@ -1026,10 +1026,10 @@ function getSetOptions() {
 	var setOptions = [];
 	if (!document.getElementById('pokemons-only').checked) {
 		//the zero trainer is off
-		for (var i = 1; i < setdex.length; i++) {
+		for (var i = 0; i < setdex.length; i++) {
 			var trainer = setdex[i];
 			if (!trainer.mons[0]) {
-				trainer.mons[0] = { "ability": "Swift Swim", "level": 9, "item": "Choice Band", "moves": ["Bounce"], "nature": "Careful", "species": "Magikarp" }
+				continue
 			}
 			setOptions.push({
 				text: trainer.trn,
@@ -1470,7 +1470,7 @@ function drop(ev) {
 		} else {
 			ev.target.appendChild(pokeDragged);
 		}
-	} else if (ev.target.classList.contains("left-side") || ev.target.classList.contains("right-side")) {
+	} else if (ev.target.tagName === "IMG") {
 		if (!cntrlIsPressed) {
 			var prev1 = pokeDragged.previousElementSibling;
 			if (!prev1) {

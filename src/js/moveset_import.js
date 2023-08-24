@@ -231,6 +231,9 @@ function addSets(pokes) {
 				currentPoke.teraType = getTeraType(rows[i + 1].split(":"));
 				currentPoke = getStats(currentPoke, rows, i + 1);
 				currentPoke = getMoves(currentPoke, rows, i);
+				if (currentPoke.nature === "-") {
+					currentPoke.nature = "Hardy" // unexplainable bug
+				}
 				pokelist.push(currentPoke);
 				break;
 			}
