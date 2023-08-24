@@ -84,7 +84,7 @@ function performCalculations(p1, p2, p3, double) {
 		});
 		$(resultLocations[0 + double][i].move + " + label").text(p1.moves[i].name.replace("Hidden Power", "HP"));
 		$(resultLocations[0 + double][i].damage).text(result.moveDesc(notation));
-		$(resultLocations[0 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))
+		if ($('#result-color-on').prop("checked")) $(resultLocations[0 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))
 		// P2
 		result = damageResults[1 + double][i];
 		maxDamage = result.range()[1] * p2.moves[i].hits;
@@ -98,7 +98,7 @@ function performCalculations(p1, p2, p3, double) {
 		});
 		$(resultLocations[1 + double][i].move + " + label").text(p2.moves[i].name.replace("Hidden Power", "HP"));
 		$(resultLocations[1 + double][i].damage).text(result.moveDesc(notation));
-		$(resultLocations[1 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))
+		if ($('#result-color-on').prop("checked")) $(resultLocations[1 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))
 
 		// BOTH
 		var bestMove;
