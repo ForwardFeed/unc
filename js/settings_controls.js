@@ -21,12 +21,31 @@ function doubleModeSelection() {
     }
 }
 
-function settingsMenuToggle(){
+function settingsMenuToggle() {
     document.getElementById("settings-menu").toggleAttribute("hidden");
 }
 
-function fieldResetToggle(){
-    localStorage.setItem("field-reset", !localStorage.getItem("field-reset"))
+function fieldResetToggle() {
+    localStorage.setItem("field-reset", ! JSON.parse(localStorage.getItem("field-reset")));
+}
+
+function resultColorToggle() {
+    var resultColor = JSON.parse(localStorage.getItem("result-color"))
+    localStorage.setItem("result-color", !resultColor);
+    if (!resultColor) { // inversion here^
+        $('#result-color-on').prop("checked", true)
+    } else {
+        $('#result-color-off').prop("checked", true)
+        var subgroups = document.getElementsByClassName("move-result-subgroup");
+        for (sub of subgroups){
+            for(div of sub.children){
+                if (div.className.match(/move-dmg-[0-9]/)) div.className = ""
+            }
+        }
+    }
+   
+  
+    calcTrigger();
 }
 
 $(document).ready(function () {
@@ -46,4 +65,7 @@ $(document).ready(function () {
     $('#field-reset-on').click(fieldResetToggle);
     $('#field-reset-off').click(fieldResetToggle);
     if (JSON.parse(localStorage.getItem("field-reset")))   $('#field-reset-on').prop("checked", true);
+    $('#result-color-on').click(resultColorToggle);
+    $('#result-color-off').click(resultColorToggle);
+    if (JSON.parse(localStorage.getItem("result-color")))   $('#result-color-on').prop("checked", true);
 });
