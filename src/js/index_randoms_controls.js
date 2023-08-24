@@ -41,7 +41,7 @@ function performCalculations(p1, p2, p3, double) {
 	double = double ? 2 : 0;;
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
-	//it's here i need to math if one mons has intimidate
+	var p1Save = p1 //prevents double apply of initimate
 	damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
 	p1 = damageResults[0 + double][0].attacker;
 	p2 = damageResults[1 + double][0].attacker;
@@ -117,6 +117,7 @@ function performCalculations(p1, p2, p3, double) {
 	bestResult.prop("checked", true);
 	bestResult.change();
 	if (!double && p3){
+		p1 = p1Save;
 		performCalculations(p1, p3, p2, true);
 	}
 }
@@ -270,10 +271,6 @@ function checkStatBoost(p1, p2) {
 }
 
 function calculateAllMoves(gen, p1, p1field, p2, p2field, double, pP3) {
-	if (double) {
-		//prevents from applying intimidate two times in a row
-		pP3 = null
-	}
 	double = double ? 2 : 0;
 	checkStatBoost(p1, p2);
 	var results = [[], [], [], []];
