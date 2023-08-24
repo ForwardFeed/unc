@@ -31,7 +31,8 @@ for (var i = 0; i < 4; i++) {
 }
 
 function resultBorderColors(result) {
-	var maxRoll = parseFloat(result.desc().match(/[^ ]+%/)[0]);
+	if (!result) return ""
+	var maxRoll = parseFloat(result.moveDesc().match(/[^ ]+%/)[0]);
 	if (maxRoll == 0) return "0"
 	if (maxRoll < 25) return "1"
 	if (maxRoll < 50) return "2"
@@ -81,7 +82,6 @@ function performCalculations(p1, p2, p3, double) {
 		p1.maxDamages.sort(function (firstMove, secondMove) {
 			return secondMove.maxDamage - firstMove.maxDamage;
 		});
-		;
 		$(resultLocations[0 + double][i].move + " + label").text(p1.moves[i].name.replace("Hidden Power", "HP"));
 		$(resultLocations[0 + double][i].damage).text(result.moveDesc(notation));
 		$(resultLocations[0 + double][i].damage).parent().removeClass().addClass("move-dmg-" + resultBorderColors(result))

@@ -1130,7 +1130,7 @@ function parseSelector(value) {
 
 }
 window.current_trainer_id = 0;
-$(".set-selector").change(function () {
+$(".set-selector").change(function (event) {
 	var id = $(this).val();
 	parsed = parseSelector(id);
 	var trainerID = parsed[0],
@@ -1456,7 +1456,10 @@ $(document).keydown(function (event) {
 		// Cntrl+  A
 	} else if (event.key === "Escape") {
 		settingsMenuToggle()
-	} else if (event.shiftKey){
+	} else if (event.target.classList.contains("select2-input") || event.target.tagName === "TEXTAREA"){
+		return
+	} 
+	else if (event.shiftKey){
 		if (event.key === "Z") {
 			oppositeAllCrits()
 		}

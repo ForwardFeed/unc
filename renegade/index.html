@@ -52,6 +52,21 @@
                 <input type="radio" name="arrows" id="show-arrows">
             </div>
         </div>
+        <div id="settings-box">
+            <div class="settings-row">
+                <span>Reset field when changing trainer:</span>
+                <label for="field-reset-off">Off</label>
+                <input type="radio" name="field-reset" id="field-reset-off" checked>
+                <label for="field-reset-on">On</label>
+                <input type="radio" name="field-reset" id="field-reset-on">
+            </div>
+        </div>
+        <legend> KEYBINDS </legend>
+        <div id="settings-box">
+            <div><b>SHIFT + Z</b> => Toggles all opposite moves as crits</div>
+            <div><b>ESCAPE</b> => Show / Hides settings menu</div>
+        </div>
+        
     </div>
     <!-- Load the theme right now-->
     <script type="text/javascript" src="../js/theme-toggle.js"></script>
@@ -1047,6 +1062,50 @@
                             <td><div class="right" title="Has this Pok&eacute;mon's power been boosted by an ally's Helping Hand?">
                                 <input aria-describedby="selectHelpingHandInstruction" class="visually-hidden calc-trigger" type="checkbox" id="helpingHandR" />
                                 <label class="btn btn-xxwide" for="helpingHandR">Helping Hand</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g1 g2 g3 ">
+                            <td><div class="left" title="Has this Pokémon's power been boosted by 1rst Badge?">
+                                <div hidden="" id="selectAtkBadgeInstruction">Has this Pokémon's power been boosted by 1rst Badge?</div>
+                                <input aria-describedby="selectAtkBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="AtkL">
+                                <label class="btn btn-xxwide" for="AtkL">Attack Boost</label>
+                            </div></td>
+                            <td><div class="right" title="Has this Pokémon's power been boosted by 1rst Badge?">
+                                <input aria-describedby="selectAtkBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="AtkR">
+                                <label class="btn btn-xxwide" for="AtkR">Attack Boost</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g1 g2 g3 ">
+                            <td><div class="left" title="Has this Pokémon's power been boosted by 3rd Badge?">
+                                <div hidden="" id="selectSpeedBadgeInstruction">Has this Pokémon's power been boosted by 3rd Badge?</div>
+                                <input aria-describedby="selectSpeedBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="SpeL">
+                                <label class="btn btn-xxwide" for="SpeL">Speed Boost</label>
+                            </div></td>
+                            <td><div class="right" title="Has this Pokémon's power been boosted by 3rd Badge?">
+                                <input aria-describedby="selectAtkBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="SpeR">
+                                <label class="btn btn-xxwide" for="SpeR">Speed Boost</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g1 g2 g3 ">
+                            <td><div class="left" title="Has this Pokémon's power been boosted by 5th Badge?">
+                                <div hidden="" id="SelectSpecBadgeInstruction">Has this Pokémon's power been boosted by 5th Badge?</div>
+                                <input aria-describedby="SelectDefBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="DefL">
+                                <label class="btn btn-xxwide" for="DefL">Defense Boost</label>
+                            </div></td>
+                            <td><div class="right" title="Has this Pokémon's power been boosted by 5th Badge?">
+                                <input aria-describedby="SelectDefBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="DefR">
+                                <label class="btn btn-xxwide" for="DefR">Defense Boost</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g1 g2 g3 ">
+                            <td><div class="left" title="Has this Pokémon's power been boosted by 7th Badge?">
+                                <div hidden="" id="SelectSpecBadgeInstruction">Has this Pokémon's power been boosted by 7th Badge?</div>
+                                <input aria-describedby="SelectSpecBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="SpecL">
+                                <label class="btn btn-xxwide" for="SpecL">Special Boost</label>
+                            </div></td>
+                            <td><div class="right" title="Has this Pokémon's power been boosted by 7th Badge?">
+                                <input aria-describedby="SelectSpecBadgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="SpecR">
+                                <label class="btn btn-xxwide" for="SpecR">Special Boost</label>
                             </div></td>
                         </tr>
                         <tr class="gen-specific g4 g5 g6 g7 g8 g9">
