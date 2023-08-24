@@ -35,6 +35,10 @@ $(document).ready(function () {
     $('#forest-theme').change(themeSelection);
     $('#double-two').change(doubleModeSelection);
     $('#double-one').change(doubleModeSelection);
+    if (+localStorage.getItem("doubleLegacy")) {
+        $('#double-one').prop("checked", true);
+        doubleModeSelection()
+    }
     $('#hide-arrows').change(sideArrowToggle);
     $('#show-arrows').change(sideArrowToggle);
     $('#open-settings-box').click(settingsMenuToggle);
