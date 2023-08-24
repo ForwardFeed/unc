@@ -1067,7 +1067,6 @@ function getPlayerOptions() {
 	var setOptions = [];
 	if (!document.getElementById('pl-pokemons-only').checked) {
 		if (!setdex[0].mons) {
-
 		} else {
 			for (var i = 0, iLen = setdex[0].mons.length; i < iLen; i++) {
 				var pokemon = setdex[0].mons[i];
@@ -1078,7 +1077,7 @@ function getPlayerOptions() {
 			}
 		}
 	}
-	if (!document.getElementById('pl-trainer-only').checke || setdex[0].mons.length == 0) {
+	if (!document.getElementById('pl-trainer-only').checked || setdex[0].mons.length == 0) {
 		var pokeNames = Object.keys(pokedex);
 		pokeNames.sort();
 		for (var i = 0, iLen = pokeNames.length; i < iLen; i++) {
@@ -1320,8 +1319,7 @@ function dragMoveListener(event) {
 
 window.dragMoveListener = dragMoveListener
 
-
-function loadDefaultLists() {
+function loadPokemonList(){
 	$(".set-selector").select2({
 		//when a result is push to deal with the rendering it goes throught it function here
 		formatResult: function (object) {
@@ -1331,7 +1329,6 @@ function loadDefaultLists() {
 		query: function (query) {
 			var pageSize = 30;
 			var results = [];
-			var term = query.term;// ? query.term[0].toUpperCase() : undefined;
 			var options = getSetOptions();
 			for (var i = 0; i < options.length; i++) {
 				var option = options[i];
@@ -1352,6 +1349,9 @@ function loadDefaultLists() {
 			callback(getSetOptions()[1]);
 		}
 	});
+}
+
+function loadTrainerList(){
 	$(".player-selector").select2({
 		//when a result is push to deal with the rendering it goes throught it function here
 		formatResult: function (object) {
@@ -1361,7 +1361,6 @@ function loadDefaultLists() {
 		query: function (query) {
 			var pageSize = 30;
 			var results = [];
-			var term = query.term;// ? query.term[0].toUpperCase() : undefined;
 			var options = getPlayerOptions();
 			for (var i = 0; i < options.length; i++) {
 				var option = options[i];
@@ -1382,6 +1381,11 @@ function loadDefaultLists() {
 			callback(getPlayerOptions()[0]);
 		}
 	});
+}
+
+function loadDefaultLists() {
+	loadTrainerList();
+	loadPokemonList();
 }
 
 function allPokemon(selector) {
@@ -1750,7 +1754,8 @@ function openCloseNoteBox() {
 
 function selectItem(ev) {
 	var newItem = ev.target.getAttribute("data-id");
-	document.getElementById("itemL1").value = newItem;
+	$("#itemL1").val(newItem);
+	$("#itemL1").change();
 }
 
 function onFirstTime() {
