@@ -133,6 +133,9 @@ function getFinalSpeed(gen, pokemon, field, side) {
     var terrain = field.terrain;
     var speed = getModifiedStat(pokemon.rawStats.spe, pokemon.boosts.spe, gen);
     var speedMods = [];
+    if (field.attackerSide.isBadgeSpeed) {
+        speed = Math.floor(speed * 1.1);
+    }
     if (side.isTailwind)
         speedMods.push(8192);
     if ((pokemon.hasAbility('Unburden') && pokemon.abilityOn) ||
@@ -502,13 +505,6 @@ function handleFixedDamageMoves(attacker, move) {
     return 0;
 }
 exports.handleFixedDamageMoves = handleFixedDamageMoves;
-
-function handlePercentageMoves(defender, move) {
-if (move.named('Super Fang')) {
-    return Math.floor(defender.originalCurHP / 2) > 0 ? Math.floor(defender.originalCurHP / 2) : 1;
-}
-exports.handlePercentageMoves = handlePercentageMoves;
-}
 function pokeRound(num) {
     return num % 1 > 0.5 ? Math.ceil(num) : Math.floor(num);
 }

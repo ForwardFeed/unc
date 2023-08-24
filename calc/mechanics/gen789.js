@@ -5,9 +5,11 @@ var util_1 = require("../util");
 var items_1 = require("../items");
 var result_1 = require("../result");
 var util_2 = require("./util");
-function calculateSMSSSV(gen, attacker, defender, move, field) {
+function calculateSMSSSV(gen, attacker, defender, move, field, defenderFriend) {
     (0, util_2.checkAirLock)(attacker, field);
     (0, util_2.checkAirLock)(defender, field);
+    if (defenderFriend)
+        (0, util_2.checkAirLock)(defenderFriend, field);
     (0, util_2.checkForecast)(attacker, field.weather);
     (0, util_2.checkForecast)(defender, field.weather);
     (0, util_2.checkItem)(attacker, field.isMagicRoom);
@@ -21,6 +23,8 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     (0, util_2.computeFinalStats)(gen, attacker, defender, field, 'def', 'spd', 'spe');
     (0, util_2.checkIntimidate)(gen, attacker, defender);
     (0, util_2.checkIntimidate)(gen, defender, attacker);
+    if (defenderFriend)
+        (0, util_2.checkIntimidate)(gen, defenderFriend, attacker);
     (0, util_2.checkDownload)(attacker, defender, field.isWonderRoom);
     (0, util_2.checkDownload)(defender, attacker, field.isWonderRoom);
     (0, util_2.checkIntrepidSword)(attacker, gen);
@@ -270,8 +274,8 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         result.damage = zLostHP;
         return result;
     }
-    if (move.named('Nature\'s Madness')) {
-        var lostHP = field.defenderSide.isProtected ? 0 : Math.floor(defender.curHP() / 2);
+    if (move.named('Nature\'s Madness', 'Super Fang', 'Ruination')) {
+        var lostHP = field.defenderSide.isProtected ? 0 : Math.floor(defender.curHP() / 2) || 1;
         result.damage = lostHP;
         return result;
     }

@@ -110,6 +110,11 @@ function calculateADV(gen, attacker, defender, move, field) {
         return result;
     }
     desc.HPEVs = "".concat(defender.evs.hp, " HP");
+    if (move.named('Super Fang')) {
+        var lostHP = Math.floor(defender.curHP() / 2) || 1;
+        result.damage = lostHP;
+        return result;
+    }
     var fixedDamage = (0, util_1.handleFixedDamageMoves)(attacker, move);
     if (fixedDamage) {
         result.damage = fixedDamage;
@@ -163,6 +168,28 @@ function calculateADV(gen, attacker, defender, move, field) {
     if (isPhysical && attacker.hasAbility('Huge Power', 'Pure Power')) {
         at *= 2;
         desc.attackerAbility = attacker.ability;
+    }
+    if (field.attackerSide.isBadgeAtk) {
+        if ((move.hasType('Normal', 'Fighting', 'Flying', 'Ground', 'Rock', 'Bug', 'Ghost', 'Poison', 'Steel'))) {
+            at = Math.floor(at * 1.1);
+            desc.isBadgeAtk = true;
+        }
+    }
+    if (field.attackerSide.isBadgeSpec) {
+        if ((move.hasType('Water', 'Grass', 'Fire', 'Ice', 'Electric', 'Psychic', 'Dragon', 'Dark'))) {
+            at = Math.floor(at * 1.1);
+            desc.isBadgeSpec = true;
+        }
+    }
+    if (field.defenderSide.isBadgeSpec) {
+        if (!isPhysical) {
+            df = Math.floor(df * 1.1);
+        }
+    }
+    if (field.defenderSide.isBadgeDef) {
+        if (isPhysical) {
+            df = Math.floor(df * 1.1);
+        }
     }
     if (!attacker.hasItem('Sea Incense') && move.hasType((0, items_1.getItemBoostType)(attacker.item))) {
         at = Math.floor(at * 1.1);

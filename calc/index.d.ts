@@ -1,7 +1,7 @@
 import { State } from './state';
 import * as I from './data/interface';
 import * as A from './adaptable';
-export declare function calculate(gen: I.GenerationNum | I.Generation, attacker: A.Pokemon, defender: A.Pokemon, move: A.Move, field?: A.Field): A.Result;
+export declare function calculate(gen: I.GenerationNum | I.Generation, attacker: A.Pokemon, defender: A.Pokemon, move: A.Move, field?: A.Field, defenderFriend?: A.Pokemon): A.Result;
 export declare class Move extends A.Move {
     constructor(gen: I.GenerationNum | I.Generation, name: string, options?: Partial<Omit<State.Move, 'ability' | 'item' | 'species'>> & {
         ability?: string;

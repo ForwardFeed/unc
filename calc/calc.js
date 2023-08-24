@@ -19,8 +19,8 @@ var MECHANICS = [
     gen789_1.calculateSMSSSV,
     gen789_1.calculateSMSSSV,
 ];
-function calculate(gen, attacker, defender, move, field) {
-    return MECHANICS[gen.num](gen, attacker.clone(), defender.clone(), move.clone(), field ? field.clone() : new field_1.Field());
+function calculate(gen, attacker, defender, move, field, defenderFriend) {
+    return MECHANICS[gen.num](gen, attacker.clone(), defender.clone(), move.clone(), field ? field.clone() : new field_1.Field(), defenderFriend === null || defenderFriend === void 0 ? void 0 : defenderFriend.clone());
 }
 exports.calculate = calculate;
 //# sourceMappingURL=calc.js.map
