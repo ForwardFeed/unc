@@ -1,7 +1,7 @@
 :root {
 	--text: #090802;
-	--background: #0f5306;
-	--button-hover: rgb(207, 212, 204);
+	--background: rgba(72,179,69,1);
+	--button-hover: rgb(124, 207, 76);
 	--button-selected: #32d04b;
 	--fieldset-color: #53a664;
 	--background-image: linear-gradient(#67eab9, 70%, #8cd985);
@@ -28,4 +28,15 @@ a.links-lighten:visited:hover {
 	background-image: var(--background-image);
 	color: var(--text);
 }
+/*background: rgb(30,48,26);
+	background: linear-gradient(90deg, rgba(30,48,26,1) 0%, rgba(72,179,69,1) 50%, rgba(30,48,26,1) 100%); */
+html {
+	/*background: rgb(72,179,69);
+	background: radial-gradient(circle, rgba(72,179,69,1) 0%, rgba(30,48,26,1) 100%);*/
+	background: rgb(30,48,26);
+	background: linear-gradient(90deg, rgba(30,48,26,1) 0%, rgba(72,179,69,1) 50%, rgba(30,48,26,1) 100%);
+}
 
+.wrapper {
+	background-color: transparent;
+}

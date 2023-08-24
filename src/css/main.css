@@ -605,6 +605,26 @@ table.field {
     background: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
 }
 
+.move-dmg-1{
+    /* less than 25% */
+}
+
+.move-dmg-2{
+    /* less than 50% */
+}
+
+.move-dmg-3{
+    /* less than 75% */
+}
+
+.move-dmg-4{
+    /* less than 100% */
+}
+
+.move-dmg-5{
+    /* more than 100% */
+}
+
 .box-poke, #trainer-pok-list-opposing2, #trainer-pok-list-opposing{
     min-height: 30px;
 }
@@ -869,6 +889,3 @@ input[type='radio']:checked {
     background: var(--button-selected);
 }
 
-input, select, button, .btn{
-    
-}

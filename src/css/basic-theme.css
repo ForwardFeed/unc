@@ -47,7 +47,7 @@ input {
 }
 
 textarea {
-    background-image: var(--background-image);
+    background-color: var(--background);
     color: var(--text);
 }
 

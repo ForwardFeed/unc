@@ -48,12 +48,14 @@ export function calculateSMSSSV(
   attacker: Pokemon,
   defender: Pokemon,
   move: Move,
-  field: Field
+  field: Field,
+  defenderFriend?: Pokemon,
 ) {
   // #region Initial
 
   checkAirLock(attacker, field);
   checkAirLock(defender, field);
+  if (defenderFriend) checkAirLock(defenderFriend, field);
   checkForecast(attacker, field.weather);
   checkForecast(defender, field.weather);
   checkItem(attacker, field.isMagicRoom);
@@ -69,6 +71,7 @@ export function calculateSMSSSV(
 
   checkIntimidate(gen, attacker, defender);
   checkIntimidate(gen, defender, attacker);
+  if (defenderFriend) checkIntimidate(gen, defenderFriend, attacker);
   checkDownload(attacker, defender, field.isWonderRoom);
   checkDownload(defender, attacker, field.isWonderRoom);
   checkIntrepidSword(attacker, gen);

@@ -32,19 +32,17 @@ for (var i = 0; i < 4; i++) {
 
 var damageResults;
 /*
-	@pP2 potential player 2
+	@p1 player one
+	@p2 potential player 2
+	@p3 potential player 3, the foes friend who will pop off intimidate or air lock(maybe) 
 	@double, if set the the result will be shown in the second div
 */
-function performCalculations(pP2, double) {
-	double = double ? 2 : 0;
-	var p1info = $("#p1");
-	var p2info = pP2 ? pP2 : $("#p2");
-	var p1 = createPokemon(p1info);
-	var p2 = createPokemon(p2info);
+function performCalculations(p1, p2, p3, double) {
+	double = double ? 2 : 0;;
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
-
-	damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double);
+	//it's here i need to math if one mons has intimidate
+	damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
 	p1 = damageResults[0 + double][0].attacker;
 	p2 = damageResults[1 + double][0].attacker;
 	var battling = [p1, p2];
@@ -118,6 +116,9 @@ function performCalculations(pP2, double) {
 	}
 	bestResult.prop("checked", true);
 	bestResult.change();
+	if (!double && p3){
+		performCalculations(p1, p3, p2, true);
+	}
 }
 
 function calculationsColors(p1info, p2) {
@@ -268,12 +269,16 @@ function checkStatBoost(p1, p2) {
 	}
 }
 
-function calculateAllMoves(gen, p1, p1field, p2, p2field, double) {
+function calculateAllMoves(gen, p1, p1field, p2, p2field, double, pP3) {
+	if (double) {
+		//prevents from applying intimidate two times in a row
+		pP3 = null
+	}
 	double = double ? 2 : 0;
 	checkStatBoost(p1, p2);
 	var results = [[], [], [], []];
 	for (var i = 0; i < 4; i++) {
-		results[0 + double][i] = calc.calculate(gen, p1, p2, p1.moves[i], p1field);
+		results[0 + double][i] = calc.calculate(gen, p1, p2, p1.moves[i], p1field, pP3);
 		results[1 + double][i] = calc.calculate(gen, p2, p1, p2.moves[i], p2field);
 	}
 	return results;
@@ -359,6 +364,8 @@ function calcTrigger() {
 	if (window.AUTO_REFRESH) {
 		window.refreshColorCode();
 	}
+	var p1, p2, p3;
+	p1 = createPokemon($("#p1"));
 	if (window.isInDoubles) {
 		var monRow1 = document.getElementById("trainer-pok-list-opposing").children[0];
 		var monRow1T = monRow1 ? monRow1.dataset.id : null;
@@ -370,27 +377,37 @@ function calcTrigger() {
 		window.NO_CALC = true;
 		window.NO_CALC_RECURSION = true;
 		var dataSave = saveCurrentMon();
+		/* double = double ? 2 : 0;
+			var p1info = $("#p1");
+			var p2info = pP2 ? pP2 : $("#p2");
+			var p1 = createPokemon(p1info);
+			var p2 = createPokemon(p2info);*/
+		
 		if (!monRow1 || !monRow2) {
-			performCalculations();
+			performCalculations(p1, createPokemon($("#p2")));
 		} else {
 			if (monRow1 != activeMon && monRow2 != activeMon) {
 				if (document.querySelectorAll('[data-id="' + activeMon + '"')[0].parentNode.id == "trainer-pok-list-opposing") {
-					performCalculations();
+					p2 = createPokemon($("#p2"));
 					window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
-					performCalculations(false, true);
+					p3 = createPokemon($("#p2"));
+					performCalculations(p1, p2, p3);
 				} else {
-					performCalculations(false, true);
+					p3 = createPokemon($("#p2"));
 					window.select2Select($('#p2').find("input.set-selector"), monRow1, monRow1T);
-					performCalculations();
+					p2 = createPokemon($("#p2"));
+					performCalculations(p1, p2, p3);
 				}
 			} else if (monRow1 == activeMon) {
-				performCalculations();
+				p2 = createPokemon($("#p2"));
 				window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
-				performCalculations(false, true);
+				p3 = createPokemon($("#p2"));
+				performCalculations(p1, p2, p3);
 			} else if (monRow2 == activeMon) {
-				performCalculations(false, true);
+				p3 = createPokemon($("#p2"));
 				window.select2Select($('#p2').find("input.set-selector"), monRow1, monRow1T);
-				performCalculations();
+				p2 = createPokemon($("#p2"));
+				performCalculations(p1, p2, p3);
 			}
 		}
 		$('#p2').find("input.set-selector").val(activeMon);
@@ -400,7 +417,7 @@ function calcTrigger() {
 		window.NO_CALC_RECURSION = false;
 		window.NO_CALC = false;
 	} else {
-		performCalculations();
+		performCalculations(p1, createPokemon($("#p2")));
 	}
 }
 
