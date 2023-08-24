@@ -25,6 +25,10 @@ function settingsMenuToggle(){
     document.getElementById("settings-menu").toggleAttribute("hidden");
 }
 
+function fieldResetToggle(){
+    localStorage.setItem("field-reset", !localStorage.getItem("field-reset"))
+}
+
 $(document).ready(function () {
     $('#light-theme').change(themeSelection);
     $('#dark-theme').change(themeSelection);
@@ -34,5 +38,8 @@ $(document).ready(function () {
     $('#hide-arrows').change(sideArrowToggle);
     $('#show-arrows').change(sideArrowToggle);
     $('#open-settings-box').click(settingsMenuToggle);
-    $('#close-settings-box').click(settingsMenuToggle)
+    $('#close-settings-box').click(settingsMenuToggle);
+    $('#field-reset-on').click(fieldResetToggle);
+    $('#field-reset-off').click(fieldResetToggle);
+    if (JSON.parse(localStorage.getItem("field-reset")))   $('#field-reset-on').prop("checked", true);
 });

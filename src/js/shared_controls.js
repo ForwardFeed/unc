@@ -1441,14 +1441,25 @@ function getSrcImgPokemon(pokeName) {
 
 }
 
+function oppositeAllCrits(){
+	$('#critR1').prop("checked", !$('#critR1').prop("checked")).change(); 
+	$('#critR2').prop("checked", !$('#critR2').prop("checked")).change(); 
+	$('#critR3').prop("checked", !$('#critR3').prop("checked")).change(); 
+	$('#critR4').prop("checked", !$('#critR4').prop("checked")).change(); 
+}
+
 // Check whether control button is pressed
 $(document).keydown(function (event) {
-	if (event.which == "17")
+	if (event.which == "17") {
 		cntrlIsPressed = true;
-	else if (event.which == 65 && cntrlIsPressed) {
+	} else if (event.which == 65 && cntrlIsPressed) {
 		// Cntrl+  A
 	} else if (event.key === "Escape") {
 		settingsMenuToggle()
+	} else if (event.shiftKey){
+		if (event.key === "Z") {
+			oppositeAllCrits()
+		}
 	}
 });
 
@@ -1527,6 +1538,7 @@ function truckMessage() {
 
 
 function selectTrainer(id) {
+	if ($('#field-reset-on').prop("checked")) clearField();
 	document.getElementById("trainer-pok-list-opposing").innerText = "";
 	document.getElementById("trainer-pok-list-opposing2").innerText = "";
 	var parsed = parseSelector(String(id));
