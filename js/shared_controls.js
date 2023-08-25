@@ -1271,7 +1271,7 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	abilityObj.change();
 	itemObj.change();
 	if (pokemon.gender === "N") {
-		pokeObj.find(".gender").parent().hide();
+		//pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");
 	} else {
 		var genderDiv = pokeObj.find(".gender");
