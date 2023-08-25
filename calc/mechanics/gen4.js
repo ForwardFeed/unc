@@ -29,16 +29,20 @@ exports.__esModule = true;
 var items_1 = require("../items");
 var result_1 = require("../result");
 var util_1 = require("./util");
-function calculateDPP(gen, attacker, defender, move, field) {
+function calculateDPP(gen, attacker, defender, move, field, defenderFriend) {
     var _a;
     (0, util_1.checkAirLock)(attacker, field);
     (0, util_1.checkAirLock)(defender, field);
+    if (defenderFriend)
+        (0, util_1.checkAirLock)(defenderFriend, field);
     (0, util_1.checkForecast)(attacker, field.weather);
     (0, util_1.checkForecast)(defender, field.weather);
     (0, util_1.checkItem)(attacker);
     (0, util_1.checkItem)(defender);
     (0, util_1.checkIntimidate)(gen, attacker, defender);
     (0, util_1.checkIntimidate)(gen, defender, attacker);
+    if (defenderFriend)
+        (0, util_1.checkIntimidate)(gen, defenderFriend, attacker);
     (0, util_1.checkDownload)(attacker, defender);
     (0, util_1.checkDownload)(defender, attacker);
     attacker.stats.spe = (0, util_1.getFinalSpeed)(gen, attacker, field, field.attackerSide);

@@ -115,7 +115,6 @@ function statToLegacyStat(stat) {
 		return "sp";
 	}
 }
-
 function getStats(currentPoke, rows, offset) {
 	currentPoke.nature = "Serious";
 	var currentEV;
@@ -164,7 +163,7 @@ function getStats(currentPoke, rows, offset) {
 		}
 
 		currentNature = rows[x] ? rows[x].trim().split(" ") : '';
-		if (currentNature[1] == "Nature") {
+		if (currentNature[1] == "Nature" && currentNature[2] !== "Power") { // edge case with the move nature power that overwrite nature
 			currentPoke.nature = currentNature[0];
 		}
 	}
@@ -231,9 +230,6 @@ function addSets(pokes) {
 				currentPoke.teraType = getTeraType(rows[i + 1].split(":"));
 				currentPoke = getStats(currentPoke, rows, i + 1);
 				currentPoke = getMoves(currentPoke, rows, i);
-				if (currentPoke.nature === "-") {
-					currentPoke.nature = "Hardy" // unexplainable bug
-				}
 				pokelist.push(currentPoke);
 				break;
 			}
