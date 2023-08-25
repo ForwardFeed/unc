@@ -1633,16 +1633,16 @@ function refreshColorCode() {
 }
 
 function hideColorCodes() {
-	var pMons = document.getElementsByClassName("trainer-pok left-side");
+	var pMons = document.getElementById("trainer-mons").querySelectorAll("img");
 	for (var i = 0; i < pMons.length; i++) {
-		pMons[i].className = "trainer-pok left-side";
+		pMons[i].className = "";
 	}
 	window.AUTO_REFRESH = false;
 	HideShowCCSettings();
 }
 
 function SpeedBorderSetsChange(ev) {
-	var monImgs = document.getElementsByClassName("left-side");
+	var monImgs = document.getElementById("trainer-mons").querySelectorAll("img");
 	for (var i = 0; i < monImgs.length; i++) {
 		if (ev.target.checked) {
 			monImgs[i].classList.remove("mon-speed-none");
@@ -1658,7 +1658,7 @@ function widthSpeedBorder(ev) {
 }
 
 function ColorCodeSetsChange(ev) {
-	var monImgs = document.getElementsByClassName("left-side");
+	var monImgs = document.getElementById("trainer-mons").querySelectorAll("img");
 	for (var i = 0; i < monImgs.length; i++) {
 		if (ev.target.checked) {
 			monImgs[i].classList.remove("mon-dmg-none");
@@ -1859,7 +1859,6 @@ function savePNotes(fullID) {
 }
 
 function restorePNotes(fullID) {
-	console.log(fullID)
 	var notes = PNOTES.get(fullID)
 	if (!notes) {
 		clearPNotes()
