@@ -33,8 +33,6 @@
                 <label for="forest-theme">Forest</label>
                 <input type="radio" name="theme" id="forest-theme">
             </div>
-        </div>
-        <div id="settings-box">
             <div class="settings-row">
                 <span>Double Mode: </span>
                 <label for="double-two">2 V 1</label>
@@ -42,8 +40,6 @@
                 <label for="double-one">1 V 1</label>
                 <input type="radio" name="double" id="double-one">
             </div>
-        </div>
-        <div id="settings-box">
             <div class="settings-row">
                 <span>Side Arrows:</span>
                 <label for="hide-arrows">Hide</label>
@@ -51,8 +47,6 @@
                 <label for="show-arrows">Show</label>
                 <input type="radio" name="arrows" id="show-arrows">
             </div>
-        </div>
-        <div id="settings-box">
             <div class="settings-row">
                 <span>Reset field when changing trainer:</span>
                 <label for="field-reset-off">Off</label>
@@ -60,20 +54,27 @@
                 <label for="field-reset-on">On</label>
                 <input type="radio" name="field-reset" id="field-reset-on">
             </div>
-        </div>
-        <div id="settings-box">
             <div class="settings-row">
                 <span>Colors the damage zone in function of damage dealt</span>
-                <label for="result-color-on">Off</label>
+                <label for="result-color-off">Off</label>
                 <input type="radio" name="result-color" id="result-color-off" checked>
                 <label for="result-color-on">On</label>
                 <input type="radio" name="result-color" id="result-color-on">
             </div>
+            <div class="settings-row">
+                <span>Active Pokémon Notes</span>
+                <label for="p-notes-off">Off</label>
+                <input type="radio" name="p-notes" id="p-notes-off" checked>
+                <label for="p-notes-on">On</label>
+                <input type="radio" name="p-notes" id="p-notes-on">
+                <label for="p-notes-reset">Clear all notes</label>
+                <input type="checkbox" id="p-notes-reset">
+            </div>
         </div>
         <legend> KEYBINDS </legend>
         <div id="settings-box">
-            <div><b>SHIFT + Z</b> => Toggles all opposite moves as crits</div>
-            <div><b>ESCAPE</b> => Show / Hides settings menu</div>
+            <div class="settings-row"><b>SHIFT + Z</b> => Toggles all opposite moves as crits</div>
+            <div class="settings-row"><b>ESCAPE</b> => Show / Hides settings menu</div>
         </div>
         
     </div>
@@ -1768,12 +1769,18 @@
                      only the first one off each row will be calculated against. Top left always top calc and Bot left always bot calc" hidden>
                     </div>
                 </div>
-                <!--hr>
-                <button id="set-double-opp">Set in doubles</button-->
                 <hr>
                 <button type="button" id="previous-trainer"> Previous Trainer</button>
                 <button type="button" id="next-trainer"> Next Trainer</button>
                 <button type="button" id="reset-trainer">Reset</button>
+            </fieldset>
+        </div>
+        <div aria-label="pokemon notes" role="region">
+            <fieldset class="div-p-note" id="div-p-notes">
+                <legend align="center"> Active Pokémon Notes
+                    <button id="clearNotes" hidden>Clear</button>
+                </legend>
+                <textarea name="active-p-note" id="active-p-note"></textarea>
             </fieldset>
         </div>
     </div>
@@ -1868,7 +1875,7 @@
     </ul>
     <button id="open-settings-box">Open Settings Panel</button>
     <div id="sets">
-        <span>version 0.1.1 "I'm an comedy anime character"</span>
+        <span>version 0.1.2 "One step closer to a beta™ battle™plan™ "</span>
     </div>
     
 </div> 

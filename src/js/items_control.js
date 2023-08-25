@@ -15,10 +15,6 @@ var BATTLE_ITEMS_MAPS = {
     "Power Level": [["Macho Brace","ev-item/macho-brace"],["Power Anklet","ev-item/power-anklet"],["Power Band","ev-item/power-band"],["Power Belt","ev-item/power-belt"],["Power Bracer","ev-item/power-bracer"],["Power Lens","ev-item/power-lens"],["Power Weight","ev-item/power-weight"]]
 }
 
-function fragmentFromString(strHTML) {
-    return document.createRange().createContextualFragment(strHTML);
-}
-
 function populateItemBox() {
     var itemBox = document.getElementById("item-box-body")
     var strFrag = ""
@@ -36,10 +32,6 @@ function populateItemBox() {
     $('.ic').click(selectItem);
     $('.ic').click(saveTrigger);
     
-}
-
-function applyItemFilter(Filter) {
-    var filter
 }
 
 function deserializeBattleItems() {
