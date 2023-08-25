@@ -242,7 +242,10 @@ th {
 #holder-2 tr {
     white-space: nowrap;
 }
-
+.div-p-note {
+    max-width: 30em;
+    width: 30em;
+}
 /* general button styling */
 .btn {
     text-align: center;
@@ -470,8 +473,17 @@ table.field {
 .clear {
   clear: right;
 }
+.div-p-note{
+    text-align: center;
+}
 
-.import-team-text {
+#active-p-note {
+    min-width: 32em;
+    min-height: 5em;
+    resize: vertical
+}
+
+.import-team-text{
     min-width: 27em;
     min-height: 10em;
     resize: vertical;

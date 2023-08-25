@@ -43,9 +43,18 @@ function resultColorToggle() {
             }
         }
     }
-   
-  
     calcTrigger();
+}
+
+function activePokemonNoteToggle() {
+    var status =  $('#p-notes-on').prop("checked")
+    if (status) {
+        localStorage.setItem("p-notes", "1")
+        $("#div-p-notes").prop("hidden", false);
+    } else {
+        localStorage.setItem("p-notes", "0")
+        $("#div-p-notes").prop("hidden", true);
+    }
 }
 
 $(document).ready(function () {
@@ -68,4 +77,10 @@ $(document).ready(function () {
     $('#result-color-on').click(resultColorToggle);
     $('#result-color-off').click(resultColorToggle);
     if (JSON.parse(localStorage.getItem("result-color")))   $('#result-color-on').prop("checked", true);
+    $('#p-notes-on').click(activePokemonNoteToggle);
+    $('#p-notes-off').click(activePokemonNoteToggle);
+    $('#p-notes-reset').change(clearAllNotes);
+    +localStorage.getItem("p-notes") ? $('#p-notes-on').prop("checked", true).click() : $('#p-notes-off').prop("checked", true).click()
+    
+
 });

@@ -1411,8 +1411,11 @@ function select2Select(select, id, title) {
 
 function iconMonClicked(ev) {
 	var tar = ev.target;
-	var select = $(this).closest(".panel").find("input.selector")
+	var fieldset = $(this).closest(".panel").find("fieldset")
+	var select = fieldset.find("input.selector");
+	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) savePNotes(select.val()); 
 	select2Select(select, tar.dataset.id, tar.dataset.title)
+	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) restorePNotes(tar.dataset.id); 
 }
 
 function addBoxed(box, poke, id, trainerID) {
@@ -1549,7 +1552,10 @@ function selectTrainer(id) {
 		trainer = parsed[1],
 		pokemon = parsed[2],
 		pokemonName = parsed[3];
+		pokeID = parsed[4];
 
+	if (+localStorage.getItem("p-notes") && trainerID != 0) savePNotes($('#p2').find("input.set-selector").val()); 
+	if (+localStorage.getItem("p-notes") && trainerID != 0 ) restorePNotes(pokemonName+";"+trainer.trn+";"+0); 
 	select2Select($('#p2').find("input.set-selector"), id, pokemonName + " : " + trainer.trn)
 	localStorage.setItem(GameName + "trainer", id);
 }
@@ -1823,6 +1829,54 @@ function onClickScreenCalc() {
 	screenDivCount++
 }
 
+function clearPNotes() {
+	$("#clearNotes").prop("hidden", true);
+	$('#active-p-note').val("");
+}
+
+function showClearPNotes() {
+	$("#clearNotes").prop("hidden", false);
+}
+var PNOTES = new Map(JSON.parse(localStorage.getItem(GameName + "pnotes")))
+function savePNotes(fullID) {
+	var prevNotes = PNOTES.get(fullID);
+	var notes = $('#active-p-note').val();
+	if (prevNotes) {
+		if (!notes) {
+			PNOTES.delete(fullID)
+			return
+		}
+		else if (notes === prevNotes){
+			// i don't trigger a save over this
+			return
+		} else {
+			PNOTES.set(fullID,notes);
+		}
+	} else if (notes) {
+		PNOTES.set(fullID,notes);
+	}
+	localStorage.setItem(GameName + "pnotes", JSON.stringify(Array.from(PNOTES.entries())))
+}
+
+function restorePNotes(fullID) {
+	console.log(fullID)
+	var notes = PNOTES.get(fullID)
+	if (!notes) {
+		clearPNotes()
+	} else {
+		$('#active-p-note').val(notes)
+		showClearPNotes();
+	}
+}
+
+function clearAllNotes() {
+	var yes = confirm("This will clear all the data of all the notes you've written so far, this cannot be undone, do you wish to proceed anyway?")
+	if (yes) {
+		localStorage.setItem(GameName + "pnotes", "[]")
+	} 
+	$('#p-notes-reset').prop("checked", false);
+}
+
 window.AUTO_REFRESH = false;
 $(document).ready(function () {
 	setupCalc()
@@ -1859,6 +1913,8 @@ $(document).ready(function () {
 	$('#close-item-box, #ball-item').click(openCloseItemBox);
 	$('#close-note-box, #open-note').click(openCloseNoteBox);
 	$('#screen-calc').click(onClickScreenCalc)
+	$('#active-p-note').keydown(showClearPNotes);
+	$('#clearNotes').click(clearPNotes);
 	for (let dropzone of document.getElementsByClassName("dropzone")) {
 		dropzone.ondragenter = handleDragEnter;
 		dropzone.ondragleave = handleDragLeave;
