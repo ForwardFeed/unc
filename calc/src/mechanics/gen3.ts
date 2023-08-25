@@ -21,14 +21,17 @@ export function calculateADV(
   attacker: Pokemon,
   defender: Pokemon,
   move: Move,
-  field: Field
+  field: Field,
+  defenderFriend?: Pokemon,
 ) {
   checkAirLock(attacker, field);
   checkAirLock(defender, field);
+  if (defenderFriend) checkAirLock(defenderFriend, field);
   checkForecast(attacker, field.weather);
   checkForecast(defender, field.weather);
   checkIntimidate(gen, attacker, defender);
   checkIntimidate(gen, defender, attacker);
+  if (defenderFriend) checkIntimidate(gen, defenderFriend, attacker);
   attacker.stats.spe = getFinalSpeed(gen, attacker, field, field.attackerSide);
   defender.stats.spe = getFinalSpeed(gen, defender, field, field.defenderSide);
 

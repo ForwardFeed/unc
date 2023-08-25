@@ -24,18 +24,21 @@ export function calculateDPP(
   attacker: Pokemon,
   defender: Pokemon,
   move: Move,
-  field: Field
+  field: Field,
+  defenderFriend?: Pokemon
 ) {
   // #region Initial
 
   checkAirLock(attacker, field);
   checkAirLock(defender, field);
+  if (defenderFriend) checkAirLock(defenderFriend, field);
   checkForecast(attacker, field.weather);
   checkForecast(defender, field.weather);
   checkItem(attacker);
   checkItem(defender);
   checkIntimidate(gen, attacker, defender);
   checkIntimidate(gen, defender, attacker);
+  if (defenderFriend) checkIntimidate(gen, defenderFriend, attacker);
   checkDownload(attacker, defender);
   checkDownload(defender, attacker);
   attacker.stats.spe = getFinalSpeed(gen, attacker, field, field.attackerSide);
