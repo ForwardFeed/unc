@@ -61,6 +61,7 @@ $(document).ready(function () {
     $('#light-theme').change(themeSelection);
     $('#dark-theme').change(themeSelection);
     $('#forest-theme').change(themeSelection);
+    $('#blahaj-theme').change(themeSelection);
     $('#double-two').change(doubleModeSelection);
     $('#double-one').change(doubleModeSelection);
     if (+localStorage.getItem("doubleLegacy")) {

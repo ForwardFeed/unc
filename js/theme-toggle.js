@@ -9,6 +9,7 @@ function themeSelection(theme){
 	document.getElementById('dark-theme-styles').disabled = true;
 	document.getElementById('light-theme-styles').disabled = true;
 	document.getElementById('forest-theme-styles').disabled = true;
+	document.getElementById('blahaj-theme-styles').disabled = true;
 	document.getElementById(theme + '-styles').disabled = false;
 	localStorage.setItem("theme", theme)
 	
