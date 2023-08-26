@@ -1453,11 +1453,7 @@ function oppositeAllCrits(){
 
 // Check whether control button is pressed
 $(document).keydown(function (event) {
-	if (event.which == "17") {
-		cntrlIsPressed = true;
-	} else if (event.which == 65 && cntrlIsPressed) {
-		// Cntrl+  A
-	} else if (event.key === "Escape") {
+	if (event.key === "Escape") {
 		settingsMenuToggle()
 	} else if (event.target.classList.contains("select2-input") || event.target.tagName === "TEXTAREA"){
 		return
@@ -1468,11 +1464,6 @@ $(document).keydown(function (event) {
 		}
 	}
 });
-
-$(document).keyup(function () {
-	cntrlIsPressed = false;
-});
-var cntrlIsPressed = false;
 /* dragging for pokemons in boxes*/
 function allowDrop(ev) {
 	ev.preventDefault();
@@ -1495,19 +1486,15 @@ function drop(ev) {
 			ev.target.appendChild(pokeDragged);
 		}
 	} else if (ev.target.tagName === "IMG") {
-		if (!cntrlIsPressed) {
-			var prev1 = pokeDragged.previousElementSibling;
-			if (!prev1) {
-				ev.target.after(pokeDragged);
-			} else {
-				ev.target.before(pokeDragged);
-				prev1.after(ev.target);
-			}
-			//swaps
+		// swap
+		var prev1 = pokeDragged.previousElementSibling;
+		if (!prev1) {
+			ev.target.after(pokeDragged);
 		} else {
-			//appends before
 			ev.target.before(pokeDragged);
+			prev1.after(ev.target);
 		}
+
 	}
 	ev.target.classList.remove('over');
 }
