@@ -302,7 +302,8 @@ function dispatchPlayerMon(list) {
 	list.sort(sortImports);
 	var box = document.getElementById("box-poke-list");
 	var playerMons = window.setdex[0].mons;
-	var boxOffset = playerMons.length;
+	// this weird calculation is because, if a team already exist, and it has some dupes, the new pokemons have a wrong id
+	var boxOffset = playerMons.length; 
 	for (var i = 0, iLen = list.length; i < iLen; i++) {
 		var poke = list[i];
 		/* checks for dupes*/
@@ -315,6 +316,10 @@ function dispatchPlayerMon(list) {
 		}
 		if (isDupe !== false) {
 			window.setdex[0].mons[j] = poke;
+			boxOffset--
+			if (boxOffset < 0){
+				boxOffset == 0
+			}
 		} else {
 			var idOffeseted = boxOffset + i
 			window.addBoxed(box, poke, idOffeseted, 0);

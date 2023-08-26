@@ -1714,6 +1714,16 @@ function trashPokemon() {
 	} else {
 		mons[0].click()
 	}
+	reorderAfterTrash()
+}
+
+function reorderAfterTrash() {
+	var mons = document.getElementById("trainer-mons").querySelectorAll("img");
+	for (var i = 0, iLen = mons.length; i < iLen; i++) {
+		var dataID = mons[i].dataset.id.split(";")
+		dataID[2] = i;
+		mons[i].dataset.id = dataID.join(";");
+	}
 }
 
 function clearTrainerSets() {
