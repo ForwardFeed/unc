@@ -1714,6 +1714,7 @@ function trashPokemon() {
 	} else {
 		mons[0].click()
 	}
+	reboxTrainerPokemon() //sorry about that, it is unfortunately necessary, will fix later, on purpose
 	reorderAfterTrash()
 }
 
