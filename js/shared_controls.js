@@ -1699,30 +1699,28 @@ function trashPokemon() {
 		return;
 	}
 	var length = maybeMultiple.length;
+	var parentBox = document.getElementById("trainer-mons");
+	var mons = parentBox.querySelectorAll("img")
 	for (var i = 0; i < length; i++) {
 		var pokeTrashed = maybeMultiple[i];
 		var pokeID = pokeTrashed.getAttribute("data-id").split(";")[2];
+		console.log(pokeID)
+		for (var j = parseInt(pokeID) + 1, jLen = setdex[0].mons.length; j < jLen; j++) {
+			var monDexed = setdex[0].mons[j].species + ";Player;" + j;
+			var monBoxed = parentBox.querySelector(`[data-id="${monDexed}"]`);
+			monBoxed.dataset.id = setdex[0].mons[j].species + ";Player;" + String(+j -1)
+		}
 		setdex[0].mons.splice(parseInt(pokeID), 1)
 	}
 	document.getElementById("trash-box").innerHTML = "";
 	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
 	// and then click to another pokemon, else its gonna make things crash
-	var mons = document.getElementById("trainer-mons").querySelectorAll("img")
+	
 	if (mons.length < 1) {
 		var select = $(this).closest(".panel").find("input.selector")
 		selectFirstPlayerAvailable(select)
 	} else {
 		mons[0].click()
-	}
-	reorderAfterTrash()
-}
-
-function reorderAfterTrash() {
-	var mons = document.getElementById("trainer-mons").querySelectorAll("img");
-	for (var i = 0, iLen = mons.length; i < iLen; i++) {
-		var dataID = mons[i].dataset.id.split(";")
-		dataID[2] = i;
-		mons[i].dataset.id = dataID.join(";");
 	}
 }
 
