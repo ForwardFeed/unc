@@ -59,12 +59,14 @@ function performCalculations(p1, p2, p3, double) {
 	var battling = [p1, p2];
 	p1.maxDamages = [];
 	p2.maxDamages = [];
-	try {
-		p1info.find(".sp .totalMod").text(p1.stats.spe);
-		p2info.find(".sp .totalMod").text(p2.stats.spe);
-	} catch (e) {
 
+	try {
+		$("#p1").find(".sp .totalMod").text(p1.stats.spe);
+		$("#p2").find(".sp .totalMod").text(p2.stats.spe);
+	} catch (e) {
+		console.log(e)
 	}
+	
 	var fastestSide = p1.stats.spe > p2.stats.spe ? 0 : p1.stats.spe === p2.stats.spe ? "tie" : 1;
 
 	var result, maxDamage;
@@ -375,6 +377,7 @@ function calcTrigger() {
 	}
 	var p1, p2, p3;
 	p1 = createPokemon($("#p1"));
+	p2 = createPokemon($("#p2"));
 	if (window.isInDoubles) {
 		var monRow1 = document.getElementById("trainer-pok-list-opposing").children[0];
 		var monRow1T = monRow1 ? monRow1.dataset.id : null;
@@ -386,14 +389,8 @@ function calcTrigger() {
 		window.NO_CALC = true;
 		window.NO_CALC_RECURSION = true;
 		var dataSave = saveCurrentMon();
-		/* double = double ? 2 : 0;
-			var p1info = $("#p1");
-			var p2info = pP2 ? pP2 : $("#p2");
-			var p1 = createPokemon(p1info);
-			var p2 = createPokemon(p2info);*/
-		
 		if (!monRow1 || !monRow2) {
-			performCalculations(p1, createPokemon($("#p2")));
+			performCalculations(p1, p2);
 		} else {
 			if (monRow1 != activeMon && monRow2 != activeMon) {
 				if (document.querySelectorAll('[data-id="' + activeMon + '"')[0].parentNode.id == "trainer-pok-list-opposing") {
@@ -426,7 +423,7 @@ function calcTrigger() {
 		window.NO_CALC_RECURSION = false;
 		window.NO_CALC = false;
 	} else {
-		performCalculations(p1, createPokemon($("#p2")));
+		performCalculations(p1, p2);
 	}
 }
 
