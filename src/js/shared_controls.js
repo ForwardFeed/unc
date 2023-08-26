@@ -1604,7 +1604,7 @@ function colorCodeUpdate() {
 		return
 	}
 	var pMons = document.getElementById("trainer-mons").querySelectorAll("img");
-	// i calc here to alleviate some calculation
+	// i calc here to alleviate some calculation, fortunately p2 doesn't get overwritten
 	var p2info = $("#p2");
 	var p2 = createPokemon(p2info);
 	for (var i = 0, iLen = pMons.length; i < iLen; i++) {
