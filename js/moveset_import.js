@@ -2,9 +2,14 @@
 	for now only save the current trainer #p1
 */
 function saveTrainerPokemon() {
-	$('#save-change').attr("hidden", true);
-	$("textarea.import-team-text").val(ExportPokemon($("#p1")));
-	$("#import.bs-btn").click();
+	var pokeInfo = $(this).closest(".poke-info");
+	var pokeID = pokeInfo.find("input.selector").val().split(";");
+	var tID = 0;
+	var monID = pokeID[2] || setdex[0].mons.length;
+	var poke = addSets(ExportPokemon(pokeInfo));
+	setdex[tID].mons[monID]= poke[0];
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(window.setdex[0].mons));
+	$("#save-change").prop("hidden", true);
 }
 
 function ExportPokemon(pokeInfo) {
