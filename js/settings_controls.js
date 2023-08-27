@@ -57,31 +57,50 @@ function activePokemonNoteToggle() {
     }
 }
 
-$(document).ready(function () {
-    $('#light-theme').change(themeSelection);
-    $('#dark-theme').change(themeSelection);
-    $('#forest-theme').change(themeSelection);
-    $('#blahaj-theme').change(themeSelection);
-    $('#double-two').change(doubleModeSelection);
-    $('#double-one').change(doubleModeSelection);
-    if (+localStorage.getItem("doubleLegacy")) {
-        $('#double-one').prop("checked", true);
-        doubleModeSelection()
+function pokeSelecSpeToggle(){
+    var status =  $('#p-s-specifier-on').prop("checked")
+    if (status) {
+        localStorage.setItem("p-s-spe", "1")
+        $(".pokebar-selection-specifier").css("display", "inline");
+    } else {
+        localStorage.setItem("p-s-spe", "0")
+        $(".pokebar-selection-specifier").css("display", "none");
     }
-    $('#hide-arrows').change(sideArrowToggle);
-    $('#show-arrows').change(sideArrowToggle);
-    $('#open-settings-box').click(settingsMenuToggle);
-    $('#close-settings-box').click(settingsMenuToggle);
-    $('#field-reset-on').click(fieldResetToggle);
-    $('#field-reset-off').click(fieldResetToggle);
-    if (JSON.parse(localStorage.getItem("field-reset")))   $('#field-reset-on').prop("checked", true);
-    $('#result-color-on').click(resultColorToggle);
-    $('#result-color-off').click(resultColorToggle);
-    if (JSON.parse(localStorage.getItem("result-color")))   $('#result-color-on').prop("checked", true);
-    $('#p-notes-on').click(activePokemonNoteToggle);
-    $('#p-notes-off').click(activePokemonNoteToggle);
-    $('#p-notes-reset').change(clearAllNotes);
-    +localStorage.getItem("p-notes") ? $('#p-notes-on').prop("checked", true).click() : $('#p-notes-off').prop("checked", true).click()
+}
+
+$(document).ready(function () {
+    try{ //if some settings are missing, it's w/e so far
+        $('#light-theme').change(themeSelection);
+        $('#dark-theme').change(themeSelection);
+        $('#forest-theme').change(themeSelection);
+        $('#blahaj-theme').change(themeSelection);
+        $('#double-two').change(doubleModeSelection);
+        $('#double-one').change(doubleModeSelection);
+        if (+localStorage.getItem("doubleLegacy")) {
+            $('#double-one').prop("checked", true);
+            doubleModeSelection()
+        }
+        $('#hide-arrows').change(sideArrowToggle);
+        $('#show-arrows').change(sideArrowToggle);
+        $('#open-settings-box').click(settingsMenuToggle);
+        $('#close-settings-box').click(settingsMenuToggle);
+        $('#field-reset-on').click(fieldResetToggle);
+        $('#field-reset-off').click(fieldResetToggle);
+        if (JSON.parse(localStorage.getItem("field-reset")))   $('#field-reset-on').prop("checked", true);
+        $('#result-color-on').click(resultColorToggle);
+        $('#result-color-off').click(resultColorToggle);
+        if (JSON.parse(localStorage.getItem("result-color")))   $('#result-color-on').prop("checked", true);
+        $('#p-notes-on').click(activePokemonNoteToggle);
+        $('#p-notes-off').click(activePokemonNoteToggle);
+        $('#p-notes-reset').change(clearAllNotes);
+        +localStorage.getItem("p-notes") ? $('#p-notes-on').prop("checked", true).click() : $('#p-notes-off').prop("checked", true).click();
+        $('#p-s-specifier-on').click(pokeSelecSpeToggle);
+        $('#p-s-specifier-off').click(pokeSelecSpeToggle);
+        +localStorage.getItem("p-s-spe") ? $('#p-s-specifier-on').prop("checked", true).click() : $('#p-s-specifier-off').prop("checked", true).click();
+    } catch(e) {
+
+    }
+
     
 
 });
