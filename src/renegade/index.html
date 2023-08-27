@@ -71,7 +71,14 @@
                 <label for="p-notes-on">On</label>
                 <input type="radio" name="p-notes" id="p-notes-on">
                 <label for="p-notes-reset">Clear all notes</label>
-                <input type="checkbox" id="p-notes-reset">
+                <input type="checkbox" id="p-notes-reset"> 
+            </div>
+            <div class="settings-row">
+                <span>Show Selection specifier under the pokemon selection bar</span>
+                <label for="p-s-specifier-off">Off</label>
+                <input type="radio" name="p-s-specifier" id="p-s-specifier-off" checked>
+                <label for="p-s-specifier-on">On</label>
+                <input type="radio" name="p-s-specifier" id="p-s-specifier-on">
             </div>
         </div>
         <legend> KEYBINDS </legend>
@@ -237,7 +244,7 @@
                     <img id="p1mon" src="" alt="">
                 </legend>
                 <input type="text" class="player-selector calc-trigger selector" />
-                <span style="width:auto">
+                <span class="pokebar-selection-specifier">
                     <input type="radio" name="selection-filter-pl" id="pl-pokemons-only">Only pokedex</input>
                     <input type="radio" name="selection-filter-pl" id="pl-trainer-only">Only Player's pokémons</input> 
                     <input type="radio" name="selection-filter-pl" id="pl-any-selection" autocomplete="off" checked>Any</input> 
@@ -1247,7 +1254,7 @@
                     <img id="p2mon" src="" alt="">
                 </legend>
                 <input type="text" class="set-selector calc-trigger selector" />
-                <span style="width:auto">
+                <span class="pokebar-selection-specifier">
                     <input type="radio" name="selection-filter" id="pokemons-only">Only pokedex</input>
                     <input type="radio" name="selection-filter" id="no-pokedex">No pokedex</input> 
                     <input type="radio" name="selection-filter" id="trainers-only">Only trainers</input> 
