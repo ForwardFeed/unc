@@ -163,6 +163,47 @@ $(".sl .dvs").keyup(function () {
 	calcHP(poke);
 });
 
+function showBerryHP(poke, item){
+	var maxHP = parseInt(poke.find(".max-hp").html());
+	var BHP, PHP; //Brute HP or Percentage HP
+	switch(item){
+		case "Oran Berry":
+			BHP = 10;
+			break;
+		case "Berry Juice":
+			BHP = 20;
+			break;
+		case "Sitrus Berry":
+			if (gen == 3) {
+				BHP = 30;
+			} else {
+				PHP = 25; 
+			}
+			break;
+		case "Wiki Berry":
+		case "Mago Berry":
+		case "Aguav Berry":
+		case "Iapapa Berry":
+			if ( gen <= 6){
+				PHP = 12.5;
+			} else if (gen == 7){
+				PHP = 50;
+			} else {
+				PHP = 30;
+			}
+			break;
+	}
+	console.log(maxHP, BHP, PHP)
+	if (BHP) {
+		poke.find(".berry-hp").html(`+ ${Math.floor((BHP/maxHP)*100)}% (berry)`)
+	} else if (PHP) {
+		poke.find(".berry-hp").html(`+ ${Math.floor(PHP*(maxHP/100))}HP (berry)`)
+	} else {
+		poke.find(".berry-hp").html("");
+	}
+	return
+}
+
 function getHPDVs(poke) {
 	return (~~poke.find(".at .dvs").val() % 2) * 8 +
 		(~~poke.find(".df .dvs").val() % 2) * 4 +
@@ -433,12 +474,15 @@ $(".move-selector").change(function () {
 
 $(".item").change(function () {
 	var itemName = $(this).val();
-	var $metronomeControl = $(this).closest('.poke-info').find('.metronome');
+	var $pannel =  $(this).closest('.poke-info');
+	var $metronomeControl = $pannel.find('.metronome');
 	if (itemName === "Metronome") {
 		$metronomeControl.show();
 	} else {
 		$metronomeControl.hide();
 	}
+	var $HPControl = $pannel.find('.i-f-hp');
+	showBerryHP($HPControl, itemName);
 });
 
 function smogonAnalysis(pokemonName) {
@@ -1270,6 +1314,7 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	calcStats(pokeObj);
 	abilityObj.change();
 	itemObj.change();
+	showBerryHP(pokeObj, itemObj.val())
 	if (pokemon.gender === "N") {
 		//pokeObj.find(".gender").parent().hide();
 		pokeObj.find(".gender").val("");
@@ -1538,8 +1583,7 @@ function autoAdaptFieldPerTrainer() {
 	$('#tailwindR').parent().prop("hidden", !new RegExp(/Tailwind/).test(textTrainer));
 	$('#spikesR3').parent().prop("hidden", !new RegExp(/Spikes/).test(textTrainer));
 	$('#auroraVeilR').parent().prop("hidden", !new RegExp(/Aurora Veil/).test(textTrainer));
-	$('#foresightR').parent().prop("hidden", !new RegExp(/Foresight/).test(textTrainer));
-	$('#foresightR').parent().prop("hidden", !new RegExp(/Odor Sleuth/).test(textTrainer));
+	$('#foresightR').parent().prop("hidden", !new RegExp(/(Odor Sleuth|Foresight)/).test(textTrainer));
 }
 
 function selectTrainer(id) {
