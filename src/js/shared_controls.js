@@ -195,7 +195,7 @@ function showBerryHP(poke, item){
 	}
 	console.log(maxHP, BHP, PHP)
 	if (BHP) {
-		poke.find(".berry-hp").html(`+ ${Math.floor((BHP/maxHP)*100)}% (berry)`)
+		poke.find(".berry-hp").html(`+ ${((BHP/maxHP)*100).toFixed(2)}% (berry)`)
 	} else if (PHP) {
 		poke.find(".berry-hp").html(`+ ${Math.floor(PHP*(maxHP/100))}HP (berry)`)
 	} else {
