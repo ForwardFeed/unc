@@ -920,3 +920,6 @@ input[type='radio']:checked {
     background: var(--button-selected);
 }
 
+#berry-hpL, #berry-hpR{
+    display: inline;
+}
