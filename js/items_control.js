@@ -1,4 +1,4 @@
-var PLAYER_AVAILABLE_ITEMS = PLAYER_AVAILABLE_ITEMS || items;
+var PLAYER_AVAILABLE_ITEMS;
 
 var BATTLE_ITEMS_MAPS = {
     "Type Boost Damage": [["Black Belt","hold-item/black-belt"],["Black Glasses","hold-item/black-glasses"],["Charcoal","hold-item/charcoal"],["Dragon Fang","hold-item/dragon-fang"],["Hard Stone","hold-item/hard-stone"],["Never-Melt Ice","hold-item/never-melt-ice"],["Magnet","hold-item/magnet"],["Metal Coat","hold-item/metal-coat"],["Miracle Seed","hold-item/miracle-seed"],["Mystic Water","hold-item/mystic-water"],["Poison Barb","hold-item/poison-barb"],["Sharp Beak","hold-item/sharp-beak"],["Silk Scarf","hold-item/silk-scarf"],["Spell Tag","hold-item/spell-tag"],["Silver Powder","hold-item/silver-powder"],["Soft Sand","hold-item/soft-sand"],["Twisted Spoon","hold-item/twisted-spoon"]],
@@ -40,6 +40,7 @@ function deserializeBattleItems() {
     };
 }
 $(document).ready(function(){
+    PLAYER_AVAILABLE_ITEMS = PLAYER_AVAILABLE_ITEMS || items;
     deserializeBattleItems()
     // load images asynchronously to not hinder the loading speed
     setTimeout(populateItemBox, 0);
