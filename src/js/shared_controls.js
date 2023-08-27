@@ -1529,6 +1529,18 @@ function truckMessage() {
 
 }
 
+function autoAdaptFieldPerTrainer() {
+	var textTrainer = (JSON.stringify(setdex[current_trainer_id].mons));
+	$('#srR').parent().prop("hidden", !new RegExp(/Stealth Rock/).test(textTrainer));
+	$('#protectR').parent().prop("hidden", !new RegExp(/Protect/).test(textTrainer));
+	$('#helpingHandR').parent().prop("hidden", !new RegExp(/Helping Hand/).test(textTrainer));
+	$('#leechSeedR').parent().prop("hidden", !new RegExp(/Leech Seed/).test(textTrainer));
+	$('#tailwindR').parent().prop("hidden", !new RegExp(/Tailwind/).test(textTrainer));
+	$('#spikesR3').parent().prop("hidden", !new RegExp(/Spikes/).test(textTrainer));
+	$('#auroraVeilR').parent().prop("hidden", !new RegExp(/Aurora Veil/).test(textTrainer));
+	$('#foresightR').parent().prop("hidden", !new RegExp(/Foresight/).test(textTrainer));
+	$('#foresightR').parent().prop("hidden", !new RegExp(/Odor Sleuth/).test(textTrainer));
+}
 
 function selectTrainer(id) {
 	if ($('#field-reset-on').prop("checked")) clearField();
