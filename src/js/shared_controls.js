@@ -193,7 +193,6 @@ function showBerryHP(poke, item){
 			}
 			break;
 	}
-	console.log(maxHP, BHP, PHP)
 	if (BHP) {
 		poke.find(".berry-hp").html(`+ ${((BHP/maxHP)*100).toFixed(2)}% (berry)`)
 	} else if (PHP) {
@@ -1215,6 +1214,7 @@ $(".player-selector").change(function () {
 		pokemonName = parsed[3];
 
 	Object.assign(pokemon, pokedex[pokemon.species]);
+	$('#save-change').prop("hidden", true);
 	setDataPannel($(this), pokemonName, pokemon, trainer)
 });
 
@@ -1747,7 +1747,6 @@ function trashPokemon() {
 	for (var i = 0; i < length; i++) {
 		var pokeTrashed = maybeMultiple[i];
 		var pokeID = pokeTrashed.getAttribute("data-id").split(";")[2];
-		console.log(pokeID)
 		for (var j = parseInt(pokeID) + 1, jLen = setdex[0].mons.length; j < jLen; j++) {
 			var monDexed = setdex[0].mons[j].species + ";Player;" + j;
 			var monBoxed = parentBox.querySelector(`[data-id="${monDexed}"]`);
