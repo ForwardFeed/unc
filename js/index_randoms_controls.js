@@ -49,11 +49,20 @@ var damageResults;
 	@double, if set the the result will be shown in the second div
 */
 function performCalculations(p1, p2, p3, double) {
-	double = double ? 2 : 0;;
+	double = double ? 2 : 0;
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
 	var p1Save = p1 //prevents double apply of initimate
-	damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
+	
+	//make the second don't overwrite the first
+	if (double != 0){ 
+		var TempdamageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
+		damageResults[2] = TempdamageResults[2]
+		damageResults[3] = TempdamageResults[3]
+	} else {
+		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
+	}
+	console.log(damageResults)
 	p1 = damageResults[0 + double][0].attacker;
 	p2 = damageResults[1 + double][0].attacker;
 	var battling = [p1, p2];
@@ -225,6 +234,7 @@ function calculationsColors(p1info, p2) {
 $(".result-move").change(function (ev) {
 	if (damageResults) {
 		var result = findDamageResult(ev.target);
+		console.log(result)
 		if (result) {
 			var desc = result.fullDesc(notation, false);
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
@@ -236,7 +246,8 @@ $(".result-move").change(function (ev) {
 
 $(".result-move2").change(function (ev) {
 	if (damageResults) {
-		var result = findDamageResult(ev.target);
+		var result = findDamageResult(ev.target, true);
+		console.log(result)
 		if (result) {
 			var desc = result.fullDesc(notation, false);
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
@@ -258,9 +269,10 @@ function displayDamageHits(damage) {
 	return '1st Hit: ' + damage[0].join(', ') + '; 2nd Hit: ' + damage[1].join(', ');
 }
 
-function findDamageResult(resultMoveObj) {
+function findDamageResult(resultMoveObj, double) {
+	double = double ? 2 : 0;
 	var selector = "#" + resultMoveObj.getAttribute("id");
-	for (var i = 0; i < resultLocations.length; i++) {
+	for (var i = double; i < double + 2; i++) {
 		for (var j = 0; j < resultLocations[i].length; j++) {
 			if (resultLocations[i][j].move === selector) {
 				return damageResults[i][j];
