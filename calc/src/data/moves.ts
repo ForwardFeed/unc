@@ -26,6 +26,7 @@ export interface MoveData {
   readonly isZ?: boolean;
   readonly isMax?: boolean;
   readonly multihit?: number | number[];
+  readonly powUp?: boolean;
 
   readonly bp: number;
   readonly zp?: number;
@@ -1310,7 +1311,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Zen Headbutt': {secondaries: true},
   Autotomize: {bp: 0, type: 'Steel'},
   Bestow: {bp: 0, type: 'Normal'},
-  'Echoed Voice': {bp: 40, type: 'Normal', isSound: true, category: 'Special'},
+  'Echoed Voice': {bp: 40, type: 'Normal', powUp: true, isSound: true, category: 'Special'},
   'Electro Ball': {bp: 0, type: 'Electric', category: 'Special'},
   Entrainment: {bp: 0, type: 'Normal'},
   'Final Gambit': {
