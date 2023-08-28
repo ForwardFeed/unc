@@ -62,7 +62,6 @@ function performCalculations(p1, p2, p3, double) {
 	} else {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
 	}
-	console.log(damageResults)
 	p1 = damageResults[0 + double][0].attacker;
 	p2 = damageResults[1 + double][0].attacker;
 	var battling = [p1, p2];
@@ -234,7 +233,6 @@ function calculationsColors(p1info, p2) {
 $(".result-move").change(function (ev) {
 	if (damageResults) {
 		var result = findDamageResult(ev.target);
-		console.log(result)
 		if (result) {
 			var desc = result.fullDesc(notation, false);
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
@@ -247,7 +245,6 @@ $(".result-move").change(function (ev) {
 $(".result-move2").change(function (ev) {
 	if (damageResults) {
 		var result = findDamageResult(ev.target, true);
-		console.log(result)
 		if (result) {
 			var desc = result.fullDesc(notation, false);
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
