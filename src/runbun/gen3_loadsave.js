@@ -23,24 +23,22 @@ function readTeamSize(teamOffset, bytes){
 // note for box 1, the bof starts at 4
 function readBox(bof, bytes, missedBytes){
     var ofs = bof
-    var monList = [{}]
+    var monList = []
     if (missedBytes){
         var missingBytes = bytes.slice(bof, bof + 80 - missedBytes.length)
         var mergedBytes = new Uint8Array(missedBytes.length + missingBytes.length)
         mergedBytes.set(missedBytes);
         mergedBytes.set(missingBytes, missedBytes.length);
-        console.log(mergedBytes)
-        ofs = missedBytes.length; 
+        ofs -= missingBytes.length ;
         var mon = readMonBox(0, mergedBytes);
-        if (mon) monList.push(mon)
+        if (mon) monList.push(createRUNBUNmon(mon))
         
     }
     for (; ofs< bof + 3968; ofs+=80){
         var mon = readMonBox(ofs, bytes);
-        if (mon) monList.push(mon)
+        if (mon) monList.push(createRUNBUNmon(mon))
     }
     var mof =  ofs - (bof + 3968);//missed offset
-    console.log(ofs - (bof + 3968))
     return { list: monList, mof: mof}
 }
 
@@ -293,7 +291,7 @@ function getRUNBUNNature(mon){
 function createRUNBUNmon(mon){ //RUNBUN_NATURE RUNBUN_ABI RUNBUN_ITEMS RUNBUN_MONS RUNBUN_MOVES
     var poke = {};
     poke.item = RUNBUN_ITEMS[mon.heldItem];
-    poke.species = RUNBUN_MONS[mon.species];
+    poke.species = RUNBUN_MONS[mon.species - 1];
     poke.ability = getRUNBUNAbility(mon);
     poke.level = mon.level;
     poke.nature = getRUNBUNNature(mon);
@@ -344,13 +342,10 @@ function parseFileGen3(file){
             var currentBox = readNbytes(RSave.PCA, 4, bytes) + 1
             var boxA = readBox(RSave.PCA + 4, bytes)
             var mof = boxA.mof
-            console.log(mof)
-            console.log(RSave.PCA + 3968 - mof, RSave.PCA + 3968)
             var missedBytes = bytes.slice(RSave.PCA + 3968 - mof, RSave.PCA + 3968)
             var boxB = readBox(RSave.PCB + 4, bytes, missedBytes)
             var mof = boxB.mof
             var boxedMonsList = boxA.list.concat(boxB.list)
-            return
             dispatchPlayerMon(boxedMonsList);          
         } catch (e) {
             console.warn(e)
@@ -360,7 +355,6 @@ function parseFileGen3(file){
 };
 
 function gen3_loadsave (){
-    console.log("aaa")
     $('#import-zone').val("")
     $('#import-zone').on({
         dragenter: function(e){
