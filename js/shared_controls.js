@@ -464,6 +464,9 @@ $(".move-selector").change(function () {
 	} else if (dropsStats) {
 		moveGroupObj.children(".move-hits").hide();
 		moveGroupObj.children(".stat-drops").show();
+	} else if (move.powUp) {
+		moveGroupObj.children(".move-hits").hide();
+		moveGroupObj.children(".stat-drops").show();
 	} else {
 		moveGroupObj.children(".move-hits").hide();
 		moveGroupObj.children(".stat-drops").hide();
@@ -735,6 +738,10 @@ function getMoveDetails(moveInfo, species, ability, item, useMax) {
 	var isCrit = moveInfo.find(".move-crit").prop("checked");
 	var hits = +moveInfo.find(".move-hits").val();
 	var timesUsed = +moveInfo.find(".stat-drops").val();
+	if (timesUsed && moveName === "Echoed Voice") {
+		var moveBP = 40 * timesUsed
+		moveInfo.find(".move-bp").val(moveBP);
+	}
 	var timesUsedWithMetronome = moveInfo.find(".metronome").is(':visible') ? +moveInfo.find(".metronome").val() : 1;
 	var overrides = {
 		basePower: +moveInfo.find(".move-bp").val(),

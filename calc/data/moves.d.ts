@@ -22,6 +22,7 @@ export interface MoveData {
     readonly isZ?: boolean;
     readonly isMax?: boolean;
     readonly multihit?: number | number[];
+    readonly powUp?: boolean;
     readonly bp: number;
     readonly zp?: number;
     readonly maxPower?: number;
