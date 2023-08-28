@@ -1539,9 +1539,9 @@ function drop(ev) {
 			ev.target.before(pokeDragged);
 			prev1.after(ev.target);
 		}
-
 	}
 	ev.target.classList.remove('over');
+	pokeDragged = null;
 }
 
 function handleDragEnter(ev) {
