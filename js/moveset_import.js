@@ -284,13 +284,6 @@ function checkExeptions(poke) {
 	return poke;
 
 }
-
-function dispatchPlayerMon() {
-	var text = document.getElementById("import-zone");
-	var monsList = window.addSets(text.value);
-	dispatchPlayerMon(monsList);
-}
-
 function sortImports(a, b) {
 	var sorted = [a.species, b.species].sort()[0];
 	if (sorted == b.species) {

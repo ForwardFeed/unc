@@ -664,7 +664,9 @@ table.field {
     color:gray
 }
 .dropzone > img{
-    cursor: move; 
+    cursor: move;
+    min-height: 30px;
+    min-width: 40px;
 }
 .dropzone > img:hover{
     background: var(--button-hover);
