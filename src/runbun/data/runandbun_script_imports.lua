@@ -3079,7 +3079,7 @@ ability = {'None','None','None',
 'Thick Fat','Guts','Sheer Force',
 'Thick Fat','Guts','Sheer Force',
 'Thick Fat','None','Huge Power',
-'Sturdy','None','Sand Force',
+'Magnet Pull','None','Sand Force',
 'Normalize','None','None',
 'Normalize','None','None',
 'Keen Eye','Stall','Prankster',
@@ -3350,8 +3350,8 @@ ability = {'None','None','None',
 'Defeatist','None','None',
 'Stench','Sticky Hold','Aftermath',
 'Stench','Weak Armor','Aftermath',
-'Dark Aura','None','Illusion',
-'Dark Aura','None','Illusion',
+'Illusion','None','Dark Aura',
+'Illusion','None','Dark Aura',
 'Cute Charm','Technician','Skill Link',
 'Cute Charm','Technician','Skill Link',
 'Frisk','Competitive','Shadow Tag',
@@ -4107,6 +4107,7 @@ end
 
 function calcLevel(exp, species)
 	level = 1
+	console:log(string.format("%s", species))
 	while (exp>=expRequired(species,level+1)) do
 		level=level+1
 	end

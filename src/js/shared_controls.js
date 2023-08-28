@@ -872,7 +872,7 @@ var GENERATION = {
 	'9': 9, 'sv': 9
 };
 
-var gen, notation, pokedex, setdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION, dexset = [];
+var gen, notation, pokedex, dexpoke , setdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION, dexset = [];
 
 function setupCalc() {
 	gen = window.CALC_GEN_SETTINGS.calc;
@@ -886,6 +886,10 @@ function setupCalc() {
 			continue;
 		}
 		dexset[name] = a;
+	}
+	dexpoke = [];
+	for (var pokeName in pokedex) {
+		dexpoke.push([pokeName])
 	}
 	typeChart = calc.TYPE_CHART[window.CALC_GEN_SETTINGS.type_chart];
 	moves = calc.MOVES[window.CALC_GEN_SETTINGS.moves];
