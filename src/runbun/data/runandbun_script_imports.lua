@@ -4107,7 +4107,6 @@ end
 
 function calcLevel(exp, species)
 	level = 1
-	console:log(string.format("%s", species))
 	while (exp>=expRequired(species,level+1)) do
 		level=level+1
 	end

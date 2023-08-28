@@ -204,7 +204,7 @@ function readMonBox(start, bytes){
     mon.personality = personality;
     mon.otId = otId;
     //Box trick
-    getRunBUNlevel(mon.experience, mon.species);
+    mon.level = getRunBUNlevel(mon.experience, mon.species);
     return mon
 }
 //100 bytes
@@ -276,9 +276,9 @@ function getRunBUNlevel(exp, species){
 }
 
 function getRUNBUNAbility(mon){
-    current = RUNBUN_ABI[mon.species][mon.altAbility]
+    current = RUNBUN_ABI[mon.species + 1][mon.altAbility]
     if (current == "None") {
-        current = RUNBUN_ABI[mon.species][0]
+        current = RUNBUN_ABI[mon.species + 1][0]
     }
     return current
 }
@@ -288,7 +288,7 @@ function getRUNBUNNature(mon){
     }
     return RUNBUN_NATURE[mon.hiddenNature+1]
 }
-function createRUNBUNmon(mon){ //RUNBUN_NATURE RUNBUN_ABI RUNBUN_ITEMS RUNBUN_MONS RUNBUN_MOVES
+function createRUNBUNmon(mon){
     var poke = {};
     poke.item = RUNBUN_ITEMS[mon.heldItem];
     poke.species = RUNBUN_MONS[mon.species - 1];
@@ -355,23 +355,27 @@ function parseFileGen3(file){
 };
 
 function gen3_loadsave (){
-    $('#import-zone').val("")
+    $('#import-zone').val("");
+    $('#import-zone').prop("placeholder", "you can also drop your save file here");
     $('#import-zone').on({
         dragenter: function(e){
             if (pokeDragged){
                 return
             }
+            $('#import-zone').css("background-color", "var(--button-hover)")
         },
         dragleave: function(e){
             if (pokeDragged){ // don't show the visual hint for a non-file, should make this more robust tho
                 return
             }
+            $('#import-zone').css("background-color", "var(--background)")
         },
         drop: function(e){
             if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files.length) {
                 e.preventDefault();
                 e.stopPropagation();
                 parseFileGen3(e.originalEvent.dataTransfer.files[0]);
+                $('#import-zone').css("background-color", "var(--background)")
             }
         }
     })
