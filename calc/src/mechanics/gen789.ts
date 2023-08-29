@@ -683,6 +683,7 @@ export function calculateBasePowerSMSSSV(
     break;
   case 'Heavy Slam':
   case 'Heat Crash':
+    console.log(attacker.weightkg, defender.weightkg);
     const wr =
         (attacker.weightkg * getWeightFactor(attacker)) /
         (defender.weightkg * getWeightFactor(defender));
