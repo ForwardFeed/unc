@@ -1989,8 +1989,6 @@ $(document).ready(function () {
 	} else {
 		selectTrainer(last);
 	}
-	//
-	clearField()
 	//to indicate some features to new arrivants
 	var isNotNew = JSON.parse(localStorage.getItem("isNotNew"))
 	if (!isNotNew) {//first time loading the page

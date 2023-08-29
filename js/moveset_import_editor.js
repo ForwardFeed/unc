@@ -277,5 +277,4 @@ function checkExeptions(poke) {
 }
 
 $(document).ready(function () {
-
 });
