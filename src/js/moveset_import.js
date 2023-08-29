@@ -335,4 +335,6 @@ $(document).ready(function () {
 	if (savedMons) {
 		dispatchPlayerMon(savedMons);
 	}
+	$('#p1').find("input.selector").change()
+	clearField();
 });
