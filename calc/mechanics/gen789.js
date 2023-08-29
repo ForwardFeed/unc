@@ -495,7 +495,6 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
             break;
         case 'Heavy Slam':
         case 'Heat Crash':
-            console.log(attacker.weightkg, defender.weightkg);
             var wr = (attacker.weightkg * (0, util_2.getWeightFactor)(attacker)) /
                 (defender.weightkg * (0, util_2.getWeightFactor)(defender));
             basePower = wr >= 5 ? 120 : wr >= 4 ? 100 : wr >= 3 ? 80 : wr >= 2 ? 60 : 40;

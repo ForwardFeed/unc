@@ -64,12 +64,15 @@ function getRecovery(gen, attacker, defender, move, damage, notation) {
             recovery[1] += Math.min(Math.round(maxD[i] * move.hits / 8), max);
         }
     }
+    if (move.named('Recover')) {
+        recovery[0] = recovery[1] = Math.round(attacker.maxHP() / 2);
+    }
     if (move.named('G-Max Finale')) {
         recovery[0] = recovery[1] = Math.round(attacker.maxHP() / 6);
     }
     if (move.drain) {
         var percentHealed = move.drain[0] / move.drain[1];
-        var max = Math.round(defender.maxHP() * percentHealed);
+        var max = Math.round(defender.curHP() * percentHealed);
         for (var i = 0; i < minD.length; i++) {
             var range = [minD[i], maxD[i]];
             for (var j in recovery) {
