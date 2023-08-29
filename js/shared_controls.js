@@ -653,7 +653,7 @@ function createPokemon(pokeInfo) {
 			pokemonMoves.push(new calc.Move(gen, moves[moveName] ? moveName : "(No Move)", { ability: ability, item: item }));
 		}
 
-		return new calc.Pokemon(gen, pokemonName, {
+		return new calc.Pokemon(window.CALC_GEN_SETTINGS.dex, pokemonName, {
 			level: set.level,
 			ability: set.ability,
 			abilityOn: true,
