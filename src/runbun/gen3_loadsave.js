@@ -314,6 +314,8 @@ function createRUNBUNmon(mon){
 }
 
 function parseFileGen3(file){
+    if (!file) return
+    if (file.target) file = file.target.files[0]
     var reader = new FileReader();
 	reader.onload = function (e) {
 		var bytes = new Uint8Array(e.target.result);
@@ -355,28 +357,41 @@ function parseFileGen3(file){
 };
 
 function gen3_loadsave (){
-    $('#import-zone').val("");
-    $('#import-zone').prop("placeholder", "you can also drop your save file here");
-    $('#import-zone').on({
+    var importZone = $('#import-zone')
+    importZone.val("");
+    importZone.prop("placeholder", "you can also drop your save file here");
+    importZone.on({
         dragenter: function(e){
             if (pokeDragged){
                 return
             }
-            $('#import-zone').css("background-color", "var(--button-hover)")
+            importZone.css("background-color", "var(--button-hover)")
         },
         dragleave: function(e){
             if (pokeDragged){ // don't show the visual hint for a non-file, should make this more robust tho
                 return
             }
-            $('#import-zone').css("background-color", "var(--background)")
+            importZone.css("background-color", "var(--background)")
         },
         drop: function(e){
             if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files.length) {
                 e.preventDefault();
                 e.stopPropagation();
                 parseFileGen3(e.originalEvent.dataTransfer.files[0]);
-                $('#import-zone').css("background-color", "var(--background)")
+                importZone.css("background-color", "var(--background)")
             }
         }
     })
+    var input = document.createElement("input");
+    input.id = "savefile-upload";
+    input.type = "file";
+    input.accept = ".sav";
+    input.className = "visually-hidden";
+    input.onchange = parseFileGen3;
+    var button = document.createElement("button");
+    button.innerText = "Import from savefile";
+    button.onclick = ()=>{input.click()}
+    var importDiv = document.getElementById("import-1_wrapper");
+    importDiv.append(input);
+    importDiv.append(button);
 };
