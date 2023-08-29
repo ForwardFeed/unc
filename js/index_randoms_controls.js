@@ -48,6 +48,7 @@ var damageResults;
 	@p3 potential player 3, the foes friend who will pop off intimidate or air lock(maybe) 
 	@double, if set the the result will be shown in the second div
 */
+var speFinal = [null,null,null]
 function performCalculations(p1, p2, p3, double) {
 	double = double ? 2 : 0;
 	var p1field = createField();
@@ -71,6 +72,7 @@ function performCalculations(p1, p2, p3, double) {
 	try {
 		$("#p1").find(".sp .totalMod").text(p1.stats.spe);
 		$("#p2").find(".sp .totalMod").text(p2.stats.spe);
+		speFinal[double] = p2.stats.spe; //else, the latest calc'd pokemon overwrite everything
 	} catch (e) {
 		console.log(e)
 	}
@@ -398,15 +400,18 @@ function calcTrigger() {
 		window.NO_CALC = true;
 		window.NO_CALC_RECURSION = true;
 		var dataSave = saveCurrentMon();
+		
 		if (!monRow1 || !monRow2) {
 			performCalculations(p1, p2);
 		} else {
+			speFinal = [null,null,null]
 			if (monRow1 != activeMon && monRow2 != activeMon) {
 				if (document.querySelectorAll('[data-id="' + activeMon + '"')[0].parentNode.id == "trainer-pok-list-opposing") {
 					p2 = createPokemon($("#p2"));
 					window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
 					p3 = createPokemon($("#p2"));
-					performCalculations(p1, p2, p3);
+					performCalculations(p1, p2, p3); 
+					$("#p2").find(".sp .totalMod").text(speFinal[0]);
 				} else {
 					p3 = createPokemon($("#p2"));
 					window.select2Select($('#p2').find("input.set-selector"), monRow1, monRow1T);
@@ -418,6 +423,7 @@ function calcTrigger() {
 				window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
 				p3 = createPokemon($("#p2"));
 				performCalculations(p1, p2, p3);
+				$("#p2").find(".sp .totalMod").text(speFinal[0]);
 			} else if (monRow2 == activeMon) {
 				p3 = createPokemon($("#p2"));
 				window.select2Select($('#p2').find("input.set-selector"), monRow1, monRow1T);
