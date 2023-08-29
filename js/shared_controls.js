@@ -450,8 +450,9 @@ $(".move-selector").change(function () {
 	$(this).attr('data-prev', moveName);
 	moveGroupObj.children(".move-type").val(move.type);
 	moveGroupObj.children(".move-cat").val(move.category);
-	moveGroupObj.children(".move-crit").prop("checked", move.willCrit === true);
-
+	var prevCrit = moveGroupObj.children(".move-crit").prop("checked");
+	var setCrit =  move.willCrit === true || prevCrit
+	moveGroupObj.children(".move-crit").prop("checked", setCrit);
 	var stat = move.category === 'Special' ? 'spa' : 'atk';
 	var dropsStats =
 		move.self && move.self.boosts && move.self.boosts[stat] && move.self.boosts[stat] < 0;
