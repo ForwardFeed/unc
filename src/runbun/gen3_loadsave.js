@@ -258,7 +258,7 @@ function flutuatingCurve(n){
 	return Math.floor((Math.floor(n / 2) + 32) * n**3 / 50)
 }
 function getRUNBUNexpRequired(species,level) {
-	var expCurve = RUNBUN_CURVE[species]
+	var expCurve = RUNBUN_CURVE[species - 1]
 	if (expCurve == 0) return medfastCurve(level)
 	if (expCurve == 1) return erraticCurve(level)
 	if (expCurve == 2) return flutuatingCurve(level)
