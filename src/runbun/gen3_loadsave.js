@@ -283,10 +283,11 @@ function getRUNBUNAbility(mon){
     return current
 }
 function getRUNBUNNature(mon){
+    console.log(mon)
     if (mon.hiddenNature == 26){
         return RUNBUN_NATURE[(Math.abs(mon.personality) % 25)]
     }
-    return RUNBUN_NATURE[mon.hiddenNature+1]
+    return RUNBUN_NATURE[mon.hiddenNature]
 }
 function createRUNBUNmon(mon){
     var poke = {};

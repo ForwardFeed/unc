@@ -4115,7 +4115,6 @@ end
 
 function expRequired(species,level)
 	expCurve = curve[species]
-	console:log(string.format("%s", species))
 	if (expCurve == 0) then return medfastCurve(level) end
 	if (expCurve == 1) then return erraticCurve(level) end
 	if (expCurve == 2) then return flutuatingCurve(level) end

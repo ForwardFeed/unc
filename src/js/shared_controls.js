@@ -1472,7 +1472,7 @@ function iconMonClicked(ev) {
 	var select = fieldset.find("input.selector");
 	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) savePNotes(select.val()); 
 	select2Select(select, tar.dataset.id, tar.dataset.title)
-	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) restorePNotes(tar.dataset.id); 
+	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) restorePNotes(tar.dataset.id);
 }
 
 function addBoxed(box, poke, id, trainerID) {
