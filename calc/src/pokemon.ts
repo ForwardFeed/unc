@@ -51,7 +51,6 @@ export class Pokemon implements State.Pokemon {
     } = {}
   ) {
     this.species = extend(true, {}, gen.species.get(toID(name)), options.overrides);
-
     this.gen = gen;
     this.name = options.name || name as I.SpeciesName;
     this.types = this.species.types;

@@ -52,7 +52,6 @@ export function calculateSMSSSV(
   defenderFriend?: Pokemon,
 ) {
   // #region Initial
-
   checkAirLock(attacker, field);
   checkAirLock(defender, field);
   if (defenderFriend) checkAirLock(defenderFriend, field);

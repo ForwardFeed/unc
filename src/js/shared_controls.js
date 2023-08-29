@@ -671,6 +671,8 @@ function createPokemon(pokeInfo) {
 			trainer = parsed[1],
 			pokemon = parsed[2],
 			pokemonName = parsed[3];
+		var weightkg = pokedex[pokemonName].weightkg
+		console.log(weightkg);
 		var name = pokemonName;
 		var baseStats = {};
 		var ivs = {};
@@ -721,7 +723,8 @@ function createPokemon(pokeInfo) {
 			],
 			overrides: {
 				baseStats: baseStats,
-				types: types
+				types: types,
+				weightkg: weightkg
 			}
 		});
 	}
