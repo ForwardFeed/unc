@@ -654,7 +654,7 @@ function createPokemon(pokeInfo) {
 			pokemonMoves.push(new calc.Move(gen, moves[moveName] ? moveName : "(No Move)", { ability: ability, item: item }));
 		}
 
-		return new calc.Pokemon(window.CALC_GEN_SETTINGS.dex, pokemonName, {
+		return new calc.Pokemon(gen, pokemonName, {
 			level: set.level,
 			ability: set.ability,
 			abilityOn: true,
@@ -671,8 +671,6 @@ function createPokemon(pokeInfo) {
 			trainer = parsed[1],
 			pokemon = parsed[2],
 			pokemonName = parsed[3];
-		var weightkg = pokedex[pokemonName].weightkg
-		console.log(weightkg);
 		var name = pokemonName;
 		var baseStats = {};
 		var ivs = {};
@@ -724,7 +722,6 @@ function createPokemon(pokeInfo) {
 			overrides: {
 				baseStats: baseStats,
 				types: types,
-				weightkg: weightkg
 			}
 		});
 	}
