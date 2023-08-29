@@ -288,6 +288,45 @@ function getRUNBUNNature(mon){
     }
     return RUNBUN_NATURE[mon.hiddenNature]
 }
+
+function getRUNBUNHP(mon) {
+    var hptype = ((mon.hpIV%2 + (2*(mon.attackIV%2))+(4*(mon.defenseIV%2))+(8*(mon.speedIV%2))+(16*(mon.spAttackIV%2))+(32*(mon.spDefenseIV%2)))*5)/21
+    hptype = Math.floor(hptype)
+    switch(hptype){
+        case 0:
+		    return "Fighting";
+        case 1:
+		    return "Flying";
+        case 2:
+		    return "Poison";
+        case 3:
+            return "Ground";
+        case 4:
+            return "Rock";
+        case 5:
+            return "Bug";
+        case 6:
+            return "Ghost";
+        case 7:
+            return "Steel";
+        case 8:
+            return "Fire";
+        case 9:
+            return "Water";
+        case 10:
+            return "Grass";
+        case 11:
+            return "Electric";
+        case 12:
+            return "Psychic";
+        case 13:
+            return "Ice";
+        case 14:
+            return "Dragon";
+        case 15:
+            return "Dark";
+    }
+}
 function createRUNBUNmon(mon){
     var poke = {};
     poke.item = RUNBUN_ITEMS[mon.heldItem];
@@ -303,12 +342,15 @@ function createRUNBUNmon(mon){
         sd: mon.spDefenseIV,
         sp: mon.speedIV
     };
-    poke.moves = [
-        RUNBUN_MOVES[mon.moves[0]],
-        RUNBUN_MOVES[mon.moves[1]],
-        RUNBUN_MOVES[mon.moves[2]],
-        RUNBUN_MOVES[mon.moves[3]],
-    ]
+    poke.hPWR = getRUNBUNHP(mon)
+    poke.moves = [];
+    for (var i=0; i<4; i++) {
+        var move = RUNBUN_MOVES[mon.moves[i]]
+        if (move == "Hidden Power") {
+            move = move + " " + poke.hPWR;
+        }
+        poke.moves[i] = move
+    }
     poke.gender = "M"; //default to M?
     return poke
 }
