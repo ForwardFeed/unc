@@ -127,6 +127,10 @@ export function getRecovery(
       recovery[1] += Math.min(Math.round(maxD[i] * move.hits / 8), max);
     }
   }
+  
+  if (move.named('Recover')) {
+    recovery[0] = recovery[1] = Math.round(attacker.maxHP() / 2);
+  }
 
   if (move.named('G-Max Finale')) {
     recovery[0] = recovery[1] = Math.round(attacker.maxHP() / 6);
@@ -134,7 +138,7 @@ export function getRecovery(
 
   if (move.drain) {
     const percentHealed = move.drain[0] / move.drain[1];
-    const max = Math.round(defender.maxHP() * percentHealed);
+    const max = Math.round(defender.curHP() * percentHealed);
     for (let i = 0; i < minD.length; i++) {
       const range = [minD[i], maxD[i]];
       for (const j in recovery) {
@@ -144,7 +148,6 @@ export function getRecovery(
       }
     }
   }
-
   if (recovery[1] === 0) return {recovery, text};
 
   const minHealthRecovered = toDisplay(notation, recovery[0], attacker.maxHP());
