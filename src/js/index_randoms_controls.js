@@ -431,9 +431,9 @@ function calcTrigger() {
 				performCalculations(p1, p2, p3);
 			}
 		}
-		$('#p2').find("input.set-selector").val(activeMon);
-		$('.set-selector').change();
-		$('.opposing .select2-chosen').text(activeMon);
+		var title = activeMon.split(";")
+		title = title[0] + " : " + title[1]
+		select2Select($('#p2').find("input.set-selector"), activeMon, title)
 		loadSavedMon(dataSave);
 		window.NO_CALC_RECURSION = false;
 		window.NO_CALC = false;
