@@ -1258,6 +1258,11 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	pannel.closest('.poke-info').find(".item-pool").hide();
 	pannel.closest('.poke-info').find(".role-pool").hide();
 	pannel.closest('.poke-info').find(".tera-type-pool").hide();
+	if (pokemon.hPWR) {
+		pokeObj.find(".hidden-power").html("HP "+pokemon.hPWR)
+	} else {
+		pokeObj.find(".hidden-power").html("")
+	}
 	if (trainer) {
 		var set = correctHiddenPower(pokemon);
 		if (trainer) {
