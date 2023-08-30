@@ -657,7 +657,6 @@ function createPokemon(pokeInfo) {
 		var status = "Healthy"
 		if ($('#cd-intimidate').prop("checked") && pokemon.ability === "Intimidate") abiOn = true;
 		if ($('#cd-guts').prop("checked") && pokemon.ability === "Guts") status = "Burned";
-		console.log(CALC_STATUS[status], abiOn)
 		return new calc.Pokemon(gen, pokemonName, {
 			level: set.level,
 			ability: set.ability,
@@ -687,7 +686,6 @@ function createPokemon(pokeInfo) {
 			//user changed the form
 			setdex[trainerID].mons[pokID].species = selectedForm;
 			pokeInfo.find("img")[0].src=getSrcImgPokemon(selectedForm)
-			console.log( pokeInfo.closest(".panel"))
 			var Boxedimg = pokeInfo.closest(".panel").find('[data-id=\"'+ selectID+'\"]')[0];
 			Boxedimg.src=getSrcImgPokemon(selectedForm);
 			Boxedimg.dataset.id = selectedForm + ";" + trainer.trn + ";" + pokID
@@ -1599,7 +1597,6 @@ function handleDragLeave(ev) {
 }
 
 function topPokemonIcon(fullname, node) {
-	console.log(fullname)
 	var mon = { name: fullname.split(" (")[0] };
 	var src = getSrcImgPokemon(mon);
 	node.src = src;
