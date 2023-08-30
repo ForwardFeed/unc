@@ -11,3 +11,14 @@ SPECIES_BY_ID[8]["kleavor"].baseStats = { hp: 70, atk: 130, def: 95, spa: 45, sp
 //correct the wrong moves
 calc.MOVES[8]["Covet"].type = "Fairy";
 calc.MOVES[8]["Absorb"].bp = 40;
+
+//Make the calc print IVs instead of EVs
+calc.getEVDescriptionText = function (gen, pokemon, stat, natureName) {
+    var nature = gen.natures.get((0, util_1.toID)(natureName));
+    return (pokemon.ivs[stat] +
+        (nature.plus === nature.minus ? ''
+            : nature.plus === stat ? '+'
+                : nature.minus === stat ? '-'
+                    : '') + ' ' +
+        stats_1.Stats.displayStat(stat));
+}
