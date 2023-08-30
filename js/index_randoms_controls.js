@@ -54,7 +54,7 @@ function performCalculations(p1, p2, p3, double) {
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
 	var p1Save = p1 //prevents double apply of initimate
-	//make the second don't overwrite the first
+	//preven the second turn in double from overwriting the first calcs
 	if (double != 0){ 
 		var TempdamageResults = calculateAllMoves(gen, p1, p1field, p2, p2field, double, p3);
 		damageResults[2] = TempdamageResults[2]
