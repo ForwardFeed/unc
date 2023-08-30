@@ -68,6 +68,15 @@ function pokeSelecSpeToggle(){
     }
 }
 
+function resetCritsToggle(){
+    var status = $('#rcrits-on').prop("checked")
+    if (status) {
+        localStorage.setItem("rcrits", "1")
+    } else {
+        localStorage.setItem("rcrits", "0")
+    }
+}
+
 $(document).ready(function () {
     try{ //if some settings are missing, it's w/e so far
         $('#light-theme').change(themeSelection);
@@ -97,8 +106,11 @@ $(document).ready(function () {
         $('#p-s-specifier-on').click(pokeSelecSpeToggle);
         $('#p-s-specifier-off').click(pokeSelecSpeToggle);
         +localStorage.getItem("p-s-spe") ? $('#p-s-specifier-on').prop("checked", true).click() : $('#p-s-specifier-off').prop("checked", true).click();
+        $('#rcrits-on').click(resetCritsToggle);
+        $('#rcrits-off').click(resetCritsToggle);
+        +localStorage.getItem("rcrits") ? $('#rcrits-on').prop("checked", true).click() : $('#rcrits-off').prop("checked", true).click()
     } catch(e) {
-
+        console.warn(e)
     }
 
     

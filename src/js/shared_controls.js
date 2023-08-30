@@ -163,10 +163,10 @@ $(".sl .dvs").keyup(function () {
 	calcHP(poke);
 });
 
-function showBerryHP(poke, item){
+function showBerryHP(poke, item) {
 	var maxHP = parseInt(poke.find(".max-hp").html());
 	var BHP, PHP; //Brute HP or Percentage HP
-	switch(item){
+	switch (item) {
 		case "Oran Berry":
 			BHP = 10;
 			break;
@@ -177,16 +177,16 @@ function showBerryHP(poke, item){
 			if (gen == 3) {
 				BHP = 30;
 			} else {
-				PHP = 25; 
+				PHP = 25;
 			}
 			break;
 		case "Wiki Berry":
 		case "Mago Berry":
 		case "Aguav Berry":
 		case "Iapapa Berry":
-			if ( gen <= 6){
+			if (gen <= 6) {
 				PHP = 12.5;
-			} else if (gen == 7){
+			} else if (gen == 7) {
 				PHP = 50;
 			} else {
 				PHP = 30;
@@ -194,9 +194,9 @@ function showBerryHP(poke, item){
 			break;
 	}
 	if (BHP) {
-		poke.find(".berry-hp").html(`+ ${((BHP/maxHP)*100).toFixed(2)}% (berry)`)
+		poke.find(".berry-hp").html(`+ ${((BHP / maxHP) * 100).toFixed(2)}% (berry)`)
 	} else if (PHP) {
-		poke.find(".berry-hp").html(`+ ${Math.floor(PHP*(maxHP/100))}HP (berry)`)
+		poke.find(".berry-hp").html(`+ ${Math.floor(PHP * (maxHP / 100))}HP (berry)`)
 	} else {
 		poke.find(".berry-hp").html("");
 	}
@@ -451,7 +451,7 @@ $(".move-selector").change(function () {
 	moveGroupObj.children(".move-type").val(move.type);
 	moveGroupObj.children(".move-cat").val(move.category);
 	var prevCrit = moveGroupObj.children(".move-crit").prop("checked");
-	var setCrit =  move.willCrit === true || prevCrit
+	var setCrit = move.willCrit === true || prevCrit
 	moveGroupObj.children(".move-crit").prop("checked", setCrit);
 	var stat = move.category === 'Special' ? 'spa' : 'atk';
 	var dropsStats =
@@ -477,7 +477,7 @@ $(".move-selector").change(function () {
 
 $(".item").change(function () {
 	var itemName = $(this).val();
-	var $pannel =  $(this).closest('.poke-info');
+	var $pannel = $(this).closest('.poke-info');
 	var $metronomeControl = $pannel.find('.metronome');
 	if (itemName === "Metronome") {
 		$metronomeControl.show();
@@ -873,7 +873,7 @@ var GENERATION = {
 	'9': 9, 'sv': 9
 };
 
-var gen, notation, pokedex, dexpoke , setdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION, dexset = [];
+var gen, notation, pokedex, dexpoke, setdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION, dexset = [];
 
 function setupCalc() {
 	gen = window.CALC_GEN_SETTINGS.calc;
@@ -1259,7 +1259,7 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	pannel.closest('.poke-info').find(".role-pool").hide();
 	pannel.closest('.poke-info').find(".tera-type-pool").hide();
 	if (pokemon.hPWR) {
-		pokeObj.find(".hidden-power").html("HP "+pokemon.hPWR)
+		pokeObj.find(".hidden-power").html("HP " + pokemon.hPWR)
 	} else {
 		pokeObj.find(".hidden-power").html("")
 	}
@@ -1337,7 +1337,7 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 		pokeObj.find(".gender").val("");
 	} else {
 		var genderDiv = pokeObj.find(".gender");
-		var gender = pokemon.gender === "M" ? "Male" :  pokemon.gender == "F" ? "Female" : "";
+		var gender = pokemon.gender === "M" ? "Male" : pokemon.gender == "F" ? "Female" : "";
 		genderDiv.val(gender);
 		genderDiv.change();
 		genderDiv.parent().show();
@@ -1376,15 +1376,15 @@ function dragMoveListener(event) {
 	var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 	parent.style.left = x + "px";
 	parent.style.top = y + "px";
-	
+
 	target.setAttribute('data-x', x);
 	target.setAttribute('data-y', y);
-	
+
 }
 
 window.dragMoveListener = dragMoveListener
 
-function loadPokemonList(){
+function loadPokemonList() {
 	$(".set-selector").select2({
 		//when a result is push to deal with the rendering it goes throught it function here
 		formatResult: function (object) {
@@ -1416,7 +1416,7 @@ function loadPokemonList(){
 	});
 }
 
-function loadTrainerList(){
+function loadTrainerList() {
 	$(".player-selector").select2({
 		//when a result is push to deal with the rendering it goes throught it function here
 		formatResult: function (object) {
@@ -1464,6 +1464,16 @@ function allPokemon(selector) {
 	return allSelector;
 }
 
+function critsResets(field) {
+	if (!+localStorage.getItem("rcrits")) return
+	for (var i = 1; i < 5; i++) {
+		var moveInfo = field.find(".move" + i);
+		var moveName = moveInfo.find(".move-selector")[1].value;
+		var move = moves[moveName] || moves['(No Move)'];
+		moveInfo.children(".move-crit").prop("checked", move.willCrit === true);
+	}
+}
+
 /*imitate a manual selection*/
 function select2Select(select, id, title) {
 	select.val(id);
@@ -1475,8 +1485,9 @@ function iconMonClicked(ev) {
 	var tar = ev.target;
 	var fieldset = $(this).closest(".panel").find("fieldset")
 	var select = fieldset.find("input.selector");
-	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) savePNotes(select.val()); 
+	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) savePNotes(select.val());
 	select2Select(select, tar.dataset.id, tar.dataset.title)
+	critsResets(fieldset);
 	if (fieldset[0].id === "p2" && +localStorage.getItem("p-notes")) restorePNotes(tar.dataset.id);
 }
 
@@ -1506,21 +1517,21 @@ function getSrcImgPokemon(pokeName) {
 
 }
 
-function oppositeAllCrits(){
-	$('#critR1').prop("checked", !$('#critR1').prop("checked")).change(); 
-	$('#critR2').prop("checked", !$('#critR2').prop("checked")).change(); 
-	$('#critR3').prop("checked", !$('#critR3').prop("checked")).change(); 
-	$('#critR4').prop("checked", !$('#critR4').prop("checked")).change(); 
+function oppositeAllCrits() {
+	$('#critR1').prop("checked", !$('#critR1').prop("checked")).change();
+	$('#critR2').prop("checked", !$('#critR2').prop("checked")).change();
+	$('#critR3').prop("checked", !$('#critR3').prop("checked")).change();
+	$('#critR4').prop("checked", !$('#critR4').prop("checked")).change();
 }
 
 // Check whether control button is pressed
 $(document).keydown(function (event) {
 	if (event.key === "Escape") {
 		settingsMenuToggle()
-	} else if (event.target.classList.contains("select2-input") || event.target.tagName === "TEXTAREA"){
+	} else if (event.target.classList.contains("select2-input") || event.target.tagName === "TEXTAREA") {
 		return
-	} 
-	else if (event.shiftKey){
+	}
+	else if (event.shiftKey) {
 		if (event.key === "Z") {
 			oppositeAllCrits()
 		}
@@ -1612,11 +1623,12 @@ function selectTrainer(id) {
 		trainer = parsed[1],
 		pokemon = parsed[2],
 		pokemonName = parsed[3];
-		pokeID = parsed[4];
+	pokeID = parsed[4];
 
-	if (+localStorage.getItem("p-notes") && trainerID != 0) savePNotes($('#p2').find("input.set-selector").val()); 
-	if (+localStorage.getItem("p-notes") && trainerID != 0 ) restorePNotes(pokemonName+";"+trainer.trn+";"+0); 
+	if (+localStorage.getItem("p-notes") && trainerID != 0) savePNotes($('#p2').find("input.set-selector").val());
+	if (+localStorage.getItem("p-notes") && trainerID != 0) restorePNotes(pokemonName + ";" + trainer.trn + ";" + 0);
 	select2Select($('#p2').find("input.set-selector"), id, pokemonName + " : " + trainer.trn)
+	critsResets($('#p2'));
 	localStorage.setItem(GameName + "trainer", id);
 }
 
@@ -1767,14 +1779,14 @@ function trashPokemon() {
 		for (var j = parseInt(pokeID) + 1, jLen = setdex[0].mons.length; j < jLen; j++) {
 			var monDexed = setdex[0].mons[j].species + ";Player;" + j;
 			var monBoxed = parentBox.querySelector(`[data-id="${monDexed}"]`);
-			monBoxed.dataset.id = setdex[0].mons[j].species + ";Player;" + String(+j -1)
+			monBoxed.dataset.id = setdex[0].mons[j].species + ";Player;" + String(+j - 1)
 		}
 		setdex[0].mons.splice(parseInt(pokeID), 1)
 	}
 	document.getElementById("trash-box").innerHTML = "";
 	localStorage.setItem(GameName + "playerdex", JSON.stringify(setdex[0].mons));
 	// and then click to another pokemon, else its gonna make things crash
-	
+
 	if (mons.length < 1) {
 		var select = $(this).closest(".panel").find("input.selector")
 		selectFirstPlayerAvailable(select)
@@ -1853,6 +1865,7 @@ function onFirstTime() {
 	document.getElementById("team-poke-list").setAttribute("data-placeholder", "You can drag & drop your pokemons here");
 	document.getElementById("box-poke-list2").setAttribute("data-placeholder", "You can drag & drop your pokemons here");
 	document.getElementById("trash-box").setAttribute("data-placeholder", "drop here and click remove to remove");
+	$('#rcrits-on').prop("checked", true).click()
 }
 
 var screenDivCount = 0;
@@ -1913,14 +1926,14 @@ function savePNotes(fullID) {
 			PNOTES.delete(fullID)
 			return
 		}
-		else if (notes === prevNotes){
+		else if (notes === prevNotes) {
 			// i don't trigger a save over this
 			return
 		} else {
-			PNOTES.set(fullID,notes);
+			PNOTES.set(fullID, notes);
 		}
 	} else if (notes) {
-		PNOTES.set(fullID,notes);
+		PNOTES.set(fullID, notes);
 	}
 	localStorage.setItem(GameName + "pnotes", JSON.stringify(Array.from(PNOTES.entries())))
 }
@@ -1939,7 +1952,7 @@ function clearAllNotes() {
 	var yes = confirm("This will clear all the data of all the notes you've written so far, this cannot be undone, do you wish to proceed anyway?")
 	if (yes) {
 		localStorage.setItem(GameName + "pnotes", "[]")
-	} 
+	}
 	$('#p-notes-reset').prop("checked", false);
 }
 
