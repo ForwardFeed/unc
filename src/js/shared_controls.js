@@ -653,16 +653,21 @@ function createPokemon(pokeInfo) {
 			var moveName = moveNames[i];
 			pokemonMoves.push(new calc.Move(gen, moves[moveName] ? moveName : "(No Move)", { ability: ability, item: item }));
 		}
-
+		var abiOn = false;
+		var status = "Healthy"
+		if ($('#cd-intimidate').prop("checked") && pokemon.ability === "Intimidate") abiOn = true;
+		if ($('#cd-guts').prop("checked") && pokemon.ability === "Guts") status = "Burned";
+		console.log(CALC_STATUS[status], abiOn)
 		return new calc.Pokemon(gen, pokemonName, {
 			level: set.level,
 			ability: set.ability,
-			abilityOn: true,
+			abilityOn: abiOn,
+			status: CALC_STATUS[status],
 			item: set.item && typeof set.item !== "undefined" && (set.item === "Eviolite" || set.item.indexOf("ite") < 0) ? set.item : "",
 			nature: set.nature,
 			ivs: ivs,
 			evs: evs,
-			moves: pokemonMoves
+			moves: pokemonMoves,
 		});
 	} else {
 		var selectID = pokeInfo.find("input.selector").val();
