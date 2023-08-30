@@ -79,7 +79,13 @@ function resetCritsToggle(){
 
 function colorCodingSets(){
     if (!$('#refr-cc').prop("hidden")) refreshColorCode()
-    console.log($('#refr-cc').prop("hidden"))
+    localStorage.setItem("cd-sets", JSON.stringify([+$('#cd-intimidate').prop("checked"),+$('#cd-guts').prop("checked")]))
+}
+
+function deserializeColorCodingSets(){
+    var serie = JSON.parse(localStorage.getItem("cd-sets"));
+    $('#cd-intimidate').prop("checked", serie[0])
+    $('#cd-guts').prop("checked", serie[1])
 }
 
 $(document).ready(function () {
@@ -116,6 +122,7 @@ $(document).ready(function () {
         +localStorage.getItem("rcrits") ? $('#rcrits-on').prop("checked", true).click() : $('#rcrits-off').prop("checked", true).click()
         $('#cd-intimidate').change(colorCodingSets);
         $('#cd-guts').change(colorCodingSets);
+        deserializeColorCodingSets();
    
    
     } catch(e) {
