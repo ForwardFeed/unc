@@ -8,6 +8,6 @@ SPECIES_BY_ID[8]["zacian"].baseStats = { hp: 92, atk: 130, def: 115, spa: 80, sp
 SPECIES_BY_ID[8]["zamazenta"].baseStats = { hp: 92, atk: 130, def: 115, spa: 80, spd: 115, spe: 138 };
 SPECIES_BY_ID[8]["cresselia"].baseStats = { hp: 120, atk: 70, def: 120, spa: 75, spd: 130, spe: 85 };
 SPECIES_BY_ID[8]["kleavor"].baseStats = { hp: 70, atk: 130, def: 95, spa: 45, spd: 75, spe: 85 };
-
-calc.MOVES[8]["Covet"].type = "Fairy";
-calc.MOVES[8]["Absorb"].bp = 40;
+//correct the wrong moves
+calc.MOVES[8]["covet"].type = "Fairy";
+calc.MOVES[8]["absorb"].bp = 40;
