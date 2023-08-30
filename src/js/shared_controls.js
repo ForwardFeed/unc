@@ -676,11 +676,23 @@ function createPokemon(pokeInfo) {
 			trainer = parsed[1],
 			pokemon = parsed[2],
 			pokemonName = parsed[3];
-		var name = pokemonName;
+		var name =  pokemonName;
 		var baseStats = {};
 		var ivs = {};
 		var evs = {};
 		var boosts = {};
+		var selectedForm = pokeInfo.find(".forme").val();
+		if (selectedForm && selectedForm !== pokemonName) {
+			var pokID = selectID.split(";")[2];
+			//user changed the form
+			setdex[trainerID].mons[pokID].species = selectedForm;
+			pokeInfo.find("img")[0].src=getSrcImgPokemon(selectedForm)
+			console.log( pokeInfo.closest(".panel"))
+			var Boxedimg = pokeInfo.closest(".panel").find('[data-id=\"'+ selectID+'\"]')[0];
+			Boxedimg.src=getSrcImgPokemon(selectedForm);
+			Boxedimg.dataset.id = selectedForm + ";" + trainer.trn + ";" + pokID
+			pokeInfo.find("input.selector").val(Boxedimg.dataset.id)
+		}
 		for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
 			var stat = legacyStatToStat(LEGACY_STATS[gen][i]);
 			baseStats[stat === 'spc' ? 'spa' : stat] = ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .base").val();
@@ -1587,6 +1599,7 @@ function handleDragLeave(ev) {
 }
 
 function topPokemonIcon(fullname, node) {
+	console.log(fullname)
 	var mon = { name: fullname.split(" (")[0] };
 	var src = getSrcImgPokemon(mon);
 	node.src = src;
@@ -1608,15 +1621,16 @@ function truckMessage() {
 }
 
 function autoAdaptFieldPerTrainer() {
-	var textTrainer = (JSON.stringify(setdex[current_trainer_id].mons));
-	$('#srR').parent().prop("hidden", !new RegExp(/Stealth Rock/).test(textTrainer));
-	$('#protectR').parent().prop("hidden", !new RegExp(/Protect/).test(textTrainer));
-	$('#helpingHandR').parent().prop("hidden", !new RegExp(/Helping Hand/).test(textTrainer));
-	$('#leechSeedR').parent().prop("hidden", !new RegExp(/Leech Seed/).test(textTrainer));
-	$('#tailwindR').parent().prop("hidden", !new RegExp(/Tailwind/).test(textTrainer));
-	$('#spikesR3').parent().prop("hidden", !new RegExp(/Spikes/).test(textTrainer));
-	$('#auroraVeilR').parent().prop("hidden", !new RegExp(/Aurora Veil/).test(textTrainer));
-	$('#foresightR').parent().prop("hidden", !new RegExp(/(Odor Sleuth|Foresight)/).test(textTrainer));
+	var textTrainer = JSON.stringify(setdex[current_trainer_id].mons);
+	//$('#protectR').parent().prop("hidden", !new RegExp(/Protect/).test(textTrainer));
+	//map field regex
+	var mapFR = [["srR",/Stealth Rock/],["helpingHandR", /Helping Hand/ ], ["leechSeedR",/Leech Seed/], 
+	["tailwindR",/Tailwind/], ["spikesR3",/\"Spikes/], ["auroraVeilR",/Aurora Veil/], ["foresightR",/(Odor Sleuth|Foresight)/]
+	, ["flowerGiftR", /Flower Gift/], ["friendGuardR", /Friend Guard/], ["batteryR", /Battery/], ["powerSpotR", /Power Spot/]]
+	for (var i = 0; i < mapFR.length; i++) {
+		$('#'+mapFR[i][0]).parent().prop("hidden", !new RegExp(mapFR[i][1]).test(textTrainer));
+	}
+
 }
 
 function selectTrainer(id) {
