@@ -404,35 +404,46 @@ function calcTrigger() {
 			performCalculations(p1, p2);
 		} else {
 			speFinal = [null,null,null]
+			// save the weather
+			var savedWeather = $("input:radio[name='weather']:checked").val();
+			savedWeather = savedWeather ? savedWeather.charAt(0).toLowerCase() + savedWeather.slice(1): "clear";
+			console.log(savedWeather)
 			if (monRow1 != activeMon && monRow2 != activeMon) {
 				if (document.querySelectorAll('[data-id="' + activeMon + '"')[0].parentNode.id == "trainer-pok-list-opposing") {
 					p2 = createPokemon($("#p2"));
 					window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
 					p3 = createPokemon($("#p2"));
+					// switch back to the previously selected weather for the calculation
+					$('#'+ savedWeather).prop("checked", true);
 					performCalculations(p1, p2, p3); 
 					$("#p2").find(".sp .totalMod").text(speFinal[0]);
 				} else {
-					p3 = createPokemon($("#p2"));
+					p3 = createPokemon($("#p2"));	
 					window.select2Select($('#p2').find("input.set-selector"), monRow1, monRow1T);
 					p2 = createPokemon($("#p2"));
+					$('#'+ savedWeather).prop("checked", true);
 					performCalculations(p1, p2, p3);
 				}
 			} else if (monRow1 == activeMon) {
 				p2 = createPokemon($("#p2"));
 				window.select2Select($('#p2').find("input.set-selector"), monRow2, monRow2T);
 				p3 = createPokemon($("#p2"));
+				$('#'+ savedWeather).prop("checked", true);
 				performCalculations(p1, p2, p3);
 				$("#p2").find(".sp .totalMod").text(speFinal[0]);
 			} else if (monRow2 == activeMon) {
 				p3 = createPokemon($("#p2"));
 				window.select2Select($('#p2').find("input.set-selector"), monRow1, monRow1T);
 				p2 = createPokemon($("#p2"));
+				$('#'+ savedWeather).prop("checked", true);
 				performCalculations(p1, p2, p3);
 			}
 		}
 		var title = activeMon.split(";")
 		title = title[0] + " : " + title[1]
 		select2Select($('#p2').find("input.set-selector"), activeMon, title)
+		$('#'+ savedWeather).prop("checked", true);
+
 		loadSavedMon(dataSave);
 		window.NO_CALC_RECURSION = false;
 		window.NO_CALC = false;
