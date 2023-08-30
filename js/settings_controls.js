@@ -77,6 +77,11 @@ function resetCritsToggle(){
     }
 }
 
+function colorCodingSets(){
+    if (!$('#refr-cc').prop("hidden")) refreshColorCode()
+    console.log($('#refr-cc').prop("hidden"))
+}
+
 $(document).ready(function () {
     try{ //if some settings are missing, it's w/e so far
         $('#light-theme').change(themeSelection);
@@ -109,6 +114,10 @@ $(document).ready(function () {
         $('#rcrits-on').click(resetCritsToggle);
         $('#rcrits-off').click(resetCritsToggle);
         +localStorage.getItem("rcrits") ? $('#rcrits-on').prop("checked", true).click() : $('#rcrits-off').prop("checked", true).click()
+        $('#cd-intimidate').change(colorCodingSets);
+        $('#cd-guts').change(colorCodingSets);
+   
+   
     } catch(e) {
         console.warn(e)
     }
