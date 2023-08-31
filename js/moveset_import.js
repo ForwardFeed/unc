@@ -3,13 +3,26 @@
 */
 function saveTrainerPokemon() {
 	var pokeInfo = $(this).closest(".poke-info");
-	var pokeID = pokeInfo.find("input.selector").val().split(";");
+	var selectID = pokeInfo.find("input.selector").val()
+	var pokeID = selectID.split(";");
 	var tID = 0;
 	var monID = pokeID[2] || setdex[0].mons.length;
+	var trainerName = pokeID[1] || null
 	var poke = addSets(ExportPokemon(pokeInfo));
+	if (!trainerName) dispatchPlayerMon(poke);
 	setdex[tID].mons[monID]= poke[0];
 	localStorage.setItem(GameName + "playerdex", JSON.stringify(window.setdex[0].mons));
+	
 	$("#save-change").prop("hidden", true);
+	if (!trainerName) return
+	var boxedImg = $(this).closest(".panel").find('[data-id=\"'+ selectID+'\"]')[0];
+	if (!boxedImg) boxedImg =  $(this).closest(".panel").find('[data-id=\"' + $(this).closest(".panel").find('.select2-chosen').html().split(":")[0].trim() + ";" + pokeID[1] + ";" + monID +'\"]')[0];
+	var srcImg = getSrcImgPokemon(pokeID[0]);
+	boxedImg.src = srcImg;
+	boxedImg.dataset.id = pokeID[0] + ";" + pokeID[1] + ";" + monID;
+	pokeInfo.find("input.selector").val(boxedImg.dataset.id);
+
+	
 }
 
 function ExportPokemon(pokeInfo) {

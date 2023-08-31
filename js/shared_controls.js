@@ -546,16 +546,16 @@ function setSelectValueIfValid(select, value, fallback) {
 }
 
 $(".forme").change(function () {
+	var pokeInfo = $(this).closest(".poke-info")
 	var altForme = pokedex[$(this).val()],
 		container = $(this).closest(".info-group").siblings(),
-		selectID = container.find(".select2-chosen").first().text(),
-
+		selectID = pokeInfo.find("input.selector").val(),
 		parsed = parseSelector(selectID)
+
 	var trainerID = parsed[0],
 		trainer = parsed[1],
 		pokemon = parsed[2],
 		pokemonName = parsed[3];
-
 	$(this).parent().siblings().find(".type1").val(altForme.types[0]);
 	$(this).parent().siblings().find(".type2").val(altForme.types[1] ? altForme.types[1] : "");
 	for (var i = 0; i < LEGACY_STATS[9].length; i++) {
@@ -580,6 +580,9 @@ $(".forme").change(function () {
 	} else {
 		container.find(".item").prop("disabled", false);
 	}
+	var id4select = trainer ? $(this).val() + ";" + trainer.trn + ";" + selectID.split(";")[2] : $(this).val();
+	pokeInfo.find("input.selector").val(id4select);
+	pokeInfo.find("img").first().attr("src", getSrcImgPokemon($(this).val()));
 });
 
 
@@ -680,18 +683,7 @@ function createPokemon(pokeInfo) {
 		var ivs = {};
 		var evs = {};
 		var boosts = {};
-		var selectedForm = pokeInfo.find(".forme").val();
-		if (pokemon.otherFormes && selectedForm && selectedForm !== pokemonName) {
-			var pokID = selectID.split(";")[2];
-			//user changed the form
-			setdex[trainerID].mons[pokID].species = selectedForm;
-			setdex[trainerID].mons[pokID].baseSpecies = pokemon.bases;
-			pokeInfo.find("img")[0].src=getSrcImgPokemon(selectedForm)
-			var Boxedimg = pokeInfo.closest(".panel").find('[data-id=\"'+ selectID+'\"]')[0];
-			Boxedimg.src=getSrcImgPokemon(selectedForm);
-			Boxedimg.dataset.id = selectedForm + ";" + trainer.trn + ";" + pokID
-			pokeInfo.find("input.selector").val(Boxedimg.dataset.id)
-		}
+		
 		for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
 			var stat = legacyStatToStat(LEGACY_STATS[gen][i]);
 			baseStats[stat === 'spc' ? 'spa' : stat] = ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .base").val();
