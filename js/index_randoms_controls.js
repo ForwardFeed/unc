@@ -407,7 +407,6 @@ function calcTrigger() {
 			// save the weather
 			var savedWeather = $("input:radio[name='weather']:checked").val();
 			savedWeather = savedWeather ? savedWeather.charAt(0).toLowerCase() + savedWeather.slice(1): "clear";
-			console.log(savedWeather)
 			if (monRow1 != activeMon && monRow2 != activeMon) {
 				if (document.querySelectorAll('[data-id="' + activeMon + '"')[0].parentNode.id == "trainer-pok-list-opposing") {
 					p2 = createPokemon($("#p2"));
