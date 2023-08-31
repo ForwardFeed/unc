@@ -8,6 +8,10 @@ SPECIES_BY_ID[8]["zacian"].baseStats = { hp: 92, atk: 130, def: 115, spa: 80, sp
 SPECIES_BY_ID[8]["zamazenta"].baseStats = { hp: 92, atk: 130, def: 115, spa: 80, spd: 115, spe: 138 };
 SPECIES_BY_ID[8]["cresselia"].baseStats = { hp: 120, atk: 70, def: 120, spa: 75, spd: 130, spe: 85 };
 SPECIES_BY_ID[8]["kleavor"].baseStats = { hp: 70, atk: 130, def: 95, spa: 45, spd: 75, spe: 85 };
+//correct specific run & bun stats change
+SPECIES_BY_ID[8]["azumarill"].baseStats = {hp: 100, atk: 65, def: 80, spa: 90,  spd: 80,  spe: 50};
+SPECIES_BY_ID[8]["marill"].baseStats = { hp: 70, atk: 20, def: 50, spa: 20, spd: 50, spe: 40 };
+SPECIES_BY_ID[8]["diggersby"].baseStats = { hp: 85, atk: 71, def: 77, spa: 50, spd: 77, spe: 78 };
 //correct the wrong moves
 calc.MOVES[8]["Covet"].type = "Fairy";
 calc.MOVES[8]["Absorb"].bp = 40;
