@@ -263,9 +263,8 @@ $(".percent-hp").keyup(function () {
 
 $(".ability").bind("keyup change", function () {
 	$(this).closest(".poke-info").find(".move-hits").val($(this).val() === 'Skill Link' ? 5 : 3);
-
+	
 	var ability = $(this).closest(".poke-info").find(".ability").val();
-
 	var TOGGLE_ABILITIES = ['Flash Fire', 'Intimidate', 'Minus', 'Plus', 'Slow Start', 'Unburden', 'Stakeout'];
 
 	if (TOGGLE_ABILITIES.indexOf(ability) >= 0) {
@@ -570,7 +569,7 @@ $(".forme").change(function () {
 		container.find(".ability").val(altForme.ab);
 	} else if (greninjaSet) {
 		$(this).parent().find(".ability");
-	} else if (chosenSet) {
+	} else if (chosenSet && !trainer) {
 		container.find(".ability").val(chosenSet.abilities[0]);
 	}
 	container.find(".ability").keyup();
@@ -1239,6 +1238,7 @@ $(".player-selector").change(function () {
 });
 
 function setDataPannel(pannel, pokemonName, pokemon, trainer) {
+	
 	window.NO_CALC = true;
 	var pokeObj = pannel.closest(".poke-info");
 	if (stickyMoves.getSelectedSide() === pokeObj.prop("id")) {
