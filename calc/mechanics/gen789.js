@@ -20,6 +20,8 @@ function calculateSMSSSV(gen, attacker, defender, move, field, defenderFriend) {
     (0, util_2.checkSeedBoost)(defender, field);
     (0, util_2.checkDauntlessShield)(attacker, gen);
     (0, util_2.checkDauntlessShield)(defender, gen);
+    if (defenderFriend && defenderFriend.hasAbility('Friend Guard'))
+        field.defenderSide.isFriendGuard = true;
     (0, util_2.computeFinalStats)(gen, attacker, defender, field, 'def', 'spd', 'spe');
     (0, util_2.checkIntimidate)(gen, attacker, defender);
     (0, util_2.checkIntimidate)(gen, defender, attacker);
