@@ -681,10 +681,11 @@ function createPokemon(pokeInfo) {
 		var evs = {};
 		var boosts = {};
 		var selectedForm = pokeInfo.find(".forme").val();
-		if (selectedForm && selectedForm !== pokemonName) {
+		if (pokemon.otherFormes && selectedForm && selectedForm !== pokemonName) {
 			var pokID = selectID.split(";")[2];
 			//user changed the form
 			setdex[trainerID].mons[pokID].species = selectedForm;
+			setdex[trainerID].mons[pokID].baseSpecies = pokemon.bases;
 			pokeInfo.find("img")[0].src=getSrcImgPokemon(selectedForm)
 			var Boxedimg = pokeInfo.closest(".panel").find('[data-id=\"'+ selectID+'\"]')[0];
 			Boxedimg.src=getSrcImgPokemon(selectedForm);
