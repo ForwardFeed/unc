@@ -1164,7 +1164,7 @@ function parseSelector(value) {
 			// from the player
 			trainerID = 0;
 			trainer = setdex[trainerID];
-			pokemon = trainer.mons[pokeID];
+			pokemon = trainer.mons[pokeID] || getPlayerOptions()[3];
 			pokemon = Object.assign(pokemon, pokedex[pokemon.species])
 			return [trainerID, trainer, pokemon, pokemonName]
 		} else {
