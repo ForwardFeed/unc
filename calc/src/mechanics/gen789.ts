@@ -65,6 +65,7 @@ export function calculateSMSSSV(
   checkSeedBoost(defender, field);
   checkDauntlessShield(attacker, gen);
   checkDauntlessShield(defender, gen);
+  if (defenderFriend && defenderFriend.hasAbility('Friend Guard')) field.defenderSide.isFriendGuard = true
 
   computeFinalStats(gen, attacker, defender, field, 'def', 'spd', 'spe');
 
