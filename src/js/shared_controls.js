@@ -487,11 +487,6 @@ $(".item").change(function () {
 	showBerryHP($HPControl, itemName);
 });
 
-function smogonAnalysis(pokemonName) {
-	var generation = ["rb", "gs", "rs", "dp", "bw", "xy", "sm", "ss", "sv"][gen - 1];
-	return "https://smogon.com/dex/" + generation + "/pokemon/" + pokemonName.toLowerCase() + "/";
-}
-
 function sortmons(a, b) {
 	return parseInt(a.split("[")[1].split("]")[0]) - parseInt(b.split("[")[1].split("]")[0])
 }
@@ -1246,7 +1241,6 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	}
 	pokeObj.find(".teraToggle").prop("checked", false);
 	pokeObj.find(".boostedStat").val("Auto-Select");
-	pokeObj.find(".analysis").attr("href", smogonAnalysis(pokemonName));
 	pokeObj.find(".type1").val(pokemon.types[0]);
 	pokeObj.find(".type2").val(pokemon.types[1]);
 	pokeObj.find(".hp .base").val(pokemon.bs.hp);

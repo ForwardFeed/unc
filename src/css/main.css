@@ -759,6 +759,15 @@ table.field {
     top: 250px;
     left: 500px;
 }
+#moveset-box-frame{
+    z-index: 5;
+    width: 650px;
+    height: 400px;
+    top: 200;
+    left: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 .screen-box-frame-header{
     position: relative;
     min-height: 30px;
@@ -942,4 +951,28 @@ input[type='radio']:checked {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+.moveset-abi{
+    font-size: 13pt;
+}
+
+.moveset-set>legend{
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12pt;
+}
+
+.moveset-sector{
+    display: flex;
+}
+
+.moveset-block{
+    width: 50%;
+}
+
+
+.moveset-row{
+    width: fit-content;
+    font-size: 13pt;
 }
