@@ -108,6 +108,7 @@
 
     <div aria-label="Settings" role="region">
         <span class="title-text">Pok&eacute;mon Damage Calculator</span>
+        <button id="calcadd">Calc Addition</button>
         <button id="screen-calc">
             put this calculation in a grabbable window
         </button>
@@ -1861,6 +1862,25 @@
             </div>
         </div>
     </div>
+    <div id="calcadd-box-frame" class="box-frame" hidden>
+        <div class="box-frame-header" data-x="750"data-y="200">
+            <legend>Damage Calcul Addition</legend>
+            <button id="calcadd-reset">Reset</button>
+            <button id="calcadd-add">Add</button>
+            <div class="close-frame" id="close-calcadd-box">
+                <div class="mdiv">
+                  <div class="md"></div>
+                </div>
+              </div>
+        </div>
+        <div id="calcadd-box-body" class="item-box-body">
+            <div id="calcadd-text">
+            </div>
+            <div id="calcadd-result">
+
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         var linkExtension = '.template.html';
     </script>
@@ -1906,6 +1926,7 @@
     <script type="text/javascript" src="../js/shared_controls.js?"></script>
     <script type="text/javascript" src="../js/index_randoms_controls.js?"></script>
     <script type="text/javascript" src="../js/moveset_import.js?"></script>
+    <script type="text/javascript" src="../js/move_addition.js"></script>
     <script type="text/javascript" src="./cs_after_load.js"></script>
     <script type="text/javascript" src="../js/items_control.js"></script>
     <script type="text/javascript" src="../js/side_arrows_controls.js"></script>

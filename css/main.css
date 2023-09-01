@@ -763,9 +763,18 @@ table.field {
     z-index: 5;
     width: 650px;
     height: 400px;
-    top: 200;
+    top: 200px;
     left: 500px;
     overflow-y: scroll;
+    overflow-x: hidden;
+}
+#calcadd-box-frame{
+    z-index: 1;
+    width: 650px;
+    height: 100px;
+    top: 200px;
+    left: 750px;
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 .screen-box-frame-header{
@@ -881,9 +890,12 @@ table.field {
 #screen-calc{
     float: right;
     margin-top: 22px;
-    margin-right: 41px;
+    margin-right: 10px;
 }
-
+#calcadd{
+    float: right;
+    margin-top: 22px;
+}
 .ic:hover {
     background: var(--button-hover);
 }
