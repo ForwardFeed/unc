@@ -569,7 +569,7 @@ $(".forme").change(function () {
 		container.find(".ability").val(altForme.ab);
 	} else if (greninjaSet) {
 		$(this).parent().find(".ability");
-	} else if (chosenSet && !trainer) {
+	} else if (chosenSet && trainer !== undefined && trainer !== null) {
 		container.find(".ability").val(chosenSet.abilities[0]);
 	}
 	container.find(".ability").keyup();
@@ -886,7 +886,6 @@ function setupCalc() {
 	gen = window.CALC_GEN_SETTINGS.calc;
 	GENERATION = calc.Generations.get(gen);
 	pokedex = calc.SPECIES[window.CALC_GEN_SETTINGS.dex];
-	console.log(calc.SPECIES[window.CALC_GEN_SETTINGS.dex]["Diggersby"].bs)
 	setdex = TRAINER_DEX;
 	dexset = [];
 	for (var a in setdex) {
@@ -1368,10 +1367,18 @@ interact('.box-frame-header').draggable({
 	autoScroll: true,
 
 	listeners: {
+		
+		start () {
+			document.body.classList.add("text-unselectable")
+		},
 		// call this function on every dragmove event
 		move: dragMoveListener,
+		end () {
+			document.body.classList.remove("text-unselectable")
+		}
 	}
 })
+
 
 function dragMoveListener(event) {
 	var target = event.target;
