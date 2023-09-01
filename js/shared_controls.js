@@ -886,6 +886,7 @@ function setupCalc() {
 	gen = window.CALC_GEN_SETTINGS.calc;
 	GENERATION = calc.Generations.get(gen);
 	pokedex = calc.SPECIES[window.CALC_GEN_SETTINGS.dex];
+	console.log(calc.SPECIES[window.CALC_GEN_SETTINGS.dex]["Diggersby"].bs)
 	setdex = TRAINER_DEX;
 	dexset = [];
 	for (var a in setdex) {
