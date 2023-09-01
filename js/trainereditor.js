@@ -1113,6 +1113,27 @@ function saveTrainerPokemon() {
 	for (var i = 0; i < 4; i++) {
 		poke.moves[i] = poke.moves[i].originalName;
 	}
+	delete poke.boosts
+    delete poke.evs
+    delete poke.gen
+    delete poke.nfe
+    delete poke.originalCurHP
+    delete poke.rawStats
+    delete poke.status
+    delete poke.stats
+    delete poke.types
+    delete poke.toxicCounter
+    delete poke.abilityOn
+    delete poke.alliesFainted
+    delete poke.abilities
+    delete poke.bs
+    delete poke.isDynamaxed
+    delete poke.isSaltCure
+    delete poke.weightkg
+    delete poke.name
+	delete poke.dynamaxLevel
+    delete poke.boostedStat
+    if (!poke.teraType) delete poke.teraType
 	setdex[window.current_trainer_id].mons[window.current_pokemon_id] = poke;
 	saveTrainer();
 }
