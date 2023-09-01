@@ -49,7 +49,7 @@ function calcaddAdd(){
     }
     
     var textDiv = document.getElementById("calcadd-text");
-    textDiv.innerText += " " + dmgResult.move.name;
+    textDiv.innerHTML += (textDiv.innerText ? " <em>Into</em> <b>" : "<b>") + dmgResult.attacker.name + "</b>: " + dmgResult.move.name;
     var rsltDiv = document.getElementById("calcadd-result");
     var low = Math.floor(damageAddition[0] * (1000/1) / dmgResult.defender.maxHP()) / 10;
     var median = Math.floor(calcMedian(damageAddition) * (1000/1) / dmgResult.defender.maxHP()) /10 ;
