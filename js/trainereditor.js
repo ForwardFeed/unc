@@ -671,11 +671,6 @@ $(".item").change(function () {
 	}
 });
 
-function smogonAnalysis(pokemonName) {
-	var generation = ["rb", "gs", "rs", "dp", "bw", "xy", "sm", "ss", "sv"][gen - 1];
-	return "https://smogon.com/dex/" + generation + "/pokemon/" + pokemonName.toLowerCase() + "/";
-}
-
 function formatMovePool(moves) {
 	var formatted = [];
 	for (var i = 0; i < moves.length; i++) {
@@ -1307,7 +1302,6 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	}
 	pokeObj.find(".teraToggle").prop("checked", false);
 	pokeObj.find(".boostedStat").val("Auto-Select");
-	pokeObj.find(".analysis").attr("href", smogonAnalysis(pokemonName));
 	pokeObj.find(".type1").val(pokemon.types[0]);
 	pokeObj.find(".type2").val(pokemon.types[1]);
 	pokeObj.find(".hp .base").val(pokemon.bs.hp);
