@@ -560,12 +560,12 @@ $(".forme").change(function () {
 	var chosenSet = pokemon;
 	var greninjaSet = $(this).val().indexOf("Greninja") !== -1;
 	var isAltForme = $(this).val() !== pokemonName;
-	if (isAltForme && abilities.indexOf(altForme.ab) !== -1 && !greninjaSet) {
-		container.find(".ability").val(altForme.ab);
+	if (isAltForme && altForme.baseSpecies && !greninjaSet) {
+		container.find(".ability").val(altForme.abilities[0]);
 	} else if (greninjaSet) {
 		$(this).parent().find(".ability");
 	} else if (chosenSet && trainer !== undefined && trainer !== null) {
-		container.find(".ability").val(chosenSet.abilities[0]);
+		container.find(".ability").val(chosenSet.ability || chosenSet.abilities[0]);
 	}
 	container.find(".ability").keyup();
 
@@ -1615,14 +1615,14 @@ function truckMessage() {
 function autoAdaptFieldPerTrainer() {
 	var textTrainer = JSON.stringify(setdex[current_trainer_id].mons);
 	//$('#protectR').parent().prop("hidden", !new RegExp(/Protect/).test(textTrainer));
-	//map field regex
+	//map field regex 
 	var mapFR = [["srR",/Stealth Rock/],["helpingHandR", /Helping Hand/ ], ["leechSeedR",/Leech Seed/], 
-	["tailwindR",/Tailwind/], ["spikesR3",/\"Spikes/], ["auroraVeilR",/Aurora Veil/], ["foresightR",/(Odor Sleuth|Foresight)/]
+	["tailwindR",/Tailwind/], ["auroraVeilR",/Aurora Veil/], ["foresightR",/(Odor Sleuth|Foresight)/]
 	, ["flowerGiftR", /Flower Gift/], ["friendGuardR", /Friend Guard/], ["batteryR", /Battery/], ["powerSpotR", /Power Spot/]]
 	for (var i = 0; i < mapFR.length; i++) {
 		$('#'+mapFR[i][0]).parent().prop("hidden", !new RegExp(mapFR[i][1]).test(textTrainer));
 	}
-
+	// rejected , ["spikesR3",/\"Spikes/]
 }
 
 function selectTrainer(id) {
