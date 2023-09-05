@@ -15,10 +15,8 @@ function saveTrainerPokemon() {
 	
 	$("#save-change").prop("hidden", true);
 	if (!trainerName) return
-	var boxedImg = $(this).closest(".panel").find('[data-id=\"'+ selectID+'\"]')[0];
-	if (!boxedImg) boxedImg =  $(this).closest(".panel").find('[data-id=\"' + $(this).closest(".panel").find('.select2-chosen').html().split(":")[0].trim() + ";" + pokeID[1] + ";" + monID +'\"]')[0];
-	var srcImg = getSrcImgPokemon(pokeID[0]);
-	boxedImg.src = srcImg;
+	var boxedImg = idToNode[monID];
+	boxedImg.src = getSrcImgPokemon(pokeID[0]);
 	boxedImg.dataset.id = pokeID[0] + ";" + pokeID[1] + ";" + monID;
 	pokeInfo.find("input.selector").val(boxedImg.dataset.id);
 
@@ -305,7 +303,7 @@ function sortImports(a, b) {
 	return -1;
 }
 
-
+var idToNode = [];
 function dispatchPlayerMon(list) {
 	if (list.length <= 0) {
 		return;
@@ -313,7 +311,6 @@ function dispatchPlayerMon(list) {
 	list.sort(sortImports);
 	var box = document.getElementById("box-poke-list");
 	var playerMons = window.setdex[0].mons;
-	// this weird calculation is because, if a team already exist, and it has some dupes, the new pokemons have a wrong id
 	var boxOffset = playerMons.length; 
 	for (var i = 0, iLen = list.length; i < iLen; i++) {
 		var poke = list[i];
@@ -333,7 +330,7 @@ function dispatchPlayerMon(list) {
 			}
 		} else {
 			var idOffeseted = boxOffset + i
-			window.addBoxed(box, poke, idOffeseted, 0);
+			idToNode.push(window.addBoxed(box, poke, idOffeseted, 0));
 			window.setdex[0].mons.push(poke);
 		}
 	}

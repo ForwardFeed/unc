@@ -557,25 +557,37 @@ $(".forme").change(function () {
 		baseStat.val(altForme.bs[LEGACY_STATS[9][i]]);
 		baseStat.keyup();
 	}
-	var chosenSet = pokemon;
+	var abilityObj = container.find(".ability")
 	var greninjaSet = $(this).val().indexOf("Greninja") !== -1;
 	var isAltForme = $(this).val() !== pokemonName;
+	
 	if (isAltForme && altForme.baseSpecies && !greninjaSet) {
-		container.find(".ability").val(altForme.abilities[0]);
+		abilityObj.val(altForme.abilities[0]);
 	} else if (greninjaSet) {
 		$(this).parent().find(".ability");
-	} else if (chosenSet && trainer !== undefined && trainer !== null) {
-		container.find(".ability").val(chosenSet.ability || chosenSet.abilities[0]);
+	} else if (pokemon && trainer !== undefined && trainer !== null) {
+		abilityObj.val(pokemon.abilities[0]);
 	}
-	container.find(".ability").keyup();
+	abilityObj.keyup();
 
 	if ($(this).val().indexOf("-Mega") !== -1 && $(this).val() !== "Rayquaza-Mega") {
 		container.find(".item").val("").keyup();
 	} else {
 		container.find(".item").prop("disabled", false);
 	}
-	var id4select = trainer ? $(this).val() + ";" + trainer.trn + ";" + selectID.split(";")[2] : $(this).val();
+	
+	var id4select
+	var title4select
+	if (trainer){
+		id4select = $(this).val() + ";" + trainer.trn + ";" + selectID.split(";")[2];
+		title4select = $(this).val() + " : " + trainer.trn;
+	} else {
+		id4select = $(this).val();
+		title4select = id4select;
+	}
+	
 	pokeInfo.find("input.selector").val(id4select);
+	pokeInfo.closest(".panel").find('.selector .select2-chosen').text(title4select);
 	pokeInfo.find("img").first().attr("src", getSrcImgPokemon($(this).val()));
 });
 
@@ -1511,6 +1523,7 @@ function addBoxed(box, poke, id, trainerID) {
 	newPoke.addEventListener("dragstart", dragstart_handler);
 	newPoke.addEventListener("click", iconMonClicked);
 	box.append(newPoke);
+	return newPoke
 }
 
 function getSrcImgPokemon(pokeName) {
