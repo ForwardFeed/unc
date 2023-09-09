@@ -566,7 +566,7 @@ $(".forme").change(function () {
 	} else if (greninjaSet) {
 		$(this).parent().find(".ability");
 	} else if (pokemon && trainer !== undefined && trainer !== null) {
-		abilityObj.val(pokemon.abilities[0]);
+		abilityObj.val(pokemon.baseAbi);
 	}
 	abilityObj.keyup();
 
@@ -1173,6 +1173,7 @@ function parseSelector(value) {
 			trainer = setdex[trainerID];
 			pokemon = trainer.mons[pokeID] || getPlayerOptions()[3];
 			pokemon = Object.assign(pokemon, pokedex[pokemon.species])
+			pokemon.baseAbi = pokemon.ability;
 			return [trainerID, trainer, pokemon, pokemonName]
 		} else {
 			//for a NPC
@@ -1180,6 +1181,7 @@ function parseSelector(value) {
 			trainer = setdex[trainerID];
 			pokemon = trainer.mons[pokeID];
 			pokemon = Object.assign(pokemon, pokedex[pokemon.species])
+			pokemon.baseAbi = pokemon.ability;
 			return [trainerID, trainer, pokemon, pokemonName]
 		}
 	} else {
@@ -1192,6 +1194,7 @@ function parseSelector(value) {
 			trainer = setdex[trainerID]
 			pokemon = trainer.mons[0];
 			pokemonName = pokemon.name || pokemon.species || pokemon.baseSpecies;
+			pokemon.baseAbi = pokemon.ability;
 			return [trainerID, trainer, pokemon, pokemonName]
 		}
 
