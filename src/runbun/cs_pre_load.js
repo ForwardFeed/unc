@@ -278,3 +278,75 @@ calculateBPModsSMSSSV = function(gen, attacker, defender, move, field, desc, bas
     }
     return bpMods;
 }
+function calculateDfModsSMSSSV(gen, attacker, defender, move, field, desc, isCritical, hitsPhysical) {
+    var _a;
+    if (isCritical === void 0) { isCritical = false; }
+    if (hitsPhysical === void 0) { hitsPhysical = false; }
+    var dfMods = [];
+    if (defender.hasAbility('Marvel Scale') && defender.status && hitsPhysical) {
+        dfMods.push(6144);
+        desc.defenderAbility = defender.ability;
+    }
+    else if (defender.named('Cherrim') &&
+        defender.hasAbility('Flower Gift') &&
+        field.hasWeather('Sun', 'Harsh Sunshine') &&
+        !hitsPhysical) {
+        dfMods.push(6144);
+        desc.defenderAbility = defender.ability;
+        desc.weather = field.weather;
+    }
+    else if (field.defenderSide.isFlowerGift &&
+        field.hasWeather('Sun', 'Harsh Sunshine') &&
+        !hitsPhysical) {
+        dfMods.push(6144);
+        desc.weather = field.weather;
+        desc.isFlowerGiftDefender = true;
+    }
+    else if (defender.hasAbility('Grass Pelt') &&
+        field.hasTerrain('Grassy') &&
+        hitsPhysical) {
+        dfMods.push(6144);
+        desc.defenderAbility = defender.ability;
+    }
+    else if (defender.hasAbility('Fur Coat') && hitsPhysical) {
+        dfMods.push(8192);
+        desc.defenderAbility = defender.ability;
+    }
+    var isSwordOfRuinActive = attacker.hasAbility('Sword of Ruin') || field.isSwordOfRuin;
+    var isBeadsOfRuinActive = attacker.hasAbility('Beads of Ruin') || field.isBeadsOfRuin;
+    if ((isSwordOfRuinActive && hitsPhysical) ||
+        (isBeadsOfRuinActive && !hitsPhysical)) {
+        if (attacker.hasAbility('Sword of Ruin') || attacker.hasAbility('Beads of Ruin')) {
+            desc.attackerAbility = attacker.ability;
+        }
+        else {
+            desc[hitsPhysical ? 'isSwordOfRuin' : 'isBeadsOfRuin'] = true;
+        }
+        dfMods.push(3072);
+    }
+    if (move.named('Explosion', 'Self-Destruct', 'Misty Explosion')) {
+        dfMods.push(2048);
+    }
+    if ((defender.hasAbility('Protosynthesis') &&
+        (field.hasWeather('Sun') || attacker.hasItem('Booster Energy'))) ||
+        (defender.hasAbility('Quark Drive') &&
+            (field.hasTerrain('Electric') || attacker.hasItem('Booster Energy')))) {
+        if ((hitsPhysical && (0, util_2.getMostProficientStat)(defender) === 'def') ||
+            (!hitsPhysical && (0, util_2.getMostProficientStat)(defender) === 'spd')) {
+            desc.defenderAbility = defender.ability;
+            dfMods.push(5324);
+        }
+    }
+    if ((defender.hasItem('Eviolite') && ((_a = gen.species.get((0, util_1.toID)(defender.name))) === null || _a === void 0 ? void 0 : _a.nfe)) ||
+        (!hitsPhysical && defender.hasItem('Assault Vest')) ||
+        (defender.hasItem("Soul Dew") && move.category === 'Special' && defender.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega'))) {
+        dfMods.push(6144);
+        desc.defenderItem = defender.item;
+    }
+    else if ((defender.hasItem('Metal Powder') && defender.named('Ditto') && hitsPhysical) ||
+        (defender.hasItem('Deep Sea Scale') && defender.named('Clamperl') && !hitsPhysical)) {
+        dfMods.push(8192);
+        desc.defenderItem = defender.item;
+    }
+    return dfMods;
+}
