@@ -46,7 +46,9 @@
         <div class="panel">
              <div aria-label="Trainer list" role="region">
                 <fieldset class="poke-info trainer-list">
-                    <legend>Trainer List</legend>
+                    <legend>Trainer List 
+                        <input placeholder="search" id="trainer-search" type="text">
+                    </legend>
                     <table>
                         <thead>
                             <tr>
@@ -641,6 +643,12 @@
                     <button type="button" id="previous-trainer"> Previous Trainer</button>
                     <button type="button" id="next-trainer"> Next Trainer</button>
                     <hr>
+                    <div id="rematches">
+                        Rematches:
+                    </div>
+                    <div id="alternatives">
+                        Alternatives: 
+                    </div>
                     <legend>delete pokemons</legend>
                     <div id="poke-trash" class=" poke-box dropzone" data-placeholder="drag and drop pokemon here to delete them">
 
@@ -652,7 +660,7 @@
             <p>
                 <h3>How to use it:</h3>
                 <br>
-                This is an editor allowing to generate the trainer list for my unified nuzlocke calc
+                This is an editor allowing to generate the trainer list for the unified nuzlocke calc
                 <ul>
                     <li>Your work is automatically save upon switching position or adding a trainer to the list</li>
                     <li>The delete pokemon works instantly, if you made a mistake refesh the page</li>
@@ -715,7 +723,7 @@
         </ul>
         <button id="open-settings-box">Open Settings Panel</button>
         <div id="sets">
-            <span>version 0.2.0 "Challenge accepted 😎"</span>
+            <span>version 0.3.0 "Rick, there are trainers inside trainers"</span>
         </div>
     </div>
 </body>

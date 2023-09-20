@@ -39,6 +39,20 @@ function deserializeBattleItems() {
         BATTLE_ITEMS_MAPS[entry] = new Map(BATTLE_ITEMS_MAPS[entry]);
     };
 }
+
+function openCloseItemBox() {
+	document.getElementById("item-box-frame").toggleAttribute("hidden");
+}
+
+function openCloseNoteBox() {
+	document.getElementById("note-box-frame").toggleAttribute("hidden");
+}
+function selectItem(ev) {
+	var newItem = ev.target.getAttribute("data-id");
+	$("#itemL1").val(newItem);
+	$("#itemL1").change();
+}
+
 $(document).ready(function(){
     PLAYER_AVAILABLE_ITEMS = PLAYER_AVAILABLE_ITEMS || items;
     deserializeBattleItems()

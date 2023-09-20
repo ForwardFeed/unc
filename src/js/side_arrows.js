@@ -1,14 +1,14 @@
 function sideArrowToggle() {
-	var arrows = document.querySelector("input[name=\"arrows\"]:checked").id;
-	if (arrows === "show-arrows") {
-		localStorage.setItem("hsidearrow", "1");
-	} else {
-		localStorage.setItem("hsidearrow", "0");
+	for (panel of document.getElementsByClassName("side-panel")) {
+		if (+localStorage.getItem("sidearrow")) {
+			panel.removeAttribute("hidden")
+			setupSideCollapsers()
+		} else {
+			panel.setAttribute("hidden", true)
+		}
+		
 	}
-	for (pannel of document.getElementsByClassName("side-pannel")) {
-		pannel.toggleAttribute("hidden")
-	}
-	setupSideCollapsers()
+
 }
 
 function sideCollapsersCorrection(ev) {
@@ -110,7 +110,7 @@ function setupSideCollapsers() {
 
 
 $(document).ready(function(){
-    if (+localStorage.getItem("hsidearrow")) {
+    if (+localStorage.getItem("sidearrow")) {
         document.getElementById("show-arrows").checked = true;
 		setupSideCollapsers();
 		sideArrowToggle();

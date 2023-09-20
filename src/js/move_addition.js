@@ -1,14 +1,4 @@
-var damageAddition = new Array(16).fill(0);
-function findSelectedDamage(){
-    var selected = "#" + document.querySelector('[name="resultMove"]:checked').id;
-    for (var i = 0; i < 4; i++){
-        for(var j = 0; j < 4; j++){
-            if (resultLocations[i][j].move === selected) return damageResults[i][j]
-        }
-    }
-}
-
-function calcMedian(arr) {
+/*function calcMedian(arr) {
     if (!arr.length) return arr
     var half = Math.floor(arr.length / 2);
     arr.sort(function(a, b) { return a - b;});
@@ -18,49 +8,43 @@ function calcMedian(arr) {
     } else {
         return (arr[half] + arr[half]) / 2.0;
     }
-}
+}*/
 
-function calcaddToggle(){
-    var frame = document.getElementById("calcadd-box-frame");
-	frame.toggleAttribute("hidden")
-	var state = frame.getAttribute("hidden") === "" ? false : true;
-    if (state){
-
-    } else {
-        
+class MoveAddition{
+    constructor(){
+        this.low = 0
+        this.high = 0
+        this.textDiv = document.getElementById("calcadd-text");
+        this.rsltDiv = document.getElementById("calcadd-result");
+        this.setup()
     }
-}
-
-function calcaddReset(){
-    damageAddition.fill(0)
-    var textDiv = document.getElementById("calcadd-text")
-    textDiv.innerText = "";
-    var rsltDiv = document.getElementById("calcadd-result")
-    rsltDiv.innerText = "0 - 0 - 0%";
-}
-
-function calcaddAdd(){
-    var dmgResult = findSelectedDamage()
-    //because of dragon rage stuff
-    if (typeof dmgResult.damage === "object") {
-        damageAddition = dmgResult.damage.map((a,i)=> a + damageAddition[i]);
-    } else {
-        damageAddition = damageAddition.map((a,i)=> a + dmgResult.damage);
+    setup(){
+        $('#calcadd, #close-calcadd-box').click(()=>{this.toggle()});
+        $('#calcadd-reset').click(()=>{this.reset()});
+        $('#calcadd-add').click(()=>{this.add()});
     }
+    reset(){
+        this.low = 0
+        this.high = 0
+        this.textDiv.innerText = "";
+        this.rsltDiv.innerText = "0 - 0 - 0%";
+    }
+    toggle(){
+        var frame = document.getElementById("calcadd-box-frame");
+        frame.toggleAttribute("hidden")
+        /*var state = frame.getAttribute("hidden") === "" ? false : true;
+        if (state){
     
-    var textDiv = document.getElementById("calcadd-text");
-    textDiv.innerHTML += (textDiv.innerText ? " <em>Into</em> <b>" : "<b>") + dmgResult.attacker.name + "</b>: " + dmgResult.move.name;
-    var rsltDiv = document.getElementById("calcadd-result");
-    var low = Math.floor(damageAddition[0] * (1000/1) / dmgResult.defender.maxHP()) / 10;
-    var median = Math.floor(calcMedian(damageAddition) * (1000/1) / dmgResult.defender.maxHP()) /10 ;
-    var high =  Math.floor( damageAddition[15] * (1000/1)  / dmgResult.defender.maxHP()) /10  ;
-    rsltDiv.innerText = low + " - " + median + " - " + high + " %";
-
+        } else {
+            
+        }*/
+    }
+    add(){
+        const selected = calcGateway.display.selected
+        this.low += selected.lowDamPercent
+        this.high += selected.highDamPercent
+        this.textDiv.innerHTML += (this.textDiv.innerText ? " <em>Into</em> <b>" : "<b>") + ( selected.props.attacker.name + "</b>: " + 
+            selected.props.move.name );
+        this.rsltDiv.innerText = this.low + " - " + this.high + " %";
+    }
 }
-
-$(document).ready(function () {
-    $('#calcadd').click(calcaddToggle);
-    $('#close-calcadd-box').click(calcaddToggle);
-    $('#calcadd-reset').click(calcaddReset);
-    $('#calcadd-add').click(calcaddAdd);
-});

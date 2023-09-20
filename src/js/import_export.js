@@ -1,30 +1,62 @@
-/*
-	for now only save the current trainer #p1
-*/
-function saveTrainerPokemon() {
-	var pokeInfo = $(this).closest(".poke-info");
-	var selectID = pokeInfo.find("input.selector").val()
-	var pokeID = selectID.split(";");
-	var tID = 0;
-	var monID = pokeID[2] || setdex[0].mons.length;
-	var trainerName = pokeID[1] || null
-	var poke = addSets(ExportPokemon(pokeInfo));
-	if (!trainerName) dispatchPlayerMon(poke);
-	setdex[tID].mons[monID]= poke[0];
-	localStorage.setItem(GameName + "playerdex", JSON.stringify(window.setdex[0].mons));
-	
-	$("#save-change").prop("hidden", true);
-	if (!trainerName) return
-	var boxedImg = idToNode[monID];
-	boxedImg.src = getSrcImgPokemon(pokeID[0]);
-	boxedImg.dataset.id = pokeID[0] + ";" + pokeID[1] + ";" + monID;
-	pokeInfo.find("input.selector").val(boxedImg.dataset.id);
-
-	
+function sortPokemon(a, b) {
+	var sorted = [a.species, b.species].sort()[0];
+	if (sorted == b.species) {
+		return 1;
+	}
+	return -1;
 }
 
-function ExportPokemon(pokeInfo) {
-	var pokemon = createPokemon(pokeInfo);
+
+//returns false if there is no collusion detected
+function checkCollisionPersonality(person){
+	var monList = P1.trainer.mons
+	for (i in monList){
+		var mon = monList[i]
+		if (mon.person === person) return true
+	}
+	return false
+}
+function dispatchPlayerMon(list) {
+	if (list.length <= 0) {
+		return;
+	}
+	list.sort(sortPokemon);
+	var playerMons = P1.trainer.mons;
+	var boxOffset = playerMons.length; 
+	for (var i = 0, iLen = list.length; i < iLen; i++) {
+		var poke = list[i];
+		/* checks for dupes*/
+		var isDupe = false;
+		for (var j = 0, jLen = playerMons.length; j < jLen; j++) {
+			if (playerMons[j].person === poke.person) {
+				P1.trainer.mons[j] = poke;
+				boxOffset--
+				if (boxOffset < 0){
+					boxOffset == 0
+				}
+				isDupe = true;
+				break;
+			}
+		}
+		if (isDupe) continue;
+		var idOffeseted = boxOffset + i
+		poke.person
+		if (!poke.person){
+			var personality = Math.floor(Math.random() * 90000) + 10000;
+			while (checkCollisionPersonality(personality)){
+				personality = Math.floor(Math.random() * 90000) + 10000;
+				break
+			}
+			poke.person = personality;
+		}
+		P1.box.addBoxed(poke, idOffeseted);
+		playerMons.push(poke);
+	}
+	localStorage.setItem(GameName + "playerdex", JSON.stringify(P1.trainer.mons));
+	P1.box.mainBox.children().eq(0).click();
+}
+function ExportPokemon(panel) {
+	var pokemon = panel.createPokemon();
 	var EV_counter = 0;
 	var finalText = "";
 	finalText = pokemon.name + (pokemon.item ? " @ " + pokemon.item : "") + "\n";
@@ -75,19 +107,20 @@ function ExportPokemon(pokeInfo) {
 
 function importMonsPlayer() {
 	var text = document.getElementById("import-zone");
-	var monsList = window.addSets(text.value);
+	var monsList = addSets(text.value);
 	dispatchPlayerMon(monsList);
+	setHighestLevelMon()
 	text.value = "";
 }
 $("#exportL").click(function () {
-	var exportData = ExportPokemon($("#p1"));
+	var exportData = ExportPokemon(P1);
 	$("textarea.import-team-text").val(exportData);
 	navigator.clipboard.writeText(exportData).then(function () {
 	});
 });
 
 $("#exportR").click(function () {
-	var exportData = ExportPokemon($("#p2"));
+	var exportData = ExportPokemon(P2);
 	$("textarea.import-team-text").val(exportData);
 	navigator.clipboard.writeText(exportData).then(function () {
 	});
@@ -115,22 +148,7 @@ function getTeraType(row) {
 	if (Object.keys(calc.TYPE_CHART[9]).slice(1).indexOf(teraType) !== -1) return teraType;
 }
 
-function statToLegacyStat(stat) {
-	switch (stat) {
-	case 'hp':
-		return "hp";
-	case 'atk':
-		return "at";
-	case 'def':
-		return "df";
-	case 'spa':
-		return "sa";
-	case 'spd':
-		return "sd";
-	case 'spe':
-		return "sp";
-	}
-}
+
 function getStats(currentPoke, rows, offset) {
 	currentPoke.nature = "Serious";
 	var currentEV;
@@ -295,137 +313,10 @@ function checkExeptions(poke) {
 	return poke;
 
 }
-function sortImports(a, b) {
-	var sorted = [a.species, b.species].sort()[0];
-	if (sorted == b.species) {
-		return 1;
-	}
-	return -1;
-}
-
-var idToNode = [];
-function dispatchPlayerMon(list) {
-	if (list.length <= 0) {
-		return;
-	}
-	list.sort(sortImports);
-	var box = document.getElementById("box-poke-list");
-	var playerMons = window.setdex[0].mons;
-	var boxOffset = playerMons.length; 
-	for (var i = 0, iLen = list.length; i < iLen; i++) {
-		var poke = list[i];
-		/* checks for dupes*/
-		var isDupe = false;
-		for (var j = 0, jLen = playerMons.length; j < jLen; j++) {
-			if (playerMons[j].species === poke.species) {
-				isDupe = j;
-				break;
-			}
-		}
-		if (isDupe !== false) {
-			window.setdex[0].mons[j] = poke;
-			boxOffset--
-			if (boxOffset < 0){
-				boxOffset == 0
-			}
-		} else {
-			var idOffeseted = boxOffset + i
-			idToNode.push(window.addBoxed(box, poke, idOffeseted, 0));
-			window.setdex[0].mons.push(poke);
-		}
-	}
-	localStorage.setItem(GameName + "playerdex", JSON.stringify(window.setdex[0].mons));
-	box.children[0].click();
-}
-
-function moveSetBuildLegend(set){
-	var monLegend = document.createElement("legend");
-	var evoText = set.evl ? " (" + set.evl + ")": " ";
-	monLegend.innerText = set.mon + evoText;
-	return monLegend;
-}
-
-function moveSetBuildSector(set){
-	var fragA = new DocumentFragment();
-	var fragB = new DocumentFragment();
-	for (var i = 0, iLen = set.mv.length; i< iLen; i++) {
-		var move = set.mv[i];
-		var row = document.createElement("div");
-		row.className = "moveset-row";
-		row.innerText = "Lv." + move[0] + " " + move[1];
-		//slit into two rows, the lower level left
-		Math.round(i / iLen) ? fragB.append(row) : fragA.append(row);
-	}
-	var blockA = document.createElement("div");
-	blockA.className = "moveset-block";
-	blockA.append(fragA)
-	var blockB = document.createElement("div");
-	blockB.className = "moveset-block";
-	blockB.append(fragB)
-	var movesetBox = document.createElement("div");
-	movesetBox.className = "moveset-sector"
-	movesetBox.append(blockA)
-	movesetBox.append(blockB)
-	
-	return movesetBox;
-}	
-
-function moveSetShow(set, evoset, preevo){
-	var box = document.getElementById("moveset-box-body");
-	if (set.ab){ //it may be missing
-		box.children[0].innerHTML = `<b>Abilities:</b> <span>${set.ab[0][0]} </span> | <span> ${set.ab[1][0]} </span> <b>Hidden:</b> <span> ${set.ab[2][0]}</span>`;
-	}
-	box.children[1].innerHTML = "";
-	box.children[1].append(moveSetBuildLegend(set));
-	box.children[1].append(moveSetBuildSector(set));
-	if (evoset) {
-		box.children[1].append(moveSetBuildLegend(evoset));
-		box.children[1].append(moveSetBuildSector(evoset));
-	}
-	if (preevo) {
-		box.children[1].append(moveSetBuildLegend(preevo));
-		box.children[1].append(moveSetBuildSector(preevo));
+function saveTrigger (ev) {
+	var isUser = ev.originalEvent ? ev.originalEvent.isTrusted : false;
+	if (isUser || ev.added) { //ev.added is for the moves buttons
+		$('#save-change').attr("hidden", false);
 	}
 }
-
-function moveSetToggling(){
-	var frame = document.getElementById("moveset-box-frame");
-	frame.toggleAttribute("hidden")
-	var state = frame.getAttribute("hidden") === "" ? false : true; //weird dev web moment
-	if (state) {
-		//show
-		var monSel = $('#p1').find("input.selector").val();
-		var monName = monSel.split(";")[0];
-		if (! MOVESETS) return //not ready yet
-		for (var i = 0, iLen = MOVESETS.length; i < iLen; i++){
-			var set = MOVESETS[i];
-			if (set.mon !== monName) continue;
-			var evoset = set.evl ? MOVESETS[i+1] : null;
-			var preevo =  MOVESETS[i-1].evl ? MOVESETS[i-1]: null;
-			// fetch the next next evo and set preevo to it instead
-			if (evoset && !preevo) preevo = evoset.evl ? MOVESETS[i+2] : null
-			// fetch the previous pre evo and set nextEvo to it instead
-			if (!evoset && preevo) evoset = MOVESETS[i-2].evl ? MOVESETS[i-2] : null
-			moveSetShow(set, evoset, preevo);
-		}
-	} else {
-		//hide
-	}
-}
-
-
-$(document).ready(function () {
-	$('#save-change').click(saveTrainerPokemon);
-	$("#import").click(importMonsPlayer);
-	var savedMons = JSON.parse(localStorage.getItem(GameName + "playerdex"));
-	if (savedMons) {
-		dispatchPlayerMon(savedMons);
-	}
-	$('#p1').find("input.selector").change();
-	clearField();
-	$('#close-moveset-box').click(moveSetToggling);
-	$('#moveset').click(moveSetToggling);
-	var script = document.createElement("script");
-	script.src = "./data/movesets.js";
-	document.head.appendChild(script)
-});
+$(".save-trigger, .ic").bind("change keyup", saveTrigger);

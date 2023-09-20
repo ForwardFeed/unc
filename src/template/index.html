@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <title>Pok&eacute;mon Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="../js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="../css/main.css?" />
+    <link type="text/css" rel="stylesheet" href="../css/main.css" />
     <link type="text/css" rel="stylesheet" href="../css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="../css/basic-theme.css">
     <link type="text/css" rel="stylesheet" href="../css/dark-theme.css" id="dark-theme-styles">
@@ -17,7 +17,7 @@
 <body class="wrapper">
     <div id="settings-menu" hidden>
         <div class="box-frame-header" data-x="0"data-y="0">
-            <legend>Settings</legend>
+            <legend>Settings Panel</legend>
             <div class="close-frame" id="close-settings-box">
                 <div class="mdiv">
                   <div class="md"></div>
@@ -88,17 +88,24 @@
                 <input type="radio" name="rcrits" id="rcrits-on">
             </div>
         </div>
-        <legend> Color coding </legend>
+        <legend> Color coding defaults</legend>
         <div id="settings-box">
             <input id="cd-intimidate" type="checkbox">
             <label for="cd-intimidate">Intimidate = ON</label>
             <input id="cd-guts" type="checkbox">
             <label for="cd-guts">Guts = Burned</label>
+            <div class="settings-row">
+                <input type="checkbox" name="cc-spe-border" id="cc-spe-border" checked>Speed border
+                <input type="checkbox" name="cc-damage-color" id="cc-damage-color" checked>Damage color
+            </div>
+            <label for="">Speed border width</label>
+            <input class="settings-row" min="1" max="5" type="range" name="cc-spe-width" id="cc-spe-width">
+            
         </div>
         <legend> KEYBINDS </legend>
         <div id="settings-box">
             <div class="settings-row"><b>SHIFT + Z</b> => Toggles all opposite moves as crits</div>
-            <div class="settings-row"><b>ESCAPE</b> => Show / Hides settings pannel</div>
+            <div class="settings-row"><b>ESCAPE</b> => Show / Hides settings panel</div>
         </div>
         
     </div>
@@ -172,6 +179,7 @@
         <div class="small-text">
             <span id="damageValues"></span>
         </div>
+        <span id="warning"></span>
     </div>
     <div aria-label="Move selection" class="move-result-group for-doubles" role="region" title="Select a move to show detailed results." hidden>
         <div aria-labelledby="resultHeader2L" class="move-result-subgroup " role="radiogroup">
@@ -231,8 +239,9 @@
         <div class="small-text">
             <span id="damageValues2"></span>
         </div>
+        <span id="warning2"></span>
     </div>
-    <div class="left-side-pannel side-pannel" hidden>
+    <div class="left-side-panel side-panel" hidden>
         <button data-set="i-f-type" class="l-side-button">
             <i class="s-arrow arrowdown"></i>
             <span>Type</span>
@@ -258,7 +267,7 @@
                     Pok&eacute;mon 1
                     <img id="p1mon" src="" alt="">
                 </legend>
-                <input type="text" class="player-selector calc-trigger selector" />
+                <input type="text" class="player-selector selector" />
                 <span class="pokebar-selection-specifier">
                     <input type="radio" name="selection-filter-pl" id="pl-pokemons-only">Only pokedex</input>
                     <input type="radio" name="selection-filter-pl" id="pl-trainer-only">Only Player's pokémons</input> 
@@ -280,7 +289,7 @@
                         <label>Forme</label>
                         <select class="forme save-trigger calc-trigger"></select>
                     </div>
-                    <div class="hide">
+                    <div>
                         <label>Gender</label>
                         <select class="gender calc-trigger"><option></option><option selected="selected">Male</option><option>Female</option></select>
                     </div>
@@ -586,6 +595,7 @@
                                     <option value="4">Four allies fainted</option>
                                     <option value="5">Five allies fainted</option>
                             </select>
+                        </input>
                     </div>
                     <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                         <label for="itemL1">Item</label>
@@ -633,7 +643,7 @@
                 <div class="info-group i-f-hp">
                     <label for="currentHpL1">Current HP</label>
                     <input class="current-hp calc-trigger" id="currentHpL1" value="341" />/<span class="max-hp">341</span> (
-                    <input class="percent-hp calc-trigger" value="100" />%)
+                    <input class="percent-hp" value="100" />%)
                     <span id="berry-hpL" class="berry-hp"></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxL" />
                         <br />
@@ -643,7 +653,7 @@
                 <div hidden id="criticalHitInstruction">Force this attack to be a critical hit?</div>
                 <div hidden id="zMoveInstruction">Make this attack a Z-move?</div>
                 <div class="move1 i-f-move">
-                    <select class="move-selector save-trigger calc-trigger small-select"></select>
+                    <select class="move-selector save-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="50" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -653,7 +663,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL1" />
                     <label class="btn crit-btn" for="critL1" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL1"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zL1" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zL1" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -677,7 +687,7 @@
                     </select>
                 </div>
                 <div class="move2 i-f-move"">
-                    <select class="move-selector save-trigger calc-trigger small-select"></select>
+                    <select class="move-selector save-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -687,7 +697,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL2" />
                     <label class="btn crit-btn" for="critL2" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL2"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zL2" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zL2" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -710,8 +720,8 @@
                         <option value="5">5 times</option>
                     </select>
                 </div>
-                <div class="move3 i-f-move"">
-                    <select class="move-selector save-trigger calc-trigger small-select"></select>
+                <div class="move3 i-f-move">
+                    <select class="move-selector save-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -721,7 +731,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL3" />
                     <label class="btn crit-btn" for="critL3" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL3"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zL3" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zL3" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -745,7 +755,7 @@
                     </select>
                 </div>
                 <div class="move4 i-f-move"">
-                    <select class="move-selector save-trigger calc-trigger small-select"></select>
+                    <select class="move-selector save-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -755,7 +765,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL4" />
                     <label class="btn crit-btn" for="critL4" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL4"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zL4" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zL4" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -780,52 +790,51 @@
                 </div>
             </fieldset>
         </div>
-        <div aria-label="trainer-poks" role="region">
-            <fieldset class="poke-info" id="trainer-mons">
+        <div aria-label="trainer-poks" role="region" class="player-type-box">
+            <fieldset class="poke-info trainer-box">
                 <legend align="center">Team/Box
                     <button id="rebox">Rebox to Box 1</button>
                 </legend>
-                <div>
-                    <legend class="dropzone" align="center">Team</legend>
-                    <div id="team-poke-list" class="box-poke dropzone">
+                <div class="dropzone">
+                    <legend align="center">Team</legend>
+                    <div class="box-poke row1">
+                    </div>
+                    <div class="box-poke row2 for-doubles" hidden>
                     </div>
                 </div>
                 <hr>
-                <div>
-                    <legend class="dropzone" align="center">Box
-                        
-                    </legend>
-                    <div id="box-poke-list" class="box-poke dropzone">
+                <div class="dropzone">
+                    <legend align="center">Box</legend>
+                    <div class="box-poke main player-box">
                     </div>
                 </div>
-                <div>
-                    <legend class="dropzone" align="center">Box 2</legend>
-                    <div id="box-poke-list2" class="box-poke dropzone">
+                <div class="dropzone">
+                    <legend align="center">Box 2</legend>
+                    <div class="box-poke player-box">
                     </div>
                 </div>
                 <hr>
-                <div>
-                    <legend class="dropzone" align="center">Trash zone</legend>
-                    <div id="trash-box" class="box-poke dropzone" data-placeholder="">
-                        
+                <div class="dropzone">
+                    <legend class= align="center">Deletion zone</legend>
+                    <div class="box-poke trashzone" data-placeholder="">
+
                     </div>
-                    <button class="deadzone" id="trash-pok">Remove pokémon in Trash</button>
+                    <button class="deadzone" id="trash-pok">Remove pokémons</button>
                     <button class="deadzone" id="clearSets">Clear all player's pokémons</button>
                 </div>
                 <hr>
-                <div>
+                <div class="col-code">
                     <legend align="center">Color Codes</legend>
-                    <button id="show-cc">Show</button>
-                    <button id="hide-cc" hidden>Hide</button>
-                    <button id="refr-cc" hidden>Refresh</button>
-                    <button id="info-cc" hidden>Colors Explanation</button>
-                    <div id="info-cc-field" class="info-paragraph" hidden>
+                    <button class="show-cc">Show</button>
+                    <button class="hide-cc" hidden>Hide</button>
+                    <button class="info-cc" hidden>Colors Explanation</button>
+                    <div class="info-cc-field" class="info-paragraph" hidden>
                         <h5>Speed Borders</h5>
                         <b class="mon-speed-F">Blue</b> Outspeeds
                         <b class="mon-speed-T">Purple</b> Speed Tie
                         <b class="mon-speed-S">Black</b> Slower
                         <h5>OHKO Colors</h5>
-                        <b class="mon-dmg-WMO">Hard Counter</b> (Gets 4HKO'd at worse and may OHKO)
+                        <b class="mon-dmg-WMO">Hard Counter</b> (Gets 4HKO'd at worse and may 2HKO)
                         <br>
                         <b class="mon-dmg-W">Walls</b> (Gets 4HKO'd at worse and does more damage)
                         <br>
@@ -845,14 +854,8 @@
                         <br>
                         <b class="mon-dmg-24">Might OHKO but always gets OHKO'd</b>
                         <p>
-                            Note: Color coding is intended to help, though some caveats and quirks are missed
+                            Note: Color coding is intended to help, sometimes it get it wrong.
                         </p>
-                    </div>
-                    <div id ="cc-sets" hidden>
-                        <input type="checkbox" name="cc-spe-border" id="cc-spe-border" checked>speed border
-                        <input type="checkbox" name="cc-ohko-color" id="cc-ohko-color" checked>OHKO color
-                        <input type="checkbox" name="cc-auto-refr" id="cc-auto-refr" checked>auto-refresh
-                        <input min="1" max="5" type="range" name="cc-spe-width" id="cc-spe-width">Speed Border width
                     </div>
                 </div>
             </fieldset>
@@ -1224,6 +1227,17 @@
                                 <label class="btn btn-xxwide" for="powerSpotR">Power Spot</label>
                             </div></td>
                         </tr>
+                        <tr class="gen-specific g8">
+                            <td><div class="left" title="Has the Pok&eacute;mon defense curl actived?">
+                                <div hidden id="selectPowerSpotInstruction">Has the Pok&eacute;mon defense curl actived?</div>
+                                  <input aria-describedby="selectPowerSpotInstruction" class="visually-hidden calc-trigger" type="checkbox" id="defCurlL" />
+                                  <label class="btn btn-xxwide" for="defCurlL">Defense Curl</label>
+                                </div></td>
+                              <td><div class="right" title="Has the Pok&eacute;mon defense curl actived?">
+                                  <input aria-describedby="selectPowerSpotInstruction" class="visually-hidden calc-trigger" type="checkbox" id="defCurlR" />
+                                  <label class="btn btn-xxwide" for="defCurlR">Defense Curl</label>
+                              </div></td>
+                          </tr>
                         <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                             <td><div class="left" title="Is the defending Pok&eacute;mon switching out?">
                               <div hidden id="selectSwitchingInstruction">Is the defending Pok&eacute;mon switching out?</div>
@@ -1269,7 +1283,7 @@
                 <legend align="center">Pok&eacute;mon 2
                     <img id="p2mon" src="" alt="">
                 </legend>
-                <input type="text" class="set-selector calc-trigger selector" />
+                <input type="text" class="set-selector selector" />
                 <span class="pokebar-selection-specifier">
                     <input type="radio" name="selection-filter" id="pokemons-only">Only pokedex</input>
                     <input type="radio" name="selection-filter" id="no-pokedex">No pokedex</input> 
@@ -1291,7 +1305,7 @@
                         <label>Forme</label>
                         <select class="forme calc-trigger"></select>
                     </div>
-                    <div class="hide">
+                    <div>
                         <label>Gender</label>
                         <select class="gender calc-trigger"><option></option><option selected="selected">Male</option><option>Female</option></select>
                     </div>
@@ -1596,6 +1610,7 @@
                                     <option value="4">Four allies fainted</option>
                                     <option value="5">Five allies fainted</option>
                             </select>
+                        </input>
                     </div>
                     <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                         <label for="itemR1">Item</label>
@@ -1642,7 +1657,7 @@
                 <div class="info-group i-f-o-hp">
                     <label for="currentHpR1">Current HP</label>
                     <input class="current-hp calc-trigger" id="currentHpR1" value="341" />/<span class="max-hp">341</span> (
-                    <input class="percent-hp calc-trigger" value="100" />%)
+                    <input class="percent-hp" value="100" />%)
                     <span id="berry-hpR" class="berry-hp"></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxR" />
                         <br />
@@ -1650,7 +1665,7 @@
                     Health <div class="hpbar"></div>
                 </div>
                 <div class="move1 i-f-o-move">
-                    <select class="move-selector calc-trigger small-select"></select>
+                    <select class="move-selector small-select"></select>
                     <input class="move-bp calc-trigger" value="50" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -1660,7 +1675,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR1" />
                     <label class="btn crit-btn" for="critR1" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR1"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zR1" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7  g9" for="zR1" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -1684,7 +1699,7 @@
                     </select>
                 </div>
                 <div class="move2 i-f-o-move">
-                    <select class="move-selector calc-trigger small-select"></select>
+                    <select class="move-selector small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -1694,7 +1709,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR2" />
                     <label class="btn crit-btn" for="critR2" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR2"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zR2" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zR2" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -1718,7 +1733,7 @@
                     </select>
                 </div>
                 <div class="move3 i-f-o-move">
-                    <select class="move-selector calc-trigger small-select"></select>
+                    <select class="move-selector small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -1728,7 +1743,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR3" />
                     <label class="btn crit-btn" for="critR3" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR3"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zR3" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zR3" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -1752,7 +1767,7 @@
                     </select>
                 </div>
                 <div class="move4 i-f-o-move">
-                    <select class="move-selector calc-trigger small-select"></select>
+                    <select class="move-selector small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
                     <select class="move-cat calc-trigger gen-specific g4 g5 g6 g7 g8 g9">
@@ -1762,7 +1777,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR4" />
                     <label class="btn crit-btn" for="critR4" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR4"/>
-                    <label class="btn z-btn gen-specific g7 g8 g9" for="zR4" title="Make this attack a Z-move?">Z</label>
+                    <label class="btn z-btn gen-specific g7 g9" for="zR4" title="Make this attack a Z-move?">Z</label>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
                         <option value="3">3 hits</option>
@@ -1788,20 +1803,26 @@
             </fieldset>
         </div>
         <div aria-label="trainer-poks" role="region">
-            <fieldset class="poke-info" id="trainer-mons">
+            <fieldset class="poke-info">
                 <legend align="center"> OPPOSING TEAM</legend>
-                <div class="trainer-poks">
-                    <div id="trainer-pok-list-opposing" class="trainer-pok-list-opposing dropzone calc-trigger">
+                <div class="dropzone">
+                    <legend align="center">Team</legend>
+                    <div class="box-poke row1 main">
                     </div>
-                    <div id="trainer-pok-list-opposing2" class="dropzone calc-trigger" 
-                    data-placeholder=" For doubles you can drag & drop the opposing pokemons here,
-                     only the first one off each row will be calculated against. Top left always top calc and Bot left always bot calc" hidden>
+                    <div class="box-poke row2 for-doubles" data-placeholder=" For doubles you can drag & drop the opposing pokemons here,
+                    only the first one off each row will be calculated against. Top left always top calc and Bot left always bot calc" hidden>
                     </div>
                 </div>
                 <hr>
                 <button type="button" id="previous-trainer"> Previous Trainer</button>
                 <button type="button" id="next-trainer"> Next Trainer</button>
                 <button type="button" id="reset-trainer">Reset</button>
+                <div id="rematches">
+                    Rematches:
+                </div>
+                <div id="alternatives">
+                    Alternatives: 
+                </div>
             </fieldset>
         </div>
         <div aria-label="pokemon notes" role="region">
@@ -1813,7 +1834,7 @@
             </fieldset>
         </div>
     </div>
-    <div class="right-side-pannel side-pannel" hidden>
+    <div class="right-side-panel side-panel" hidden>
         <button data-set="i-f-o-type" class="r-side-button">
             <i class="s-arrow arrowdown"></i>
             <span>Type</span>
@@ -1880,7 +1901,7 @@
                 Click add to add the selected move.
             </div>
             <div>
-                Lowest of lowests - median of medians, - highest of highests %;
+                Lowest of lowests - highest of highests %;
             </div>
         </div>
     </div>
@@ -1898,55 +1919,61 @@
         var calc = exports = {};
         function require() { return exports };
     </script>
-    <script type="text/javascript" src="../calc/util.js?"></script>
-    <script type="text/javascript" src="../calc/stats.js?"></script>
-    <script type="text/javascript" src="../calc/data/species.js?"></script>
+    <script type="text/javascript" src="../calc/util.js"></script>
+    <script type="text/javascript" src="../calc/stats.js"></script>
+    <script type="text/javascript" src="../calc/data/species.js"></script>
 	<script type="text/javascript" src="./data/trainersets.js"></script>
-    <script type="text/javascript" src="../calc/data/types.js?"></script>
-    <script type="text/javascript" src="../calc/data/natures.js?"></script>
-    <script type="text/javascript" src="../calc/data/abilities.js?"></script>
-    <script type="text/javascript" src="../calc/data/moves.js?"></script>
-    <script type="text/javascript" src="../calc/data/items.js?"></script>
-    <script type="text/javascript" src="../calc/data/index.js?"></script>
-    <script type="text/javascript" src="../calc/move.js?"></script>
-    <script type="text/javascript" src="../calc/pokemon.js?"></script>
-    <script type="text/javascript" src="../calc/field.js?"></script>
-    <script type="text/javascript" src="../calc/items.js?"></script>
-    <script type="text/javascript" src="../calc/mechanics/util.js?"></script>
-    <script type="text/javascript" src="../calc/mechanics/gen789.js?"></script>
-    <script type="text/javascript" src="../calc/mechanics/gen56.js?"></script>
-    <script type="text/javascript" src="../calc/mechanics/gen4.js?"></script>
-    <script type="text/javascript" src="../calc/mechanics/gen3.js?"></script>
-    <script type="text/javascript" src="../calc/mechanics/gen12.js?"></script>
-    <script type="text/javascript" src="../calc/calc.js?"></script>
-    <script type="text/javascript" src="../calc/desc.js?"></script>
-    <script type="text/javascript" src="../calc/result.js?"></script>
-    <script type="text/javascript" src="../calc/adaptable.js?"></script>
-    <script type="text/javascript" src="../calc/index.js?"></script>
+    <script type="text/javascript" src="../calc/data/types.js"></script>
+    <script type="text/javascript" src="../calc/data/natures.js"></script>
+    <script type="text/javascript" src="../calc/data/abilities.js"></script>
+    <script type="text/javascript" src="../calc/data/moves.js"></script>
+    <script type="text/javascript" src="../calc/data/items.js"></script>
+    <script type="text/javascript" src="../calc/data/index.js"></script>
+    <script type="text/javascript" src="../calc/move.js"></script>
+    <script type="text/javascript" src="../calc/pokemon.js"></script>
+    <script type="text/javascript" src="../calc/field.js"></script>
+    <script type="text/javascript" src="../calc/items.js"></script>
+    <script type="text/javascript" src="../calc/mechanics/util.js"></script>
+    <script type="text/javascript" src="../calc/mechanics/gen789.js"></script>
+    <script type="text/javascript" src="../calc/mechanics/gen56.js"></script>
+    <script type="text/javascript" src="../calc/mechanics/gen4.js"></script>
+    <script type="text/javascript" src="../calc/mechanics/gen3.js"></script>
+    <script type="text/javascript" src="../calc/mechanics/gen12.js"></script>
+    <script type="text/javascript" src="../calc/calc.js"></script>
+    <script type="text/javascript" src="../calc/desc.js"></script>
+    <script type="text/javascript" src="../calc/result.js"></script>
+    <script type="text/javascript" src="../calc/adaptable.js"></script>
+    <script type="text/javascript" src="../calc/index.js"></script>
     <script type="text/javascript" src="./data/calc_settings.js"></script>
     <script type="text/javascript" src="./cs_pre_load.js"></script>
-    <script type="text/javascript" src="../js/settings_controls.js"></script>
-    <script type="text/javascript" src="../js/shared_controls.js?"></script>
-    <script type="text/javascript" src="../js/colorcoding.js"></script>
-    <script type="text/javascript" src="../js/index_randoms_controls.js?"></script>
-    <script type="text/javascript" src="../js/moveset_import.js?"></script>
+    <script type="text/javascript" src="../js/ui_globals.js"></script>
+    <script type="text/javascript" src="../js/ui_utils.js"></script>
+    <script type="text/javascript" src="../js/pokemon_box.js"></script>
+    <script type="text/javascript" src="../js/panel_move.js"></script>
+    <script type="text/javascript" src="../js/panel_stats.js"></script>
+    <script type="text/javascript" src="../js/panel.js"></script>
+    <script type="text/javascript" src="../js/calc_results.js"></script>
+    <script type="text/javascript" src="../js/calc_gateway.js"></script>
+    <script type="text/javascript" src="../js/field.js"></script>
+    <script type="text/javascript" src="../js/index.js"></script>
+    <script type="text/javascript" src="../js/settings.js"></script>
+    <script type="text/javascript" src="../js/import_export.js"></script>
     <script type="text/javascript" src="../js/move_addition.js"></script>
+    <script type="text/javascript" src="./data/movesets.js"></script>
+    <script type="text/javascript" src="../js/items.js"></script>
+    <script type="text/javascript" src="../js/side_arrows.js"></script>
+    <script type="text/javascript" src="../js/gen3_loadsave.js"></script>
     <script type="text/javascript" src="./cs_after_load.js"></script>
-    <script type="text/javascript" src="../js/items_control.js"></script>
-    <script type="text/javascript" src="../js/side_arrows_controls.js"></script>
 </div>
 
-<div class="credits">Modification by ForwardFeed Originaly Created by Honko
+<div class="credits">Modifications by ForwardFeed, based on the work of smogon calc by Honko
     <ul>
-        <li><a href="https://github.com/ForwardFeed/unc class="links-lighten" target="_blank">Modification Repository</a></li>
-        <br>
-        <li><a href="https://github.com/smogon/damage-calc/contributors" class="links-lighten" target="_blank">Smogon Contributors</a></li>
-        <li><a href="https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-damage-calculator.3593546/" class="links-lighten" target="_blank">Smogon Bug Reports</a></li>
-        <li><a href="https://github.com/smogon/damage-calc" class="links-lighten" target="_blank">Smogon GitHub repository</a></li>
+        <li><a href="https://github.com/ForwardFeed/unc" class="links-lighten" target="_blank">Modification Repository</a></li>
+        <li><a href="https://github.com/smogon/damage-calc/" class="links-lighten" target="_blank">Original Smogon Calc</a></li>
     </ul>
     <button id="open-settings-box">Open Settings Panel</button>
     <div id="sets">
-        <span>version 0.2.2 "i hate testing, i hate testing, i hate testing"</span>
+        <span>version 0.3.1 "And thy spagetti arose but soon it will vanish"</span>
     </div>
     
 </div> 

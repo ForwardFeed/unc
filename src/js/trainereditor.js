@@ -109,35 +109,9 @@ function dragstart_handler(ev) {
 
 function drop(ev) {
 	ev.preventDefault();
-	if (ev.target.classList.contains("dropzone")) {
-		pokeDragged.parentNode.removeChild(pokeDragged);
-		if (ev.target.tagName == "LEGEND") {
-			ev.target.parentNode.children[1].appendChild(pokeDragged);
-		} else if (ev.target.id == "poke-trash") {
-			var id = pokeDragged.dataset.id;
-			id = parseInt(id.split(";")[2]);
-			var pokes = document.getElementById("poke-box");
-			for (var i = 0; i < pokes.childElementCount; i++) {
-				if (i >= id) {
-					var mon = pokes.children[i];
-					mon.dataset.id = "0;" + (id);
-				}
-			}
-			setdex[window.current_trainer_id].mons.splice(id, 1);
-		} else {
-			ev.target.appendChild(pokeDragged);
-		}
-	} else if (ev.target.classList.contains("poke-icon")) {
-		var didParse = pokeDragged.dataset.id.split(";");
-		var tidParse = ev.target.dataset.id.split(";");
-		var did = parseInt(didParse[2]);
-		var tid = parseInt(tidParse[2]);
-		var tempMon = setdex[window.current_trainer_id].mons[did];
-		setdex[window.current_trainer_id].mons[did] = setdex[window.current_trainer_id].mons[tid];
-		setdex[window.current_trainer_id].mons[tid] = tempMon;
-		ev.target.dataset.id = tidParse[0] + ";" + tidParse[1] + ";" + did;
-		pokeDragged.dataset.id = didParse[0] + ";" + didParse[1] + ";" + tid;
-		if (!cntrlIsPressed) {
+	if (ev.target.closest(".dropzone")) {
+		if (ev.target.tagName === "IMG") {
+			// swap
 			var prev1 = pokeDragged.previousElementSibling;
 			if (!prev1) {
 				ev.target.after(pokeDragged);
@@ -145,13 +119,20 @@ function drop(ev) {
 				ev.target.before(pokeDragged);
 				prev1.after(ev.target);
 			}
-			//swaps
 		} else {
-			//appends before
-			ev.target.before(pokeDragged);
+			pokeDragged.parentNode.removeChild(pokeDragged);
+			if (ev.target.tagName == "LEGEND") {
+				ev.target.parentNode.children[1].appendChild(pokeDragged);
+			} else if (ev.target.id == "poke-trash") {
+				pokeDragged.parentNode.removeChild(pokeDragged);
+			} else {
+				ev.target.appendChild(pokeDragged);
+			}
 		}
 	}
 	ev.target.classList.remove('over');
+	pokeDragged.click()
+	pokeDragged = null;
 }
 
 function handleDragEnter(ev) {
@@ -247,7 +228,6 @@ function createPokemon(pokeInfo) {
 			boosts[stat] = ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .boost").val();
 		}
 		if (gen === 1) baseStats.spd = baseStats.spa;
-
 		var ability = pokeInfo.find(".ability").val();
 		var item = pokeInfo.find(".item").val();
 		var isDynamaxed = pokeInfo.find(".max").prop("checked");
@@ -755,6 +735,30 @@ $(".forme").change(function () {
 		container.find(".item").prop("disabled", false);
 	}
 });
+function correctCompactedIVEV(pokemon){
+	if (pokemon.evs){
+		var hp = pokemon.evs.hp ? pokemon.evs.hp : pokemon.evs[0] ? pokemon.evs[0] : 0;
+		var at = pokemon.evs.at ? pokemon.evs.at : pokemon.evs[1] ? pokemon.evs[1] : 0;
+		var df = pokemon.evs.df ? pokemon.evs.df : pokemon.evs[2] ? pokemon.evs[2] : 0;
+		var sa = pokemon.evs.sa ? pokemon.evs.sa : pokemon.evs[3] ? pokemon.evs[3] : 0;
+		var sd = pokemon.evs.sd ? pokemon.evs.sd : pokemon.evs[4] ? pokemon.evs[4] : 0;
+		var sp = pokemon.evs.sp ? pokemon.evs.sp : pokemon.evs[5] ? pokemon.evs[5] : 0;
+		if (typeof at === "function") at = pokemon.evs[1] //at is array function of at()...
+		pokemon.evs = {hp: hp, at: at, df, df, sa: sa, sd: sd, sp:sp};
+	}
+	if (pokemon.ivs){
+		hp = pokemon.ivs.hp ? pokemon.ivs.hp : pokemon.ivs[0] ? pokemon.ivs[0] : 0;
+		at = pokemon.ivs.at ? pokemon.ivs.at : pokemon.ivs[1] ? pokemon.ivs[1] : 0;
+		df = pokemon.ivs.df ? pokemon.ivs.df : pokemon.ivs[2] ? pokemon.ivs[2] : 0;
+		sa = pokemon.ivs.sa ? pokemon.ivs.sa : pokemon.ivs[3] ? pokemon.ivs[3] : 0;
+		sd = pokemon.ivs.sd ? pokemon.ivs.sd : pokemon.ivs[4] ? pokemon.ivs[4] : 0;
+		sp = pokemon.ivs.sp ? pokemon.ivs.sp : pokemon.ivs[5] ? pokemon.ivs[5] : 0;
+		if (typeof at === "function") at = pokemon.ivs[1]
+		pokemon.ivs = {hp: hp, at: at, df, df, sa: sa, sd: sd, sp:sp};
+	}
+	
+	return pokemon;
+}
 
 
 function correctHiddenPower(pokemon) {
@@ -914,7 +918,11 @@ function getSetOptions() {
 				id: i, /*without id it doesn't get selectable*/
 			});
 			if (document.getElementById('no-pokedex').checked || document.getElementById("any-selection").checked) {
+				if (!trainer.mons) {
+					continue
+				}
 				for (var j = 0; j < trainer.mons.length; j++) {
+					
 					var mon = trainer.mons[j];
 					if (!mon) {
 						continue;
@@ -1128,9 +1136,24 @@ function saveTrainerPokemon() {
     delete poke.name
 	delete poke.dynamaxLevel
     delete poke.boostedStat
-    if (!poke.teraType) delete poke.teraType
-	setdex[window.current_trainer_id].mons[window.current_pokemon_id] = poke;
+	poke.level = 0 //typical of redux elite
+	delete poke.id
+    if (!poke.teraType) delete poke.teraTyp
+	if(setdex[window.current_trainer_id].flagid){
+		var flagid = setdex[window.current_trainer_id].flagid.split(";")
+		var flag = flagid[0]
+		var id = flagid[1]
+		if (flag === "rem"){
+			setdex[window.current_trainer_id][flag][id][window.current_pokemon_id] = poke
+		} else {
+			setdex[window.current_trainer_id][flag][id].mons[window.current_pokemon_id] = poke
+		}
+		
+	}else{
+		setdex[window.current_trainer_id].mons[window.current_pokemon_id] = poke;
+	}
 	saveTrainer();
+	
 }
 
 function importSets() {
@@ -1218,10 +1241,146 @@ $(".move-selector").change(function () {
 	moveGroupObj.children(".move-z").prop("checked", false);
 });
 
+//flag => "mons", "rem", "insane, "alt"
+function trainerTeamChange(flag, id){
+	saveTrainerPokemon();
+	if (!flag) return
+	var trn = setdex[current_trainer_id]
+	switch(flag){
+		case "alt":
+			// if we're in a rematch, put it down
+			if (trn.swp){
+				trn.mons = trn.swp;
+				delete trn.swp;
+				delete trn.flagid
+			}
+			// if we change from the base one, we need to save it in the trainer swap
+			if (!trn.trnswp){
+				trn.trnswp = {
+					trn : trn.trn,
+					mons : trn.mons,
+					rem : trn.rem,
+				}
+			}
+			// then we can change all the trainer settings to the currentrainer
+			// like taking the fork of the little kitchen inside the kitchen to replace the fork of the kitchen
+			// Jeez i plain my future self to have to understand my current code, it's very wonderlandish
+			if (id === "Base"){
+				trn.trn = trn.trnswp.trn
+				trn.mons = trn.trnswp.mons
+				trn.rem = trn.trnswp.rem
+				delete trn.trnswp
+				delete trn.flagid
+			} else {
+				var alt = trn.alt[id];
+				trn.trn = alt.trn;
+				trn.mons = alt.mons;
+				trn.rem = alt.rem;
+				trn.flagid = flag + ";" + id;
+			}
+			break;
+		case "rem":
+			if (!trn.swp){
+				trn.swp = trn.mons;
+			}
+			trn.mons = trn[flag][id];
+			trn.flagid = flag + ";" + id
+			break;
+		case "insane":
+			if (!trn.swp){
+				trn.swp = trn.mons;
+			}
+			trn.mons = trn[flag];
+			trn.flagid = flag + ";" + id
+			break;
+		case "mons":
+			if (trn.swp){
+				trn.mons = trn.swp;
+				delete trn.swp;
+				delete trn.flagid;
+			}
+			break;
+		default:
+			return
+	}
+	boxOppositeTrainer(trn)
+}
+function rematchAlternativeShow(trainer){
+	if (!trainer) return
+	//rematch
+	var div = document.getElementById("rematches");
+	if (trainer.rem){
+		div.removeAttribute("hidden");
+		div.innerText = "Rematches :"
+		var baseBtn = document.createElement("button");
+			baseBtn.innerText = "Base";
+			baseBtn.onclick = ()=>{trainerTeamChange("mons")};
+		div.append(baseBtn)
+		var rems = trainer.rem
+		for(var i = 0; i < rems.length; i++){
+			var newBtn = document.createElement("button");
+				newBtn.innerText = i + 1
+				newBtn.dataset.id = i
+				newBtn.onclick = (ev)=>{trainerTeamChange("rem", ev.target.dataset.id)},
+			div.append(newBtn)
+		}
+	} else{
+		div.setAttribute("hidden", true);
+	}
+	// alternative or insane
+	div = document.getElementById("alternatives")
+	if (!trainer.insane && !trainer.alt){
+		div.setAttribute("hidden", true);
+		return
+	}
+	div.removeAttribute("hidden");
+	div.innerText = "Alternatives :"
+	if(trainer.insane){
+		var baseBtn = document.createElement("button");
+			baseBtn.innerText = "Base";
+			baseBtn.onclick = ()=>{trainerTeamChange("mons")};
+		div.append(baseBtn)
+		var insaneBtn = document.createElement("button");
+			insaneBtn.innerText = "Insane";
+			insaneBtn.onclick = ()=>{trainerTeamChange("insane")};
+		div.append(insaneBtn)
+	}
+	var newBtn = document.createElement("button");
+		newBtn.innerText = setdex[current_trainer_id].trn;
+		newBtn.dataset.id = 'Base';
+		newBtn.onclick = (ev)=>{trainerTeamChange("alt", ev.target.dataset.id)},
+	div.append(newBtn)
+	if (trainer.alt){	
+		var alts = trainer.alt
+		for(var i = 0; i < alts.length; i++){
+			var newBtn = document.createElement("button");
+			newBtn.innerText = setdex[current_trainer_id].alt[i].trn;
+			dexset[setdex[current_trainer_id].alt[i].trn] = current_trainer_id
+			newBtn.dataset.id = i;
+			newBtn.onclick = (ev)=>{trainerTeamChange("alt", ev.target.dataset.id)},
+		div.append(newBtn)
+		}
+	}
+}
+
+function boxOppositeTrainer(trainer){
+	var box = document.getElementById("poke-box");
+	box.innerText = "";
+	for (var i = 0; i < trainer.mons.length; i++) {
+		var poke = trainer.mons[i];
+		addBoxed(box, poke, i);
+	}
+	//this is to skip saving the mon, it causes bug
+	var select = $("#p2").closest(".panel").find("input.set-selector");
+	var tar = box.children[0];
+	select2Select(select, tar.dataset.id, tar.dataset.title);
+}
+
 function parseSelector(value) {
 	var parsed = value.split(";");
 	var trainerID, trainer, pokemon, pokemonName, pokeID;
 	pokemonName = parsed[0];
+
 	if (parsed.length == 3) {
 		pokeID = parsed[2];
 		window.current_pokemon_id = pokeID;
@@ -1251,6 +1410,7 @@ function parseSelector(value) {
 			//It's a trainer
 			trainer = setdex[trainerID];
 			pokemon = trainer.mons[0];
+			pokemon = Object.assign(pokemon, pokedex[pokemon.species]);
 			if (!pokemon) {
 				return;
 			}
@@ -1269,19 +1429,16 @@ $(".set-selector").change(function () {
 		pokemonName = parsed[3]
 	if (trainer) {
 		if (trainerID == 0 || window.current_trainer_id == trainerID) {
-			//Player hasn't changed
+			//Trainer hasn't changed or it's the player's mon
 		} else {
 			// changed trainer
+			if (trainer.swp) trainer.mons = trainer.swp
 			document.getElementById("trainer-edition-name").value = trainer.trn;
 			switchToModTrainer();
 			window.current_trainer_id = parseInt(trainerID);
+			rematchAlternativeShow(trainer);
 			localStorage.setItem(GameName + "tid", trainerID);
-			var box = document.getElementById("poke-box");
-			box.innerText = "";
-			for (var i = 0; i < trainer.mons.length; i++) {
-				var poke = trainer.mons[i];
-				addBoxed(box, poke, i);
-			}
+			boxOppositeTrainer(trainer)
 			pokemonName = pokemonName || trainer.mons[0].species;
 			pokemon = pokemon || trainer.mons[0];
 			Object.assign(pokemon, pokedex[pokemonName]);
@@ -1290,13 +1447,13 @@ $(".set-selector").change(function () {
 		}
 	}
 	if (pokemon) {
-		setDataPannel($(this), pokemonName, pokemon, trainer);
+		setDataPanel($(this), pokemonName, pokemon, trainer);
 	}
 });
 
-function setDataPannel(pannel, pokemonName, pokemon, trainer) {
+function setDataPanel(panel, pokemonName, pokemon, trainer) {
 	window.NO_CALC = true;
-	var pokeObj = pannel.closest(".poke-info");
+	var pokeObj = panel.closest(".poke-info");
 	if (stickyMoves.getSelectedSide() === pokeObj.prop("id")) {
 		stickyMoves.clearStickyMove();
 	}
@@ -1317,15 +1474,15 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 	var abilityObj = pokeObj.find(".ability");
 	var itemObj = pokeObj.find(".item");
 
-	pannel.closest('.poke-info').find(".ability-pool").hide();
-	pannel.closest('.poke-info').find(".item-pool").hide();
-	pannel.closest('.poke-info').find(".role-pool").hide();
-	pannel.closest('.poke-info').find(".tera-type-pool").hide();
+	panel.closest('.poke-info').find(".ability-pool").hide();
+	panel.closest('.poke-info').find(".item-pool").hide();
+	panel.closest('.poke-info').find(".role-pool").hide();
+	panel.closest('.poke-info').find(".tera-type-pool").hide();
 	if (trainer) {
 		if (!pokemon.moves) {
 			pokemon.moves=["(No Move)","(No Move)","(No Move)","(No Move)"];
 		}
-		var set = correctHiddenPower(pokemon);
+		var set = correctCompactedIVEV(correctHiddenPower(pokemon));
 		if (trainer) {
 			pokeObj.find(".teraType").val(set.teraType || pokemon.types[0]);
 		}
@@ -1375,7 +1532,7 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 			moveObj.change();
 		}
 	}
-	var formeObj = pannel.siblings().find(".forme").parent();
+	var formeObj = panel.siblings().find(".forme").parent();
 	itemObj.prop("disabled", false);
 	var baseForme;
 	if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.name) {
@@ -1402,17 +1559,15 @@ function setDataPannel(pannel, pokemonName, pokemon, trainer) {
 		genderDiv.change();
 		genderDiv.parent().show();
 	}
-	pannel.closest("fieldset")[0].querySelector("img").src = getSrcImgPokemon(pokemonName);
+	panel.closest("fieldset")[0].querySelector("img").src = getSrcImgPokemon(pokemonName);
 	window.NO_CALC = false;
 }
 
 /*imitate a manual selection*/
 function select2Select(select, id, title) {
-	select.value = id;
-	select.select2('data', {id: id, text: title});
+	select.val(id);
 	select.change();
-	//stupid but i'll fix this issue, eventually, one day, on purpose
-	select.select2('data', {id: id, text: title});
+	select.closest(".panel").find('.select2-chosen').first().text(title);
 }
 function iconMonClicked(ev) {
 	saveTrainerPokemon();
@@ -1441,31 +1596,14 @@ function saveTrainer() {
 		document.getElementById("edit-error").innerText = "Missing Pokemons";
 		return;
 	}
-	/*var existingID = checkPreExistingTrainer(tName.value);
-	var count = tPoks.childElementCount;
-	var pokeList = [];
-	for (var i = 0; i < count; i++) {
-		var poke = tPoks.children[i].pokedata;
-		pokeList.push({
-			species: poke.species,
-			level: poke.level,
-			ability: poke.ability,
-			moves: poke.moves,
-			nature: poke.nature,
-			item: poke.item
-		});
+	var trn = setdex[current_trainer_id]
+	if (trn.trnswp){
+		trn.trn = trn.trnswp.trn
+		trn.mons = trn.trnswp.mons
+		trn.rem = trn.trnswp.rem
+		delete trn.trnswp
+		delete trn.flagid
 	}
-	var trainer = {
-		trn: tName.value,
-		mons: pokeList
-	};
-	if (existingID) {
-		setdex[existingID] = trainer;
-	} else {
-		setdex.push(trainer);
-		var node = document.getElementById("trn-table");
-		appendTrainerToList(node, trainer, node.childElementCount + 1);
-	}*/
 	localStorage.setItem(GameName +"setdex", JSON.stringify(setdex));
 	switchToModTrainer();
 	document.getElementById("edit-error").innerText = "";
@@ -1473,21 +1611,15 @@ function saveTrainer() {
 
 function rowEditOnClick(ev) {
 	var id = ev.target.dataset.id;
-	var mons = setdex[id].mons;
 	var name = setdex[id].trn;
-	var box = document.getElementById("poke-box");
-	box.innerText = "";
-	for (var i = 0; i < mons.length; i++) {
-		addBoxed(box, mons[i], i);
-	}
-	var text = box.children[0].dataset.title;
-	$(".set-selector").val(id + ";" + 0);
-	$(".set-selector").change();
-	$(".set-selector").select2('data', {id: window.current_trainer_id, text: text});
 	document.getElementById("trainer-edition-name").value = name || "";
+	selectTrainer(parseInt(id))
+	
 }
 
 function rowDeleteOnClick(ev) {
+	var yes = confirm("Do you really want to proceed?")
+	if (!yes) return
 	var row = ev.target.parentNode;
 	row.parentNode.removeChild(row);
 	saveTrainerListOrder();
@@ -1504,19 +1636,7 @@ function rowChangePos(ev) {
 	}
 	var row = tar.closest('tr');
 	var parent = row.parentNode;
-	/*if (diff == 1) {
-		var crossed = parent.children[value - 1];
-		var inputRow = crossed.children[1].children[0];
-		inputRow.value--;
-		inputRow.prev = inputRow.value;
-		crossed.after(row);
-	} else if (diff == -1) {
-		var crossed = parent.children[value - 1];
-		var inputRow = crossed.children[1].children[0];
-		inputRow.value++;
-		inputRow.prev = inputRow.value;
-		crossed.before(row);
-	} else */if (diff > 0) {
+	if (diff > 0) {
 		var crossed;
 		for (var i = prev; i <= diff + prev - 1; i++) {
 			crossed = parent.children[i];
@@ -1558,7 +1678,7 @@ function saveTrainerListOrder() {
 		var trainerName = row.children[0].innerText;
 		var trainerID = dexset[trainerName];
 		if (!trainerID) {
-			continue; //weird bugs with some text difference (spaces and stuff)
+			continue; //weird bugs with some text difference (spaces and stuff), will fix if it became more a hassle
 		}
 		tempDexSet.push(setdex[trainerID]);
 		row.children[0].dataset.id = trainerID;
@@ -1626,6 +1746,7 @@ function addBoxed(box, poke, id) {
 	newPoke.addEventListener("dragstart", dragstart_handler);
 	newPoke.addEventListener("click", iconMonClicked);
 	box.append(newPoke);
+	
 }
 function selectTrainer(id) {
 	document.getElementById("poke-box").innerText = "";
@@ -1634,12 +1755,19 @@ function selectTrainer(id) {
 		trainer = parsed[1],
 		pokemon = parsed[2],
 		pokemonName = parsed[3];
-
 	document.getElementById("trainer-edition-name").value = trainer.trn;
 	select2Select($('#p2').find("input.set-selector"), id, pokemonName + " : " + trainer.trn);
 }
 
 function nextTrainer() {
+	dexset = []
+	for (var a in setdex) {
+		var name = setdex[a].trn;
+		if (dexset[name]){
+			continue;
+		}
+		dexset[name] = a;
+	}
 	saveTrainer();
 	var next = parseInt(window.current_trainer_id) + 1;
 	if (next < setdex.length) {
@@ -1648,6 +1776,14 @@ function nextTrainer() {
 }
 
 function previousTrainer() {
+	dexset = []
+	for (var a in setdex) {
+		var name = setdex[a].trn;
+		if (dexset[name]){
+			continue;
+		}
+		dexset[name] = a;
+	}
 	saveTrainer();
 	var prev = window.current_trainer_id - 1;
 	if (prev >= 1) {
@@ -1716,6 +1852,18 @@ function validateTrainerRename() {
 	validate.style.display = "none";
 	var selfBtn = document.getElementById("rename-trainer");
 	selfBtn.style.display = "inline";
+	var trTable = document.getElementById("trn-table");
+	trTable.children[window.current_trainer_id - 1].children[0].innerText = value;
+	var pokeBox = document.getElementById("poke-box")
+	var mons = pokeBox.querySelectorAll("img")
+	for (var monI in mons){
+		var mon = mons[monI]
+		var title = mon.dataset.title.split(" : ");
+		mon.dataset.title = [title[1] + value].join(" : ");
+		var id =  mon.dataset.id.split(";");
+		mon.dataset.id= [id[0] + value + id[2]].join(";");
+	}
+	mons[i].click()
 }
 
 function switchToNewTrainer() {
@@ -1748,6 +1896,21 @@ function switchToModTrainer() {
 	document.getElementById("new-trainer").setAttribute("hidden", true);
 }
 
+
+function searchTrainer(){
+	var match = new RegExp($('#trainer-search').val())
+	var fields = $('#trn-table')
+	for (var i = 0, iLen = fields.children().length; i < iLen; i++) {
+		var namefield = fields.children().eq(i)
+		var name = namefield.children().eq(0).text()
+		if (match.test(name)){
+			namefield.show()
+		} else {
+			namefield.hide()
+		}
+	}
+}
+
 $(document).ready(function () {
 	setupCalc();
 	loadDefaultLists();
@@ -1764,7 +1927,7 @@ $(document).ready(function () {
 	} else {
 		selectTrainer(trainerid);
 	}
-	
+	$('#trainer-search').keyup(searchTrainer)
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$('#next-trainer').click(nextTrainer);
 	$('#previous-trainer').click(previousTrainer);
@@ -1776,7 +1939,6 @@ $(document).ready(function () {
 	$('#import-sets').click(importSets);
 	$("#rename-trainer").click(renameTrainerOnclick);
 	$("#validate-rename").click(validateTrainerRename);
-
 	var dropzones = document.getElementsByClassName("dropzone");
 	for (var i = 0; i < dropzones.length; i++) {
 		var dropzone = dropzones[i];
