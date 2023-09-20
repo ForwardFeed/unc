@@ -450,12 +450,14 @@ table.field {
 
 /* select2 overrides */
 .select2-container .select2-choice > .select2-chosen {
-    width: 100%;
+    width: 350px;
+    max-width: 350px;
 }
 .small-select.select2-container .select2-choice {
     font-size: 0.9em;
     height: 18px;
     line-height: 18px;
+    overflow-x: hidden;
 }
 .small-select.select2-container .select2-choice .select2-arrow b {
     background-position: 0 -4px;
@@ -582,8 +584,8 @@ table.field {
     /* Is considerable a wall*/
     background: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
 }
-.mon-dmg-WMO{
-    /* Is considerable a wall that may OHKO*/
+.mon-dmg-HC{
+    /* Is considerable a wall that may OHKO, hard counter*/
     background: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-4{
@@ -663,12 +665,13 @@ table.field {
     content:attr(data-placeholder);
     color:gray
 }
-.dropzone > img{
-    cursor: move;
+.dropzone > img, #p2mon, #p1mon{
     min-height: 30px;
     min-width: 40px;
+    max-height: 30px;
+    max-width: 40px;
 }
-.dropzone > img:hover{
+.box-poke > img:hover, .poke-box > img:hover{
     background: var(--button-hover);
 }
 .deadzone:hover{
@@ -706,14 +709,14 @@ table.field {
     background-color: rgba(250, 235, 215, 0);
     background-image: none;
 }
-.side-pannel{
+.side-panel{
     display: grid;
     position: relative;
 }
-.left-side-pannel{
+.left-side-panel{
     float: left;
 }
-.right-side-pannel{
+.right-side-panel{
     float: none;
 }
 
@@ -771,11 +774,9 @@ table.field {
 #calcadd-box-frame{
     z-index: 1;
     width: 650px;
-    height: 100px;
+    min-height: 100px;
     top: 200px;
     left: 750px;
-    overflow-y: hidden;
-    overflow-x: hidden;
 }
 .screen-box-frame-header{
     position: relative;
@@ -987,4 +988,13 @@ input[type='radio']:checked {
 .moveset-row{
     width: fit-content;
     font-size: 13pt;
+}
+
+#rematches > button, #alternatives > button{
+    margin: 3px;
+}
+
+.selectedButton{
+    background-image: unset;
+    background-color: var(--button-selected) !important;
 }
