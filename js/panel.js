@@ -536,6 +536,4 @@ class TrainerPanel extends Panel{
     constructor(panel){
         super(panel)
     }
-    get level(){return highestMonLevel}
-    set level(val){this.field_level.val(highestMonLevel)}
 }
