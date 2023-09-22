@@ -143,7 +143,6 @@ class PlayerBox extends BasicBox{
         var poke = addSets(ExportPokemon(this.props));
         if (!trainerName) dispatchPlayerMon(poke);
         this.props.trainer.mons[pokeID] = poke[0];
-        setHighestLevelMon();
         localStorage.setItem(GameName + "playerdex", JSON.stringify(window.setdex[0].mons));
     
         $("#save-change").prop("hidden", true);
