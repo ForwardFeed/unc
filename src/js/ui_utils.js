@@ -199,22 +199,6 @@ function statToLegacyStat(stat) {
 	}
 }
 
-var highestMonLevel = 1;
-function setHighestLevelMon(){
-	highestMonLevel = 1;
-	var hasChanged = false
-	for (var i in P1.trainer.mons){
-		var mon = P1.trainer.mons[i]
-		if (mon.level > highestMonLevel){
-			$('#levelR1').val(mon.level);
-			highestMonLevel= mon.level;
-			P2.pokemon.level = highestMonLevel 
-			hasChanged = true;
-		} 
-	}
-	if (hasChanged) P2.stats.calcStats() 
-	
-}
 
 function fuzeAllTrainers() {
 	//prevent spamming the img request
