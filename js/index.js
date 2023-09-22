@@ -347,7 +347,6 @@ $(document).ready(function () {
 		var savedMons = JSON.parse(localStorage.getItem(GameName + "playerdex"));
 		if (savedMons) {
 			dispatchPlayerMon(savedMons);
-			setHighestLevelMon()
 		}
 	} catch(e){
 		
