@@ -3,11 +3,6 @@ function getSrcImgPokemon(pokeName) {
 	if (!pokeName) {
 		return;
 	}
-	// Redux megas
-	var exceptions = ["Milotic-Mega","Butterfree-Mega","Machamp-Mega","Kingler-Mega","Lapras-Mega","Flygon-Mega","Kingdra-Mega","Dewgong-Mega","Hitmonchan-Mega","Hitmonlee-Mega","Hitmontop-Mega","Crobat-Mega","Skarmory-Mega","Bruxish-Mega","Torterra-Mega","Infernape-Mega","Empoleon-Mega","Shuckle-Mega","Relicanth-Mega","Quagsire-Mega","Jellicent-Mega","Toucannon-Mega","Dragonite-Mega","Breloom-Mega","Slaking-Mega"]
-	if (exceptions.includes(pokeName)){
-		return "../img/" + pokeName + ".png";
-	}
 	//General exceptions
 	if (pokeName == "Zygarde-10%") {
 		pokeName = "Zygarde-10%25";
@@ -435,8 +430,4 @@ function reorder(){
 	console.log("Missed:",missed.length,' ', missed)
 	console.log('Hit :', newOrder.length,' ', newOrder)
 	console.log('not in list: ', newSet.length)
-}
-
-function fuzeAllPokedex(){
-	
 }
