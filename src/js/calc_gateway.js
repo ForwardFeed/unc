@@ -169,22 +169,6 @@ class CalcGateway{
             highestPrio: highestPrio,
         }]
     }
-    checkRetribution(gen, attacker, defender, move, field, defenderFriend){
-        if (defender.hasAbility('Cold Rebound') && move.flags.contact){
-            var saveMoveName = move
-            move = calc.MOVES[gen]['Icy Wind'] 
-            var retribution = calc.calculate(gen,defender, attacker, move, field, defenderFriend)
-            move = saveMoveName;
-            return "Warning: "  + attacker.name + " May Trigger Cold Rebound for " + retribution.moveDesc(notation) + "   "
-        } else if (defender.hasAbility('Parry') && move.flags.contact) {
-            var saveMoveName = move
-            move = calc.MOVES[gen]['Mach Punch'] 
-            var retribution = calc.calculate(gen,defender, attacker, move, field, defenderFriend)
-            move = saveMoveName;
-            return "Warning: "  + attacker.name + " May Trigger Parry for " + retribution.moveDesc(notation) + "   "
-        }
-        return "";
-    }
     checkStatBoost(p1, p2) {
         if ($('#StatBoostL').prop("checked")) {
             for (var stat in p1.boosts) {
@@ -206,16 +190,12 @@ class CalcGateway{
         } else {
             warning = document.getElementById('warning')
         }
-        var warnMessage = "";
         this.checkStatBoost(p1, p2);
         var results = [[], []];
         for (var i = 0; i < 4; i++) {
             results[0][i] = calc.calculate(gen, p1, p2, p1.moves[i], p1field, pP3);
-            warnMessage += this.checkRetribution(gen, p2, p1, p2.moves[i], p1field, null);
             results[1][i] = calc.calculate(gen, p2, p1, p2.moves[i], p2field);
-            warnMessage += this.checkRetribution(gen, p1, p2, p1.moves[i], p2field, pP3)
         }
-        warning.innerText = warnMessage
         return results;
     }
     loadSavedMon(data) {
