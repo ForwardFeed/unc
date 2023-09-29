@@ -298,8 +298,12 @@ class Panel{
         
         for (const stat of LEGACY_STATS[gen]) {
             this.stats[stat + "Base"] = poke.bs[stat]
-            this.stats[stat + "IV"] = poke.ivs && poke.ivs[stat] || 31
-            this.stats[stat + "EV"] = poke.evs && poke.evs[stat] || 0
+            if (poke.ivs && !isNaN(+poke.ivs[stat])){
+                this.stats[stat + "IV"]  = poke.ivs[stat]
+            } else {
+                this.stats[stat + "IV"]  = 31
+            }
+            this.stats[stat + "EV"]  = poke.evs && poke.evs[stat] || 0
             if (stat === "hp") continue
             this.stats[stat + "Boost"] = 0
         }
