@@ -352,6 +352,7 @@ function createRUNBUNmon(mon){
         poke.moves[i] = move
     }
     poke.gender = "M"; //default to M?
+    poke.person = mon.personality
     return poke
 }
 
