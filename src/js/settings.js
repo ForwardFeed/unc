@@ -136,6 +136,18 @@ $(document).ready(function () {
                     localStorage.setItem("rcrits", +$('#rcrits-on').prop("checked"))
                 },
             },
+            {
+                selectors: [$('#livecalc-off'),$('#livecalc-on')],
+                event: "change",
+                default: 0,
+                name: "livecalc",
+                func: function(){
+                    localStorage.setItem("livecalc", +$('#livecalc-on').prop("checked"))
+                    if (+$('#livecalc-on').prop("checked")){
+                        setupLiveCalc()
+                    }
+                },
+            },
         ])
         // checkboxes
         $('#p-notes-reset').change(clearAllNotes);
