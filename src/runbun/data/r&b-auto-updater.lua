@@ -645,7 +645,8 @@ function WS_Handshake(sock, id, http_data)
       return
    end
    --- res = frame(res, TEXT, false)
-   --console:log('[Sent ' .. tostring(sock:send(res)) .. ' bytes of data]\n' .. res)
+   local nb = sock:send(res)
+   --console:log('[Sent ' .. tostring(nb) .. ' bytes of data]\n' .. res)
 end
 
 function ST_handshake(id)
@@ -773,7 +774,7 @@ function start_server()
             server:close()
             console:error(ST_format("Listen", err, true))
          else
-            console:log("Listening on port " .. port)
+            console:log("Sockets: Listening on port " .. port)
             server:add("received", ST_accept)
          end
       end
@@ -911,7 +912,7 @@ end
 
 function readMessage(message)
    local funcall, data = parseMessage(message)
-   ---console:log('function call :' .. funcall .. ' data: ' .. data) 
+   --console:log('function call :' .. funcall .. ' data: ' .. data) 
    if funcall == '1' then
       return --[[ not set yet
       local state = emu:read8(offsets.main + 0x439) -- inBattle flag
